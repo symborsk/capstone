@@ -1,10 +1,12 @@
 # from https://www.learnopencv.com/install-opencv3-on-ubuntu/
 
+echo "Setting up opencv on pi"
+echo "apt stuff"
 sudo apt-get update
 sudo apt-get remove x264 libx264-dev
 
 # dependencies
- 
+ echo "dependencies"
 sudo apt-get install build-essential checkinstall cmake pkg-config yasm
 sudo apt-get install git gfortran
 sudo apt-get install libjpeg8-dev libjasper-dev libpng12-dev
@@ -23,16 +25,19 @@ sudo apt-get install libopencore-amrnb-dev libopencore-amrwb-dev
 sudo apt-get install x264 v4l-utils
  
 # Optional dependencies
+echo "optional dependencies"
 sudo apt-get install libprotobuf-dev protobuf-compiler
 sudo apt-get install libgoogle-glog-dev libgflags-dev
 sudo apt-get install libgphoto2-dev libeigen3-dev libhdf5-dev doxygen
 
 # python libraries
+echo "python libraries"
 sudo apt-get install python-dev python-pip python3-dev python3-pip
 sudo -H pip2 install -U pip numpy
 sudo -H pip3 install -U pip numpy
 
 # Install virtual environment (python3 only)
+echo "Installing virtual env on python3"
 sudo pip3 install virtualenv virtualenvwrapper
 echo "# Virtual Environment Wrapper"  >> ~/.bashrc
 echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
@@ -51,6 +56,7 @@ deactivate
 ######################################
 
 # download opencv
+echo "downloading opencv"
 git clone https://github.com/opencv/opencv.git
 cd opencv 
 git checkout 3.3.1 
@@ -62,6 +68,7 @@ git checkout 3.3.1
 cd ..
 
 # compile
+echo "compile and install opencv"
 cd opencv
 mkdir build
 cd build
