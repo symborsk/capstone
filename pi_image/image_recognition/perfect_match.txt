@@ -1,0 +1,5 @@
+These are the results when the same two images are compared
+1.0
+0.0
+12979200.0
+1.0536712127723509e-08
