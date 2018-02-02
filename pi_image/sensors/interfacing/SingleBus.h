@@ -6,7 +6,7 @@ written by Adafruit Industries
 #define SINGLEBUS_H
 
 #include "wiringPi.h"
-
+#include <string>
 
 // Uncomment to enable printing out nice debug messages.
 //#define DHT_DEBUG
@@ -37,7 +37,7 @@ class SingleBus {
    void printData(void);
    void sendDH11StartSignal(void);
    void DH11Checksum(void);
-   boolean read(bool force=false);
+   bool read(bool force=false);
 
  private:
   uint8_t *data;
@@ -53,7 +53,7 @@ class SingleBus {
   uint32_t expectPulse(bool level);
 
 };
-
+/*
 class InterruptLock {
   public:
    InterruptLock() {
@@ -63,6 +63,6 @@ class InterruptLock {
     interrupts();
    }
 
-};
+};*/
 
 #endif

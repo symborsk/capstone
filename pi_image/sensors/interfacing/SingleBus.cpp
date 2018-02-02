@@ -6,12 +6,12 @@ written by Adafruit Industries
 #include "SingleBus.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>	
+#include <stdint.h>
 
 #define MIN_INTERVAL 2000
 
 SingleBus::SingleBus(uint8_t pin, uint8_t type, uint8_t count, uint8_t bytes, uint8_t delay) {
-	data = realloc(data, sizeof(uint8_t) * bytes);
+	data = (unit8_t*)realloc(data, sizeof(uint8_t) * bytes);
   _pin = pin;
   _type = type;
   _bytes = bytes;
@@ -60,7 +60,7 @@ void SingleBus::sendDH11StartSignal() {
 	  delay(20);
 }
 
-boolean SingleBus::read(bool force) {
+bool SingleBus::read(bool force) {
   // Check if sensor was read less than two seconds ago and return early
   // to use last reading.
   uint32_t currenttime = millis();
@@ -153,7 +153,7 @@ boolean SingleBus::read(bool force) {
   return DH11Checksum(data);
 }
 
-boolean SingleBus::DH11Checksum(int * data) {
+bool SingleBus::DH11Checksum(int * data) {
 	if (data[4] == ((data[0] + data[1] + data[2] + data[3]) & 0xFF)) {
     _lastresult = true;
     return _lastresult;
