@@ -5,7 +5,12 @@ written by Adafruit Industries
 #ifndef SINGLEBUS_H
 #define SINGLEBUS_H
 
-#include "wiringPi.h"
+#if ARDUINO >= 100
+// #include "Arduino.h"
+#else
+ //#include "WProgram.h"
+#endif
+
 
 
 // Uncomment to enable printing out nice debug messages.
@@ -32,12 +37,12 @@ written by Adafruit Industries
 
 class SingleBus {
   public:
-   SingleBus(uint8_t pinNum, uint8_t type, uint8_t count=6, uint8_t bytes, uint8_t delay);
+   SingleBus(uint8_t pin, uint8_t type, uint8_t count, uint8_t bytes, uint8_t delay);
    void begin(void);
    void printData(void);
    void sendDH11StartSignal(void);
-   void DH11Checksum(void);
-   boolean read(bool force=false);
+   bool read(bool force=false);
+   bool DH11Checksum(int * data);
 
  private:
   uint8_t *data;
@@ -54,15 +59,6 @@ class SingleBus {
 
 };
 
-class InterruptLock {
-  public:
-   InterruptLock() {
-    noInterrupts();
-   }
-   ~InterruptLock() {
-    interrupts();
-   }
 
-};
 
 #endif
