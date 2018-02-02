@@ -2,10 +2,9 @@
 MIT license
 written by Adafruit Industries
 */
-#ifndef SINGLEBUS_H
-#define SINGLEBUS_H
 
-#include "wiringPi.h"
+#include <wiringPi.h>
+#include <stdint.h>
 
 
 // Uncomment to enable printing out nice debug messages.
@@ -37,7 +36,7 @@ void begin(void);
 void printData(void);
 void sendDH11StartSignal(void);
 bool read(bool force=false);
-bool DH11Checksum(int * data);
+bool DH11Checksum(uint8_t * data);
 
 private:
 uint8_t *data;

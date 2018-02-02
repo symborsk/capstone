@@ -6,7 +6,8 @@ written by Adafruit Industries
 #include "SingleBus.h"
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <wiringPi.h>
+#include <time.h>
 #define MIN_INTERVAL 2000
 
 SingleBus::SingleBus(uint8_t pin, uint8_t type, uint8_t count, uint8_t bytes, uint8_t delay) {
@@ -19,17 +20,7 @@ SingleBus::SingleBus(uint8_t pin, uint8_t type, uint8_t count, uint8_t bytes, ui
   _bit = digitalPinToBitMask(pin);
   _port = digitalPinToPort(pin);
 #endif
-  _maxcycles = microsecondsToClockCycles(1000);  // 1 millisecond timeout for
-                           // reading pulses from DHT sensor.
-                           // Note that count is now ignored as the DHT reading algorithm adjusts itself
-                           // basd on the speed of the processor.
-}
-
-void SingleBus::begin(void) {
-  // set up the pins!
-  pinMode(_pin, INPUT_PULLUP);
-  // Using this value makes sure that millis() - lastreadtime will be
-  // >= MIN_INTERVAL right away. Note that this assignment wraps around,
+_maxcycles = 1000/CLOCKS_PER_SEC;
   // but so will the subtraction.
   _lastreadtime = -MIN_INTERVAL;
   DEBUG_PRINT("Max clock cycles: "); DEBUG_PRINTLN(_maxcycles, DEC);
@@ -81,17 +72,13 @@ bool SingleBus::read(bool force) {
 
   uint32_t cycles[80];
   {
-    // Turn off interrupts temporarily because the next sections are timing critical
-    // and we don't want any interruptions.
-    InterruptLock lock;
-
     // End the start signal by setting data line high for 40 microseconds.
     // This is DH11 specific... Needs to be more general
     digitalWrite(_pin, HIGH);
     delayMicroseconds(40);
 
     // Now start reading the data line to get the value from the sensor
-    pinMode(_pin, INPUT_PULLUP);
+    pullUpDnControl(_pin, PUD_UP);
     delayMicroseconds(10);  // Delay a bit to let sensor pull data line low.
 
                 // First expect a low signal for ~delay microseconds followed by a high signal
@@ -153,7 +140,7 @@ bool SingleBus::read(bool force) {
   return DH11Checksum(data);
 }
 
-bool SingleBus::DH11Checksum(int * data) {
+bool SingleBus::DH11Checksum(uint8_t * data) {
   if (data[4] == ((data[0] + data[1] + data[2] + data[3]) & 0xFF)) {
     _lastresult = true;
     return _lastresult;
