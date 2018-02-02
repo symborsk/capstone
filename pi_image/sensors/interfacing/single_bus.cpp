@@ -3,12 +3,17 @@ MIT license
 written by Adafruit Industries
 */
 
-#include "DHT.h"
+#include "SingleBus.h"
+#include <stdint.h>
+#include <stdlib.h>
+#include <iostream>
+#include <stdio.h>
+
 
 #define MIN_INTERVAL 2000
 
 SingleBus::SingleBus(uint8_t pin, uint8_t type, uint8_t count, uint8_t bytes, uint8_t delay) {
-	data = realloc(data, sizeof(uint8_t) * bytes);
+	//data = realloc(data, sizeof(uint8_t) * bytes);
   _pin = pin;
   _type = type;
   _bytes = bytes;
