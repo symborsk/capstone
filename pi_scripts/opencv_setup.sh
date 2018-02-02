@@ -16,7 +16,7 @@ sudo apt-get install libtiff5-dev
  
 sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libdc1394-22-dev
 sudo apt-get install libxine2-dev libv4l-dev
-sudo apt-get install libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev
+sudo apt-get install libgstreamer0.10-dev libgstreamer-plugins-base0.10-videv
 sudo apt-get install qt5-default libgtk2.0-dev libtbb-dev
 sudo apt-get install libatlas-base-dev
 sudo apt-get install libfaac-dev libmp3lame-dev libtheora-dev
@@ -32,12 +32,12 @@ sudo apt-get install libgphoto2-dev libeigen3-dev libhdf5-dev doxygen
 
 # python libraries
 echo "python libraries"
-sudo apt-get install python-dev python-pip python3-dev python3-pip
-sudo -H pip2 install -U pip numpy
+sudo apt-get install python3-dev python3-pip
 sudo -H pip3 install -U pip numpy
 
 # Install virtual environment (python3 only)
 echo "Installing virtual env on python3"
+sudo apt-get install virtualenvwrapper
 sudo pip3 install virtualenv virtualenvwrapper
 echo "# Virtual Environment Wrapper"  >> ~/.bashrc
 echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
@@ -45,11 +45,11 @@ source ~/.bashrc
 
 ############ For Python 3 ############
 # create virtual environment
-mkvirtualenv facecourse-py3 -p python3
-workon facecourse-py3
+mkvirtualenv opencv-py3 -p python3
+workon opencv-py3
   
 # now install python libraries within this virtual environment
-pip install numpy scipy matplotlib scikit-image scikit-learn ipython
+pip3 install numpy scipy matplotlib scikit-image scikit-learn ipython
   
 # quit virtual environment
 deactivate
@@ -73,6 +73,7 @@ cd opencv
 mkdir build
 cd build
 
+
 cmake -D CMAKE_BUILD_TYPE=RELEASE \
       -D CMAKE_INSTALL_PREFIX=/usr/local \
       -D INSTALL_C_EXAMPLES=ON \
@@ -84,13 +85,11 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
       -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
       -D BUILD_EXAMPLES=ON ..
 
-# find out number of CPU cores in your machine
-nproc
 # substitute 4 by output of nproc
 make -j4
 sudo make install
 sudo sh -c 'echo "/usr/local/lib" >> /etc/ld.so.conf.d/opencv.conf'
 sudo ldconfig
 
-cd ~/.virtualenvs/facecourse-py3/lib/python3.6/site-packages
+cd ~/.virtualenvs/facecourse-py3/lib/python3.5/site-packages
 ln -s /usr/local/lib/python3.6/dist-packages/cv2.cpython-36m-x86_64-linux-gnu.so cv2.so
