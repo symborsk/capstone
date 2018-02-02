@@ -1,4 +1,4 @@
-from tkinter import *
+import tkinter as tk
 
 # http://python-textbok.readthedocs.io/en/1.0/Introduction_to_GUI_Programming.html
 # fullscreen: https://stackoverflow.com/questions/7966119/display-fullscreen-mode-on-tkinter
