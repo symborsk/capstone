@@ -2,14 +2,10 @@
 MIT license
 written by Adafruit Industries
 */
-#ifndef DHT_H
-#define DHT_H
+#ifndef SINGLEBUS_H
+#define SINGLEBUS_H
 
-#if ARDUINO >= 100
- #include "Arduino.h"
-#else
- #include "WProgram.h"
-#endif
+#include "wiringPi.h"
 
 
 // Uncomment to enable printing out nice debug messages.
@@ -36,7 +32,7 @@ written by Adafruit Industries
 
 class SingleBus {
   public:
-   SingleBus(uint8_t pin, uint8_t type, uint8_t count=6, uint8_t bytes, uint8_t delay);
+   SingleBus(uint8_t pinNum, uint8_t type, uint8_t count=6, uint8_t bytes, uint8_t delay);
    void begin(void);
    void printData(void);
    void sendDH11StartSignal(void);

@@ -3,7 +3,10 @@ MIT license
 written by Adafruit Industries
 */
 
-#include "DHT.h"
+#include "SingleBus.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>	
 
 #define MIN_INTERVAL 2000
 
