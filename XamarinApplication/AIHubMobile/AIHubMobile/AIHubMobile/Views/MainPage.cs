@@ -16,6 +16,7 @@ namespace AIHubMobile
                     itemsPage = new NavigationPage(new ItemsPage())
                     {
                         Title = "Browse"
+                       
                     };
 
                     aboutPage = new NavigationPage(new AboutPage())

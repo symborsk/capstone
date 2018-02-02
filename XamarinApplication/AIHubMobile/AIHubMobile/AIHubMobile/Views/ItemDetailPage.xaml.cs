@@ -13,12 +13,7 @@ namespace AIHubMobile
         {
             InitializeComponent();
 
-            var item = new Item
-            {
-                Text = "Item 1",
-                Description = "This is an item description."
-            };
-
+            var item = new WeatherSet(1, Convert.ToDateTime("2016-01-01"), 10, 60, 8, 10);
             viewModel = new ItemDetailViewModel(item);
             BindingContext = viewModel;
         }

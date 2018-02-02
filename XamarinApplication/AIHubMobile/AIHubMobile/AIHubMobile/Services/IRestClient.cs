@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace AIHubMobile
 {
-    public interface IRestClient
+    public interface IRestClient<T>
     {
-         Task<List<WeatherSet>> GetAllWeatherSets(bool forceRefresh = false);
+        Task<bool> RefreshWeatherSets();
+        Task<IEnumerable<WeatherSet>> GetAllWeatherSets(bool forceRefresh = false);
     }
 }

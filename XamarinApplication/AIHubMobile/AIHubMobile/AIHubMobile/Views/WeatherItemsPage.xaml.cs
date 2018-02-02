@@ -8,18 +8,18 @@ namespace AIHubMobile
 {
     public partial class ItemsPage : ContentPage
     {
-        ItemsViewModel viewModel;
+        WeatherItemsViewModel viewModel;
 
         public ItemsPage()
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new ItemsViewModel();
+            BindingContext = viewModel = new WeatherItemsViewModel();
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
-            var item = args.SelectedItem as Item;
+            var item = args.SelectedItem as WeatherSet;
             if (item == null)
                 return;
 
