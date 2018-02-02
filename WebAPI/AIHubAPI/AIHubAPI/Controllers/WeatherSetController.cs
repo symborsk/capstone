@@ -18,16 +18,14 @@ namespace AIHubAPI.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllForStation")]
         public IEnumerable<WeatherSet> GetAll()
         {
             return _context.WeatherSet.ToList();
         }
 
-        // GET api/values
-        //[Route("~/api/WeatherSetController/GetWeatherDataByStationID/{id}")]
-        [HttpGet("{id}", Name = "GetWeatherDataByID")]
-        public IActionResult GetWeatherDataByStationID(int id)
+        [HttpGet("GetSetForStationDateRange")]
+        public IActionResult GetWeatherDataByStationID(int id, DateTime startTime, DateTime endTime)
         {
             var item = _context.WeatherSet.FirstOrDefault(t => t.StationId == id);
             if (item == null)
@@ -36,6 +34,12 @@ namespace AIHubAPI.Controllers
             }
 
             return new ObjectResult(item);
+        }
+
+        [HttpPost]
+        public IActionResult InsertWeatherSet([FromBody] WeatherSet set)
+        {
+            return CreatedAtRoute("GetWeatherDataByID", new { id = set.StationId }, set);
         }
 
         //// GET api/values/5
