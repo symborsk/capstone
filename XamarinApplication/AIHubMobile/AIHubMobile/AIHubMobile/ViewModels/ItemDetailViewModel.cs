@@ -4,10 +4,10 @@ namespace AIHubMobile
 {
     public class ItemDetailViewModel : BaseViewModel
     {
-        public Item Item { get; set; }
-        public ItemDetailViewModel(Item item = null)
+        public WeatherSet Item { get; set; }
+        public ItemDetailViewModel(WeatherSet item = null)
         {
-            Title = item?.Text;
+            Title = "Station Name: " + item?.StationId;
             Item = item;
         }
     }

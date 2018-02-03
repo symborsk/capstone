@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 
 namespace AIHubMobile
 {
-    public class ItemsViewModel : BaseViewModel
+    public class WeatherItemsViewModel : BaseViewModel
     {
         public ObservableCollection<WeatherSet> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
 
-        public ItemsViewModel()
+        public WeatherItemsViewModel()
         {
             Title = "Browse";
             Items = new ObservableCollection<WeatherSet>();
@@ -36,7 +36,8 @@ namespace AIHubMobile
             try
             {
                 Items.Clear();
-                var items = await WeatherSet.GetAllWeatherSets(true);
+                bool succ = await WeatherSet.RefreshWeatherSets();
+                IEnumerable<WeatherSet> items = await WeatherSet.GetAllWeatherSets(true);
                 foreach (var item in items)
                 {
                     Items.Add(item);

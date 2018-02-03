@@ -10,7 +10,7 @@ namespace AIHubMobile
     public class BaseViewModel : INotifyPropertyChanged
     {
         public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>() ?? new MockDataStore();
-        public IRestClient WeatherSet => DependencyService.Get<IRestClient>() ?? new RestClient();
+        public IRestClient<WeatherSet> WeatherSet => DependencyService.Get<IRestClient<WeatherSet>>() ?? new RestClient();
 
         bool isBusy = false;
         public bool IsBusy
