@@ -11,7 +11,7 @@ written by Adafruit Industries
 #define MIN_INTERVAL 2000
 
 SingleBus::SingleBus(uint8_t pin, uint8_t type, uint8_t count, uint8_t bytes, uint8_t delay) {
-  data = (uint8_t*) realloc(data, sizeof(uint8_t) * bytes);
+  data = (uint8_t*) malloc(bytes * sizeof(uint8_t));
   _pin = pin;
   _type = type;
   _bytes = bytes;
@@ -184,4 +184,12 @@ uint32_t SingleBus::expectPulse(bool level) {
 #endif
 
   return count;
+} 
+
+int main(void){
+  SingleBus sensor = SingleBus(7, INPUT, 3, 5, 85);
+  sensor.printData();
+  printf("Hello World");
+
+return 0;
 }
