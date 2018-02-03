@@ -14,16 +14,18 @@ namespace AIHubMobile
 
         public WeatherItemsViewModel()
         {
-            Title = "Browse";
+            Title = "View Weather";
             Items = new ObservableCollection<WeatherSet>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+            AppOptions options = new AppOptions();
 
-            //MessagingCenter.Subscribe<NewItemPage, Item>(this, "AddItem", async (obj, item) =>
-            //{
-            //    var _item = item as Item;
-            //    Items.Add(_item);
-            //    await DataStore.AddItemAsync(_item);
-            //});
+            MessagingCenter.Subscribe<ChangeOptionsPage, AppOptions>(this, "UpdateOptions", async (obj, option) =>
+            {
+                var _item = option as AppOptions;
+                options = _item;
+                await WeatherSet.RefreshWeatherSets();
+                await WeatherSet.GetAllWeatherSets();
+            });
         }
 
         async Task ExecuteLoadItemsCommand()

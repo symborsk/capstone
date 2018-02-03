@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AIHubMobile.ItemsPage"
               Title="{Binding Title}"
-             x:Name="BrowseItemsPage">
+             x:Name="ViewWeatherPage">
     <ContentPage.ToolbarItems >
-        <ToolbarItem Text="Add" Clicked="AddItem_Clicked" />
+        <ToolbarItem Text="Options" Clicked="AddItem_Clicked" />
     </ContentPage.ToolbarItems>
 	<ContentPage.Content>
         <StackLayout>

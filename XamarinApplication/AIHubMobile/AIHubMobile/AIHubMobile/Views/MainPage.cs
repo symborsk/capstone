@@ -15,8 +15,8 @@ namespace AIHubMobile
                 case Device.iOS:
                     itemsPage = new NavigationPage(new ItemsPage())
                     {
-                        Title = "Browse"
-                       
+                        Title = "View Weather"
+
                     };
 
                     aboutPage = new NavigationPage(new AboutPage())
@@ -29,7 +29,7 @@ namespace AIHubMobile
                 default:
                     itemsPage = new ItemsPage()
                     {
-                        Title = "Browse"
+                        Title = "View Weather"
                     };
 
                     aboutPage = new AboutPage()

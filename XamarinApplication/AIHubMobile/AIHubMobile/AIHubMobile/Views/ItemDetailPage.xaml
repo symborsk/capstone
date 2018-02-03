@@ -11,21 +11,13 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*"  />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="*"  />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="35*" />
                 <ColumnDefinition Width="65*" />
             </Grid.ColumnDefinitions>
 
-            <Label Text="Station ID: "    
-                                   LineBreakMode="NoWrap" 
-                                   Style="{DynamicResource ListItemTextStyle}" 
-                                   FontSize="Small" Grid.Row="0" Grid.Column="0"/>
-            <Label Text="{Binding Binding Item.StationId}" 
-                                   LineBreakMode="NoWrap"
-                                   Style="{DynamicResource ListItemDetailTextStyle}"
-                                   FontSize="Small" Grid.Row="0" Grid.Column="1"/>
+            
             <Label Text="Recorded Time: "    
                                    LineBreakMode="NoWrap" 
                                    Style="{DynamicResource ListItemTextStyle}" 

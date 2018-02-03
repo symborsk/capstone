@@ -5,26 +5,21 @@ using Xamarin.Forms;
 
 namespace AIHubMobile
 {
-    public partial class NewItemPage : ContentPage
+    public partial class ChangeOptionsPage : ContentPage
     {
-        public Item Item { get; set; }
+        public AppOptions options { get; set; }
 
-        public NewItemPage()
+        public ChangeOptionsPage()
         {
             InitializeComponent();
 
-            Item = new Item
-            {
-                Text = "Item name",
-                Description = "This is an item description."
-            };
-
+            options = new AppOptions();
             BindingContext = this;
         }
 
         async void Save_Clicked(object sender, EventArgs e)
         {
-            MessagingCenter.Send(this, "AddItem", Item);
+            MessagingCenter.Send(this, "UpdateOptions", options);
             await Navigation.PopToRootAsync();
         }
     }

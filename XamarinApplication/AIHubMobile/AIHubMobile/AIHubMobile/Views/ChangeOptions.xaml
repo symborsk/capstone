@@ -1,15 +1,34 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AIHubMobile.NewItemPage"
-		Title="New Item">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AIHubMobile.ChangeOptionsPage"
+		Title="Options">
 	<ContentPage.ToolbarItems>
 		<ToolbarItem Text="Save" Clicked="Save_Clicked" />
 	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
-		<StackLayout Spacing="20" Padding="15">
-			<Label Text="Text" FontSize="Medium" />
-			<Entry Text="{Binding Item.Text}" FontSize="Small" />
-			<Label Text="Description" FontSize="Medium" />
-			<Editor Text="{Binding Item.Description}" FontSize="Small" Margin="0" />
-		</StackLayout>
+        <StackLayout>
+
+            <TableView Intent="Form" x:Name="Options" RowHeight="50">
+                <TableRoot>
+                    <TableSection Title="Mock Option">
+                        <SwitchCell Text="Option" On="False"/>
+                    </TableSection>
+                    <TableSection Title="Show All Stations">
+                        <SwitchCell Text="Show All" On="True" />
+                    </TableSection>
+                    <TableSection Title="Data Update">
+                        <SwitchCell Text="Update Real Time" On="False" />
+                    </TableSection>
+                </TableRoot>
+            </TableView>
+
+            <Picker Title="Select an option">
+                <Picker.Items>
+                    <x:String>lalalal</x:String>
+                    <x:String>Hahahahaha</x:String>
+                    <x:String>Aaaaarooooon</x:String>
+                </Picker.Items>
+            </Picker>
+
+        </StackLayout>
 	</ContentPage.Content>
 </ContentPage>

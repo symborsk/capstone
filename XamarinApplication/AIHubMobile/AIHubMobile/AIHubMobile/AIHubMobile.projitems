@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Models\AppOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\WeatherSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\RestClient.cs" />
