@@ -188,8 +188,12 @@ uint32_t SingleBus::expectPulse(bool level) {
 
 int main(void){
   SingleBus sensor = SingleBus(7, INPUT, 3, 5, 85);
+  while(1){
+  
   sensor.printData();
-  printf("Hello World");
+  
+  delay(2000);
 
+  }
 return 0;
 }
