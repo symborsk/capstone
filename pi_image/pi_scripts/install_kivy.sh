@@ -1,3 +1,13 @@
+#############################################################################
+# install_kivy.sh
+#
+# By: Joey-Michael Fallone
+#
+# The following script installs the dependencies and python module for the 
+# kivy GUI framework on the raspberry pi 3 on Ubuntu MATE.
+#
+#############################################################################
+
 #!/bin/bash
 echo "Instally Kivy on Ubuntu MATE for PI"
 

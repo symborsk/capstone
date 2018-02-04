@@ -1,4 +1,19 @@
+#!/bin/bash
+
+############################################################################
+# opencv_setup.sh
+# By: Joey-Michael Fallone
+#
+# The following is a modified version of the default install process available
+# for opencv3 for use with Ubuntu MATE ARM on the Raspberry Pi 3. 
+# 
+# There does exist a setup for the Pi 3 specifically, but it is designed
+# for Raspbian OS and has some configuration differences and python version
+# differences that were not desired. 
+#
+# This script was based on the install notes from:
 # from https://www.learnopencv.com/install-opencv3-on-ubuntu/
+############################################################################
 
 echo "Setting up opencv on pi"
 echo "apt stuff"
@@ -92,4 +107,5 @@ sudo sh -c 'echo "/usr/local/lib" >> /etc/ld.so.conf.d/opencv.conf'
 sudo ldconfig
 
 cd ~/.virtualenvs/facecourse-py3/lib/python3.5/site-packages
+# The following line needs to be updated with the ocrrect path
 ln -s /usr/local/lib/python3.6/dist-packages/cv2.cpython-36m-x86_64-linux-gnu.so cv2.so
