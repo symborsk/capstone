@@ -22,5 +22,10 @@ namespace AIHubMobile
             MessagingCenter.Send(this, "UpdateOptions", options);
             await Navigation.PopToRootAsync();
         }
+
+        private void UpdateOptions_Clicked(object sender, EventArgs e)
+        {
+            //TODO: Update Options functionality
+        }
     }
 }

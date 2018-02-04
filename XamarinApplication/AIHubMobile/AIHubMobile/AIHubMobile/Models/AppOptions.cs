@@ -6,6 +6,6 @@ namespace AIHubMobile
 {
     public class AppOptions
     {
-        
+        //TODO: App Options Class to track current confguration
     }
 }

@@ -2,13 +2,24 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AIHubMobile.ChangeOptionsPage"
 		Title="Options">
 	<ContentPage.ToolbarItems>
-		<ToolbarItem Text="Save" Clicked="Save_Clicked" />
+		<ToolbarItem Text="Update" Clicked="UpdateOptions_Clicked" />
 	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
         <StackLayout>
 
             <TableView Intent="Form" x:Name="Options" RowHeight="50">
                 <TableRoot>
+                    <TableSection Title="Server Choice">
+                        <ViewCell>
+                            <Picker Title="Server" HorizontalOptions="Fill" >
+                                <Picker.Items>
+                                    <x:String>Server 1 - Edmonton Center</x:String>
+                                    <x:String>Server 2 - Rexall Place</x:String>
+                                    <x:String>Server 3 - Southgate</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </ViewCell>
+                    </TableSection>
                     <TableSection Title="Mock Option">
                         <SwitchCell Text="Option" On="False"/>
                     </TableSection>
@@ -21,13 +32,7 @@
                 </TableRoot>
             </TableView>
 
-            <Picker Title="Select an option">
-                <Picker.Items>
-                    <x:String>lalalal</x:String>
-                    <x:String>Hahahahaha</x:String>
-                    <x:String>Aaaaarooooon</x:String>
-                </Picker.Items>
-            </Picker>
+        
 
         </StackLayout>
 	</ContentPage.Content>
