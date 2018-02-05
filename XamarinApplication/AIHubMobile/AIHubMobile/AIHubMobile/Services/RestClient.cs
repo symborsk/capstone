@@ -1,4 +1,11 @@
-﻿using System;
+﻿/**
+ * RestClient.cs
+ * By: John Symborski
+ * Capstone Group 2
+ * This service will do any interactio with RESTful Web Api.
+ * */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,6 +27,7 @@ namespace AIHubMobile
             client.MaxResponseContentBufferSize = 256000;
             Items = new List<WeatherSet>();
 
+            //This is hardoded now it will eventually get the data from a WEB APi
             Items.Add(new WeatherSet(1, Convert.ToDateTime("2016-01-01"), 22, 60, 8, 20));
             Items.Add(new WeatherSet(2, Convert.ToDateTime("2016-03-01"), 22, 60, 8, 20));
             Items.Add(new WeatherSet(3, Convert.ToDateTime("2016-02-01"), 22, 60, 8, 20));
@@ -27,25 +35,8 @@ namespace AIHubMobile
 
         public async Task<bool> RefreshWeatherSets()
         {
-            //Comment this is when we use the web API to update
 
-            //string url = @"http://localhost:50405/api/WeatherSetController/GetAllForStation";
-            //var uri = new Uri(string.Format(url, string.Empty));
-
-            //var response = await client.GetAsync(uri);
-
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    var content = await response.Content.ReadAsStringAsync();
-            //    Items = JsonConvert.DeserializeObject<List<WeatherSet>>(content);
-            //    return await Task.FromResult(true);
-            //}
-            //else
-            //{
-            //    return await Task.FromResult(false);
-            //}
-
-            //Hardcoded for now
+            //Hardcoded for now but we will have web api calls updating in this fucntion
 
             return await Task.FromResult(true);
         }

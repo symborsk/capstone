@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    App.xaml
+    By: John Symborski
+    Capstone Group 2
+    This defines some primary colors and resources that can be used throughout th app.  
+  -->
 <Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AIHubMobile.App">
   <Application.Resources>
         <ResourceDictionary>

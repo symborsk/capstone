@@ -1,4 +1,10 @@
-﻿using System;
+﻿/***
+ * Program.cs
+ * File by: John Symborski 
+ * Capstone Group 2
+ * This is the first run function Main to initialize the configuration process of WEB Api
+ * */
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

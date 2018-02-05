@@ -1,4 +1,11 @@
-﻿using System;
+﻿/***
+ * WeatherSet.cs
+ * File by: John Symborski 
+ * Capstone Group 2
+ * This is a Model class to represent a single weather set in the database
+ * */
+
+using System;
 using System.Data.Entity.Core;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;

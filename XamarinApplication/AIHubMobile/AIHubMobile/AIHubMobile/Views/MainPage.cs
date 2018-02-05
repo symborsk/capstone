@@ -1,4 +1,12 @@
-﻿using System;
+﻿/**
+ * MainPage.cs
+ * By: John Symborski
+ * Capstone Group 2
+ * This file initializes the main tabbed style pages we want to use for this app
+ * it initializes the main displays differently for different Runtime Platforms.
+ * */
+
+using System;
 
 using Xamarin.Forms;
 
@@ -6,6 +14,7 @@ namespace AIHubMobile
 {
     public class MainPage : TabbedPage
     {
+        //Initialize the main page with it tabs
         public MainPage()
         {
             Page itemsPage, aboutPage = null;
@@ -45,6 +54,7 @@ namespace AIHubMobile
             Title = Children[0].Title;
         }
 
+        //Update the title when the page is changed
         protected override void OnCurrentPageChanged()
         {
             base.OnCurrentPageChanged();
