@@ -1,4 +1,12 @@
-﻿using System;
+﻿/**
+ * WeatherItemsPage.xaml.cs
+ * By: John Symborski
+ * Capstone Group 2
+ * This file is the back end functionality bound to the Weather Item Page Markup. It will perform any logic and
+ * events the page has
+ * */
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -23,6 +31,7 @@ namespace AIHubMobile
             if (item == null)
                 return;
 
+            //Async loading of the deatil page
             await Navigation.PushAsync(new WeatherItemDetailPage(new WeatherItemDetailViewModel(item)));
 
             // Manually deselect item

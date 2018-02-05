@@ -1,4 +1,12 @@
-﻿using System;
+﻿/**
+ * WeatherItemsDetailPage.xaml.cs
+ * By: John Symborski
+ * Capstone Group 2
+ * This file is the back end functionality bound to the Weather Detail Page Markup. It will perform any logic and
+ * events the page has
+ * */
+
+using System;
 
 using Xamarin.Forms;
 
@@ -18,6 +26,8 @@ namespace AIHubMobile
             BindingContext = viewModel;
         }
 
+        //When the page is connected we simply bind the proper view model class
+        //This View model will represent a list item in detail
         public WeatherItemDetailPage(WeatherItemDetailViewModel viewModel)
         {
             InitializeComponent();
