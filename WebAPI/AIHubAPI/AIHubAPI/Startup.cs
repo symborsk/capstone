@@ -1,4 +1,11 @@
-﻿using System;
+﻿/***
+ * Startup.cs
+ * File by: John Symborski 
+ * Capstone Group 2
+ * This file is used to bind the database to the context object in entity framework
+ * As the name implies it does the configuration when the WEB API is started
+ * */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
