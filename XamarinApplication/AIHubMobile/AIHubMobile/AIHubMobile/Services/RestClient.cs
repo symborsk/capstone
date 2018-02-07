@@ -16,21 +16,27 @@ using System.Net.Http;
 [assembly:Xamarin.Forms.Dependency(typeof(AIHubMobile.RestClient))]
 namespace AIHubMobile
 {
-    public class RestClient : IRestClient<WeatherSet>
+    public class RestClient : IRestClient<WeatherStation>
     {
-        List<WeatherSet> Items;
+        List<WeatherStation> Items;
         HttpClient client;
 
         public RestClient()
         {
             client = new HttpClient();
             client.MaxResponseContentBufferSize = 256000;
-            Items = new List<WeatherSet>();
+
+            Items = new List<WeatherStation>();
 
             //This is hardoded now it will eventually get the data from a WEB APi
-            Items.Add(new WeatherSet(1, Convert.ToDateTime("2016-01-01"), 22, 60, 8, 20));
-            Items.Add(new WeatherSet(2, Convert.ToDateTime("2016-03-01"), 22, 60, 8, 20));
-            Items.Add(new WeatherSet(3, Convert.ToDateTime("2016-02-01"), 22, 60, 8, 20));
+            List<WeatherSet> weatherSets = new List<WeatherSet>();
+            ReadOnlyStationOptions roOptions = new ReadOnlyStationOptions(88, 21, true);
+            EditableStationOptions editOptions = new EditableStationOptions(true, new TimeSpan(1, 0, 0));
+            weatherSets.Add(new WeatherSet(1, Convert.ToDateTime("2016-01-01"), 22, 60, 8, 20));
+            weatherSets.Add(new WeatherSet(2, Convert.ToDateTime("2016-03-01"), 22, 60, 8, 20));
+            weatherSets.Add(new WeatherSet(3, Convert.ToDateTime("2016-02-01"), 22, 60, 8, 20));
+
+            Items.Add(new WeatherStation(new StationOptions(editOptions, roOptions), 1, weatherSets));
         }
 
         public async Task<bool> RefreshWeatherSets()
@@ -41,7 +47,7 @@ namespace AIHubMobile
             return await Task.FromResult(true);
         }
 
-        public async Task<IEnumerable<WeatherSet>> GetAllWeatherSets(bool forceRefresh = false)
+        public async Task<IEnumerable<WeatherStation>> GetAllWeatherSets(bool forceRefresh = false)
         {
             return await Task.FromResult(Items);
         }

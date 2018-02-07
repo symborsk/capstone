@@ -14,25 +14,25 @@ using Xamarin.Forms;
 
 namespace AIHubMobile
 {
-    public partial class ItemsPage : ContentPage
+    public partial class WeatherStationsPage : ContentPage
     {
-        WeatherItemsViewModel viewModel;
+        WeatherStationsViewModel viewModel;
 
-        public ItemsPage()
+        public WeatherStationsPage()
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new WeatherItemsViewModel();
+            BindingContext = viewModel = new WeatherStationsViewModel();
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
-            var item = args.SelectedItem as WeatherSet;
+            var item = args.SelectedItem as WeatherStation;
             if (item == null)
                 return;
 
             //Async loading of the deatil page
-            await Navigation.PushAsync(new WeatherItemDetailPage(new WeatherItemDetailViewModel(item)));
+            await Navigation.PushAsync(new WeatherItemDetailPage(new WeatherStationDetailViewModel(item)));
 
             // Manually deselect item
             ItemsListView.SelectedItem = null;

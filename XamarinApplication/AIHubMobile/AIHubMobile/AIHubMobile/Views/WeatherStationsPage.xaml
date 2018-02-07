@@ -7,7 +7,7 @@
   -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AIHubMobile.ItemsPage"
+             x:Class="AIHubMobile.WeatherStationsPage"
               Title="{Binding Title}"
              x:Name="ViewWeatherPage">
     <ContentPage.ToolbarItems >
@@ -42,7 +42,7 @@
                                    LineBreakMode="NoWrap" 
                                    Style="{DynamicResource ListItemTextStyle}" 
                                    FontSize="13" Grid.Row="0" Grid.Column="0"/>
-                                <Label Text="{Binding StationId}" 
+                                <Label Text="{Binding stationId}" 
                                    LineBreakMode="NoWrap"
                                    Style="{DynamicResource ListItemDetailTextStyle}"
                                    FontSize="13" Grid.Row="0" Grid.Column="1"/>
@@ -50,7 +50,7 @@
                                    LineBreakMode="NoWrap" 
                                    Style="{DynamicResource ListItemTextStyle}" 
                                    FontSize="13" Grid.Row="1" Grid.Column="0"/>
-                                <Label Text="{Binding RecordedTime}" 
+                                <Label Text="{Binding stationId}" 
                                        LineBreakMode="NoWrap"
                                        Style="{DynamicResource ListItemDetailTextStyle}"
                                        FontSize="13" Grid.Row="1" Grid.Column="1"/>

@@ -15,16 +15,16 @@ using Xamarin.Forms;
 
 namespace AIHubMobile
 {
-    public class WeatherItemsViewModel : BaseViewModel
+    public class WeatherStationsViewModel : BaseViewModel
     {
         //Collection that can be viewed
-        public ObservableCollection<WeatherSet> Items { get; set; }
+        public ObservableCollection<WeatherStation> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
 
-        public WeatherItemsViewModel()
+        public WeatherStationsViewModel()
         {
             Title = "View Weather";
-            Items = new ObservableCollection<WeatherSet>();
+            Items = new ObservableCollection<WeatherStation>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             AppOptions options = new AppOptions();
 
@@ -50,7 +50,7 @@ namespace AIHubMobile
             {
                 Items.Clear();
                 bool succ = await WeatherSet.RefreshWeatherSets();
-                IEnumerable<WeatherSet> items = await WeatherSet.GetAllWeatherSets(true);
+                IEnumerable<WeatherStation> items = await WeatherSet.GetAllWeatherSets(true);
                 foreach (var item in items)
                 {
                     Items.Add(item);
