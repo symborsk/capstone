@@ -123,6 +123,7 @@ bool SingleBus::read(bool force) {
     if (highCycles > lowCycles) {
       // High cycles are greater than 50us low cycle count, must be a 1.
       data[i / 8] |= 1;
+
     }
     // Else high cycles are less than (or equal to, a weird case) the 50us low
     // cycle count so this must be a zero.  Nothing needs to be changed in the
