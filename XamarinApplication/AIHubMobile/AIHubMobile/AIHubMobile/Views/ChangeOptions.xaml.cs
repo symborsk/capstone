@@ -1,31 +1,42 @@
-﻿using System;
+﻿/**
+ * ChangeOptions.xaml.cs
+ * By: John Symborski
+ * Capstone Group 2
+ * This file is the back end functionality bound to the Weather Item Page Markup. It will perform any logic and
+ * events the page has
+ * */
+
+using System;
 using System.Collections.Generic;
 
 using Xamarin.Forms;
 
 namespace AIHubMobile
 {
-    public partial class NewItemPage : ContentPage
+    public partial class ChangeOptionsPage : ContentPage
     {
-        public Item Item { get; set; }
+        public AppOptions options { get; set; }
 
-        public NewItemPage()
+        public ChangeOptionsPage()
         {
             InitializeComponent();
 
-            Item = new Item
-            {
-                Text = "Item name",
-                Description = "This is an item description."
-            };
-
+            options = new AppOptions();
             BindingContext = this;
         }
 
         async void Save_Clicked(object sender, EventArgs e)
         {
-            MessagingCenter.Send(this, "AddItem", Item);
+            //When the user clicks save we use the messaging service to post an update call
+            //Keeps this process async and smooth
+            MessagingCenter.Send(this, "UpdateOptions", options);
+            //Async return to root page
             await Navigation.PopToRootAsync();
+        }
+
+        private void UpdateOptions_Clicked(object sender, EventArgs e)
+        {
+            //TODO: Update Options functionality
         }
     }
 }

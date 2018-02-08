@@ -9,7 +9,8 @@
  * over a GPIO pin on the Raspberry Pi 3.
  *
  * This code is a heavy modification of existing library code licensed under
- * the MIT license.
+ * the MIT license. A full copy of the MIT license is available in the legal
+ * directory in the root of this project. 
  * 
  * That library code was used in compliance with the MIT license. 
  * 
@@ -132,7 +133,6 @@ bool SingleBus::read(bool force) {
     if (highCycles > lowCycles) {
       // High cycles are greater than 50us low cycle count, must be a 1.
       data[i / 8] |= 1;
-
     }
     // Else high cycles are less than (or equal to, a weird case) the 50us low
     // cycle count so this must be a zero.  Nothing needs to be changed in the

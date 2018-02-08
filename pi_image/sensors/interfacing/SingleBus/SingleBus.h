@@ -9,7 +9,8 @@
  * over a GPIO pin on the Raspberry Pi 3.
  *
  * This code is a heavy modification of existing library code licensed under
- * the MIT license.
+ * the MIT license. A full copy of the MIT license is available in the legal
+ * directory in the root of this project. 
  * 
  * That library code was used in compliance with the MIT license. 
  * 

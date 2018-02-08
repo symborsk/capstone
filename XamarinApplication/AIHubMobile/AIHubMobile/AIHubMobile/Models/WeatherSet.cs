@@ -1,4 +1,11 @@
-﻿using System;
+﻿/**
+ * WeatherSet.cs
+ * By: John Symborski
+ * Capstone Group 2
+ * Model of the weather set item
+ * */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 

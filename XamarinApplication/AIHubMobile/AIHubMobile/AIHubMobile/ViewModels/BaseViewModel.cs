@@ -1,4 +1,11 @@
-﻿using System;
+﻿/**
+ * BaseViewModel.cs
+ * By: John Symborski
+ * Capstone Group 2
+ *   Our Base functionality view model. Define any shared behaviour between all the view models.
+ * */
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -9,8 +16,8 @@ namespace AIHubMobile
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>() ?? new MockDataStore();
-        public IRestClient<WeatherSet> WeatherSet => DependencyService.Get<IRestClient<WeatherSet>>() ?? new RestClient();
+        //Define the factory dependeny service for getting the weather sets
+        public IRestClient<WeatherStation> WeatherSet => DependencyService.Get<IRestClient<WeatherStation>>() ?? new RestClient();
 
         bool isBusy = false;
         public bool IsBusy

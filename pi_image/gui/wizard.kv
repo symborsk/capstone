@@ -1,0 +1,99 @@
+#############################################################################
+# Wizard.kv
+#
+# By: Joey-Michael Fallone
+#
+# This is the main kivy config file for the setup wizard on the Raspberry Pi. 
+#
+# This is a GUI wizard which a user can run to interface with all types of 
+# sensors once they have been physically interfaced to the sensor hub. 
+# 
+# The goal of this is to create a completely "generic" sensor driver that 
+# will allow (in conjunction with our hardware converters) interfacing 
+# with virtually any existing server. 
+#
+# This entire module should be compiled to C using Cython to 
+# obscure source code before deploying to customers. 
+#############################################################################
+ScreenManager:
+    WelcomeScreen:
+    ServerScreen:
+    SensorScreen:
+    StartOperationScreen:
+
+
+<WelcomeScreen>:
+	name: 'welcome'
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			id: welcome_title
+			font_size: 45
+			size_hint_y: None
+			height: 100
+			text: 'Sensor Hub Setup'
+		Label:
+			id: welcome_label_actions
+			font_size: 21
+			size_hint_y: None 
+			height: 45
+			text: root.welcome_label_text
+		Widget:
+		BoxLayout:
+			orientation: 'horizontal'
+	        Button:
+	            text: 'Shutdown'
+	            size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press: root.shutdown
+            Button:
+            	text: 'Next'
+				size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press: root.manager.current = 'server'
+
+<ServerScreen>:
+	name: 'server'
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			id: server_title
+			font_size: 45
+			size_hint_y: None
+			height: 100
+			text: 'Connect to Server'
+		Label:
+			id: server_label_actions
+			font_size: 21
+			size_hint_y: None 
+			height: 45
+			text: root.server_label_text
+		BoxLayout:
+			orientation: 'horizontal'
+			Widget:
+			TextInput:
+				id: server_addr
+				font_size: 21
+				size_hint_x: None 
+				width: 300
+				size_hint_y: None 
+				height: 45
+				text: 'Server address here'
+			Widget:
+		Widget:
+		BoxLayout:
+			orientation: 'horizontal'
+	        Button:
+	            text: 'Back'
+	            size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press: root.manager.current = 'welcome'
+            Button:
+            	text: 'Next'
+				size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press: root.manager.current = 'server'

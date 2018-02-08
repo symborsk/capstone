@@ -1,4 +1,12 @@
-﻿using System;
+﻿/***
+ * WeatherSetController.cs
+ * File by: John Symborski 
+ * Capstone Group 2
+ *
+ * 
+ * */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,30 +49,5 @@ namespace AIHubAPI.Controllers
         {
             return CreatedAtRoute("GetWeatherDataByID", new { id = set.StationId }, set);
         }
-
-        //// GET api/values/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        //// POST api/values
-        //[HttpPost]
-        //public void Post([FromBody]string value)
-        //{
-        //}
-
-        //// PUT api/values/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
-
-        //// DELETE api/values/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }

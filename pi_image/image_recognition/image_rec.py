@@ -1,5 +1,14 @@
-# https://www.pyimagesearch.com/2014/07/14/3-ways-compare-histograms-using-opencv-python/
-# above needs to be cited. 
+#############################################################################
+# image_rec.py
+# By: Joey-Michael Fallone
+#
+# Basic Histogram analysis using four different algorithms to judge the 
+# similarities of similar images. Sample results can be found in this dir
+# under perfect_match.txt
+#
+# The opencv3 tutorials available at pyimagesearch.com were used in this 
+# process
+#############################################################################
 
 import cv2
 
@@ -28,12 +37,6 @@ for methodName, method in OPENCV_METHODS:
     difference = cv2.compareHist(base_histo, current_histo, method)
     results[methodName] = difference
 
-#    fig = plt.figure("Baseline")
-#    ax = fig.add_subplot(1, 1, 1)
-#    ax.imshow(baseline)
-#
-#    fig = plt.figure("Results: %s" % (methodName))
-#    fig.suptitle(methodName, fontsize=20)
 
 for key in results:
     print(results[key])

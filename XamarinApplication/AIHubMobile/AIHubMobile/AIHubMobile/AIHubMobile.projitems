@@ -13,10 +13,10 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\AboutPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\WeatherItemsPage.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\WeatherStationsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\ItemDetailPage.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\WeatherStationDetailPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\ChangeOptions.xaml">
@@ -27,29 +27,31 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Models\AppOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\EditableStationOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ReadOnlyStationOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\StationOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\WeatherSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\WeatherStation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\RestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\WeatherItemsPage.xaml.cs">
-      <DependentUpon>WeatherItemsPage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\WeatherStationsPage.xaml.cs">
+      <DependentUpon>WeatherStationsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\ItemDetailPage.xaml.cs">
-      <DependentUpon>ItemDetailPage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\WeatherStationDetailPage.xaml.cs">
+      <DependentUpon>WeatherStationDetailPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\ChangeOptions.xaml.cs">
       <DependentUpon>ChangeOptions.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\MainPage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\MockDataStore.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\IDataStore.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Item.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AboutViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ItemDetailViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\WeatherStationDetailViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\WeatherItemsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\WeatherStationsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)ViewModels\" />
