@@ -1,24 +1,18 @@
 # https://kivy.org/docs/api-kivy.uix.dropdown.html
 <CustomDropDown>:
     Button:
-        text: 'Single Bus'
+        text: '1'
         size_hint_y: None
         height: 44
-        size_hint_x: None
-        width: 150
         id: 'single'
         on_release: root.select('single')
     Label:
-        text: 'Connection'
+        text: '2'
         size_hint_y: None
         height: 44
-        size_hint_x: None
-        width: 150
     Button:
-        text: 'Serial Connection'
+        text: '3'
         size_hint_y: None
         height: 44
-        size_hint_x: None
-        width: 150
-        id: 'single'
-        on_release: root.select('single')
+        id: 'serial'
+        on_release: root.select('serial')
