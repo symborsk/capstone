@@ -11,6 +11,7 @@
 #############################################################################
 
 import cv2
+from camera import Camera
 
 
 def get_visibility_rating(base, curr):
@@ -37,4 +38,7 @@ def get_visibility_rating(base, curr):
 
 
 if __name__ == '__main__':
-    print(get_visibility_rating("baseline.jpg", "current.jpg"))
+    print("Grabbing a new snapshot")
+    camera = Camera()
+    camera.take_photo()
+    print(get_visibility_rating("baseline.jpg", camera.get_latest_photo_filename()))
