@@ -17,13 +17,13 @@
 #############################################################################
 ScreenManager:
     WelcomeScreen:
-    ServerScreen:
-    SensorScreen:
-    StartOperationScreen:
-
+    InputScreen:
+    ProgressScreen:
+    TextScreen
+    FinalScreen
 
 <WelcomeScreen>:
-	name: 'welcome'
+	name: 'welcome_screen'
 	BoxLayout:
 		orientation: 'vertical'
 		Label:
@@ -31,12 +31,12 @@ ScreenManager:
 			font_size: 45
 			size_hint_y: None
 			height: 100
-			text: 'Sensor Hub Setup'
+			text: 'Wireless Sensor Hub Hardware Setup'
 		Label:
 			id: welcome_label_actions
-			font_size: 21
+			font_size: 35
 			size_hint_y: None 
-			height: 45
+			height: 1000
 			text: root.welcome_label_text
 		Widget:
 		BoxLayout:
@@ -46,41 +46,82 @@ ScreenManager:
 	            size_hint_y: None
 	            font_size: 30
 	            height: 50
-	            on_press: root.shutdown
+	            on_press: root.on_exit
             Button:
             	text: 'Next'
 				size_hint_y: None
 	            font_size: 30
 	            height: 50
-	            on_press: root.manager.current = 'server'
+	            on_press: 
+	            	root.on_next()
+		            root.manager.transition.direction = 'left'
+		            root.manager.current = 'text_screen'
 
-<ServerScreen>:
-	name: 'server'
+<TextScreen>:
+	name: 'text_screen'
 	BoxLayout:
 		orientation: 'vertical'
 		Label:
-			id: server_title
+			id: text_screen_title
 			font_size: 45
 			size_hint_y: None
 			height: 100
-			text: 'Connect to Server'
+			text: 'Notice'
 		Label:
-			id: server_label_actions
+			id: input_screen_actions
 			font_size: 21
 			size_hint_y: None 
 			height: 45
-			text: root.server_label_text
+			text: root.text_label_text
+		Widget:
+		BoxLayout:
+			orientation: 'horizontal'
+	        Button:
+	            text: 'Back'
+	            size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_back()
+		            root.manager.transition.direction = 'right'
+		            root.manager.current = 'welcome_screen'
+            Button:
+            	text: 'Next'
+				size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_next()
+		            root.manager.transition.direction = 'left'
+		            root.manager.current = 'input_screen'
+
+<InputScreen>:
+	name: 'input_screen'
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			id: input_screen_title
+			font_size: 45
+			size_hint_y: None
+			height: 100
+			text: 'Input Information'
+		Label:
+			id: input_screen_actions
+			font_size: 21
+			size_hint_y: None 
+			height: 45
+			text: root.input_label_text
 		BoxLayout:
 			orientation: 'horizontal'
 			Widget:
 			TextInput:
-				id: server_addr
+				id: input_1
 				font_size: 21
 				size_hint_x: None 
 				width: 300
 				size_hint_y: None 
 				height: 45
-				text: 'Server address here'
+				text: 'input here'
 			Widget:
 		Widget:
 		BoxLayout:
@@ -90,10 +131,96 @@ ScreenManager:
 	            size_hint_y: None
 	            font_size: 30
 	            height: 50
-	            on_press: root.manager.current = 'welcome'
+	            on_press:
+	            	root.on_back()
+		            root.manager.transition.direction = 'right'
+		            root.manager.current = 'text_screen'
             Button:
             	text: 'Next'
 				size_hint_y: None
 	            font_size: 30
 	            height: 50
-	            on_press: root.manager.current = 'server'
+	            on_press:
+	            	root.on_next()
+		            root.manager.transition.direction = 'left'
+		            root.manager.current = 'progress_screen'
+
+<ProgressScreen>:
+    name: 'progress_screen'
+    BoxLayout:
+		orientation: 'vertical'
+		Label:
+			id: server_title
+			font_size: 45
+			size_hint_y: None
+			height: 100
+			text: 'Progress'
+		Label:
+			id: server_label_actions
+			font_size: 21
+			size_hint_y: None 
+			height: 45
+			text: 'Here is your progress'
+		BoxLayout:
+			orientation: 'horizontal'
+			Widget:
+			ProgressBar:
+			Widget:
+		Widget:
+		BoxLayout:
+			orientation: 'horizontal'
+	        Button:
+	            text: 'Back'
+	            size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press: 
+	            	root.on_back()
+		            root.manager.transition.direction = 'right'
+		            root.manager.current = 'input_screen'
+            Button:
+            	text: 'Next'
+				size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press: 
+	            	root.on_next()
+	            	root.manager.transition.direction = 'left'
+	            	root.manager.current = 'final_screen'
+
+<FinalScreen>:
+	name: 'final_screen'
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			id: final_screen_title
+			font_size: 45
+			size_hint_y: None
+			height: 100
+			text: 'Finished!'
+		Label:
+			id: input_screen_actions
+			font_size: 21
+			size_hint_y: None 
+			height: 45
+			text: 'Setup Complete'
+		Widget:
+		BoxLayout:
+			orientation: 'horizontal'
+	        Button:
+	            text: 'Back'
+	            size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_back()
+		            root.manager.transition.direction = 'right'
+		            root.manager.current = 'welcome_screen'
+            Button:
+            	text: 'Finish'
+				size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_exit()
+		            exit()
