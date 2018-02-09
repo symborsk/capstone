@@ -24,6 +24,7 @@ from kivy.uix.screenmanager import ScreenManager
 from kivy.lang import Builder
 
 from screens import *
+from Custom import *
 
 presentation = Builder.load_file("wizard.kv")
 
@@ -35,3 +36,4 @@ class WizardApp(App):
 
 if __name__ == "__main__":
 	WizardApp().run()
+

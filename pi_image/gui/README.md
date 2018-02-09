@@ -14,3 +14,15 @@ To run the GUI: python3 Wizard.py
 
 
 -Joey 
+
+Attributions: 
+The visual aspect of this project is based on the kivy documentation: 
+https://kivy.org/docs/guide/widgets.html#adding-widget-background
+accessed on February 7, 2018
+
+Code snippets from Kivy Documentation were used. 
+Here are specific links and the dates they were accessed: 
+
+https://kivy.org/docs/api-kivy.uix.screenmanager.html (Feb. 8, 2018)
+https://kivy.org/docs/_modules/kivy/uix/progressbar.html (Feb. 8, 2018)
+https://kivy.org/docs/api-kivy.uix.dropdown.html (Feb. 8, 2018)

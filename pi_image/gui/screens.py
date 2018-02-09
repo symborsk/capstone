@@ -31,6 +31,19 @@ class InputScreen(Screen):
     def on_next(self):
         pass
 
+class SensorScreen(Screen):
+    input_label_text = "Please enter Sensor Information"
+    sensors = list()
+
+    def on_back(self):
+        pass
+
+    def on_next(self):
+        pass # create sensor objs
+
+    def save_data(self):
+        pass
+
 
 class ProgressScreen(Screen):
     pb = ProgressBar(max=1000)
@@ -58,3 +71,4 @@ class FinalScreen(Screen):
 
     def on_exit(self):
         pass
+

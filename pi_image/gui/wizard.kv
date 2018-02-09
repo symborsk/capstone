@@ -19,8 +19,9 @@ ScreenManager:
     WelcomeScreen:
     InputScreen:
     ProgressScreen:
-    TextScreen
-    FinalScreen
+    TextScreen:
+    FinalScreen:
+    SensorScreen:
 
 <WelcomeScreen>:
 	name: 'welcome_screen'
@@ -122,6 +123,59 @@ ScreenManager:
 				size_hint_y: None 
 				height: 45
 				text: 'input here'
+			Widget:
+		Widget:
+		BoxLayout:
+			orientation: 'horizontal'
+	        Button:
+	            text: 'Back'
+	            size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_back()
+		            root.manager.transition.direction = 'right'
+		            root.manager.current = 'text_screen'
+            Button:
+            	text: 'Next'
+				size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_next()
+		            root.manager.transition.direction = 'left'
+		            root.manager.current = 'sensor_screen'
+
+<SensorScreen>:
+	name: 'sensor_screen'
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			id: input_screen_title
+			font_size: 45
+			size_hint_y: None
+			height: 100
+			text: 'Add Sensors'
+		Label:
+			id: input_screen_actions
+			font_size: 21
+			size_hint_y: None 
+			height: 45
+			text: root.input_label_text
+		BoxLayout:
+			orientation: 'horizontal'
+			Widget:
+			BoxLayout:
+				orientation: 'vertical'
+				TextInput:
+					id: sensor_name
+					font_size: 21
+					size_hint_x: None 
+					width: 300
+					size_hint_y: None 
+					height: 45
+					text: 'Sensor Name'
+				CustomDropDown:
 			Widget:
 		Widget:
 		BoxLayout:
