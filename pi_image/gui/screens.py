@@ -10,56 +10,51 @@
 from kivy.uix.screenmanager import Screen
 from kivy.graphics.vertex_instructions import Line
 from kivy.graphics.context_instructions import Color
+from kivy.uix.progressbar import ProgressBar
 
 
 class WelcomeScreen(Screen):
-	welcome_label_text = "Click next to get started"
+    welcome_label_text = "Wireless Sensor Hub Setup"
 
-	def __init__(self, **kwargs):
-		super(WelcomeScreen, self).__init__(**kwargs)
+    def on_exit(self):
+        pass # shutdown code will go here eventually 
 
-		# draw border (eventually this should be in a loop for each screen)
-		with self.canvas.before:
-			Color(255, 255, 255, 255)
-			Line(points = [55, 75, 55, 520], close = True, width = 1)
-			Line(points = [750, 75, 750, 520], close = True, width = 1)
-			Line(points = [750, 75, 55, 75], close = True, width = 1)
-			Line(points = [750, 520, 55, 520], close = True, width = 1)
+    def on_next(self):
+        pass
 
-	def shutdown():
-		pass # shutdown code will go here eventually 
+class InputScreen(Screen):
+    input_label_text = "Please enter Server Information"
 
-class ServerScreen(Screen):
-	server_label_text = "Please enter Server Information"
+    def on_back(self):
+        pass
 
-	def __init__(self, **kwargs):
-		super(ServerScreen, self).__init__(**kwargs)
+    def on_next(self):
+        pass
 
-		with self.canvas.before:
-			Color(255, 255, 255, 255)
-			Line(points = [55, 75, 55, 520], close = True, width = 1)
-			Line(points = [750, 75, 750, 520], close = True, width = 1)
-			Line(points = [750, 75, 55, 75], close = True, width = 1)
-			Line(points = [750, 520, 55, 520], close = True, width = 1)
 
-class SensorScreen(Screen):
-	def __init__(self, **kwargs):
-		super(SensorScreen, self).__init__(**kwargs)
+class ProgressScreen(Screen):
+    pb = ProgressBar(max=1000)
+    pb.value = 500
+    def on_back(self):
+        pass
 
-		with self.canvas.before:
-			Color(255, 255, 255, 255)
-			Line(points = [55, 75, 55, 520], close = True, width = 1)
-			Line(points = [750, 75, 750, 520], close = True, width = 1)
-			Line(points = [750, 75, 55, 75], close = True, width = 1)
-			Line(points = [750, 520, 55, 520], close = True, width = 1)
+    def on_next(self):
+        pass
 
-class StartOperationScreen(Screen):
-	def __init__(self, **kwargs):
-		super(StartOperationScreen, self).__init__(**kwargs)
+class TextScreen(Screen):
+    text_label_text = "This wizard will allow you to configure numerous sensors and server information for your wireless hub"
 
-		with self.canvas.before:
-			Color(255, 255, 255, 255)
-			Line(points = [55, 75, 55, 520], close = True, width = 1)
-			Line(points = [750, 75, 750, 520], close = True, width = 1)
-			Line(points = [750, 75, 55, 75], close = True, width = 1)
-			Line(points = [750, 520, 55, 520], close = True, width = 1)
+    def on_back(self):
+        pass
+
+    def on_next(self):
+        pass
+
+class FinalScreen(Screen):
+    final_label_text = "Finsihed!"
+
+    def on_back(self):
+        pass
+
+    def on_exit(self):
+        pass
