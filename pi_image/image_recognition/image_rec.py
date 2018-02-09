@@ -41,4 +41,4 @@ if __name__ == '__main__':
     print("Grabbing a new snapshot")
     camera = Camera()
     camera.take_photo()
-    print(get_visibility_rating("baseline.jpg", camera.get_latest_photo_filename()))
+    print(get_visibility_rating("img/baseline.jpg", camera.get_latest_photo_filename()))
