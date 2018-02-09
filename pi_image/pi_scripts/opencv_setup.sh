@@ -82,6 +82,4 @@ sudo make
 echo "Make install process"
 sudo make install
 
-cd ~/.virtualenvs/facecourse-py3/lib/python3.5/site-packages
-# The following line needs to be updated with the ocrrect path
-ln -s /usr/local/lib/python3.6/dist-packages/cv2.cpython-36m-x86_64-linux-gnu.so cv2.so
+echo "script run to completion."
