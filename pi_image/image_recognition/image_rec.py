@@ -15,10 +15,10 @@ from camera import Camera
 
 
 def get_visibility_rating(base, curr):
-    baseline      = cv2.imread('baseline.jpg')
+    baseline      = cv2.imread(base)
     base_histo    = cv2.calcHist([baseline], [0], None, [256], [0,256])
 
-    current       = cv2.imread('test.jpg')
+    current       = cv2.imread(curr)
     current_histo = cv2.calcHist([current], [0], None, [256], [0,256])
 
     histograms = {'baseline': base_histo, 'current': current_histo}
