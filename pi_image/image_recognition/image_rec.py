@@ -12,33 +12,29 @@
 
 import cv2
 
-baseline      = cv2.imread('baseline.jpg')
-base_histo    = cv2.calcHist([baseline], [0], None, [256], [0,256])
 
-current       = cv2.imread('test.jpg')
-current_histo = cv2.calcHist([current], [0], None, [256], [0,256])
+def get_visibility_rating(base, curr):
+    baseline      = cv2.imread('baseline.jpg')
+    base_histo    = cv2.calcHist([baseline], [0], None, [256], [0,256])
 
-histograms = {'baseline': base_histo, 'current': current_histo}
+    current       = cv2.imread('test.jpg')
+    current_histo = cv2.calcHist([current], [0], None, [256], [0,256])
 
-OPENCV_METHODS = (
-    ("Correlation", 0),
-    ("Chi-Squared", 1),
-    ("Intersection", 2),
-    ("Hellinger", 3))
+    histograms = {'baseline': base_histo, 'current': current_histo}
 
- # Use all four methods
-results = dict()
-for methodName, method in OPENCV_METHODS:
-    reverse = False
+    OPENCV_METHODS = (
+        ("Correlation", 0))
 
-    if methodName in ("Correlation", "Intersection"):
-        reverse = True
+     # Use correlation
+    results = dict()
+    reverse = True
 
-    difference = cv2.compareHist(base_histo, current_histo, method)
-    results[methodName] = difference
+    difference = cv2.compareHist(base_histo, current_histo, 0)
+
+    return difference
+
+    
 
 
-for key in results:
-    print(results[key])
-
-
+if __name__ == '__main__':
+    print(get_visibility_rating("baseline.jpg", "current.jpg"))
