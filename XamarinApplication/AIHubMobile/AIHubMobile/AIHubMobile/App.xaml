@@ -9,8 +9,10 @@
   <Application.Resources>
         <ResourceDictionary>
             <Color x:Key="Primary">#006330</Color>
+            <Color x:Key="PrimaryLight">#b3ffb3</Color>
             <Color x:Key="PrimaryDark">#004d25</Color>
             <Color x:Key="Accent">#FFDF1B</Color>
+            <Color x:Key="AccentLight">#fff5b3</Color>
             <Color x:Key="LightBackgroundColor">#FAFAFA</Color>
             <Color x:Key="DarkBackgroundColor">#C0C0C0</Color>
             <Color x:Key="MediumGrayTextColor">#4d4d4d</Color>

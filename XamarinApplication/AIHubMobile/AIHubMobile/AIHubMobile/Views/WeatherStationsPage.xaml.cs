@@ -1,5 +1,5 @@
 ﻿/**
- * WeatherItemsPage.xaml.cs
+ * WeatherStationsPage.xaml.cs
  * By: John Symborski
  * Capstone Group 2
  * This file is the back end functionality bound to the Weather Item Page Markup. It will perform any logic and

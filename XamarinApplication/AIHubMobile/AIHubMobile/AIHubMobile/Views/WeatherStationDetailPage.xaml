@@ -8,128 +8,132 @@
   -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              x:Class="AIHubMobile.WeatherItemDetailPage"
              Title="{Binding Title}">
+    <ContentPage.ToolbarItems >
+        <ToolbarItem Text="Config" Clicked="Config_Clicked" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <ContentView  >
+        <StackLayout>
+             
+                <StackLayout Orientation="Horizontal"  HorizontalOptions="FillAndExpand">
+                <StackLayout Orientation="Vertical"  HorizontalOptions="FillAndExpand">
+                        <Label Text="Start Range  : "    
+                                   LineBreakMode="NoWrap" 
+                                   FontSize="Small"
+                                   FontAttributes="Bold"                
+                                   VerticalOptions="CenterAndExpand"
+                                   HorizontalTextAlignment="Center"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical"  HorizontalOptions="FillAndExpand">
+                        <DatePicker VerticalOptions="CenterAndExpand" Date="Jan 1 2000">
+                            <DatePicker.Format>yyyy-MM-dd</DatePicker.Format>
+                        </DatePicker>
+                    </StackLayout>
+                </StackLayout>
 
-    <ListView x:Name="WeatherSetListView"
+                <StackLayout Orientation="Horizontal"  HorizontalOptions="FillAndExpand">
+                    <StackLayout Orientation="Vertical"  HorizontalOptions="FillAndExpand">
+                        <Label Text="End Range : "    
+                                   LineBreakMode="NoWrap" 
+                                   FontSize="Small"
+                                   FontAttributes="Bold"                
+                                   VerticalOptions="CenterAndExpand"
+                                   HorizontalTextAlignment="Center"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical"  HorizontalOptions="FillAndExpand">
+                        <DatePicker VerticalOptions="CenterAndExpand" Date="{x:Static sys:DateTime.Now}">
+                            <DatePicker.Format>yyyy-MM-dd</DatePicker.Format>
+                        </DatePicker>
+                    </StackLayout>
+                </StackLayout>
+
+                <BoxView  
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Center"
+                    HeightRequest="2"
+                    Color="Black"/>
+
+
+                <Label Text="Recordings : "    
+                                   LineBreakMode="NoWrap" 
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"/>
+
+                <ListView x:Name="WeatherSetListView"
               VerticalOptions="FillAndExpand"
-              HasUnevenRows="true">
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <ViewCell>
-                    <Grid>
-
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"  />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*"  />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="35*" />
-                            <ColumnDefinition Width="65*" />
-                        </Grid.ColumnDefinitions>
-
-
-                        <Label Text="Recorded Time: "    
-                                   LineBreakMode="NoWrap" 
-                                   Style="{DynamicResource ListItemTextStyle}" 
-                                   FontSize="Micro" Grid.Row="0" Grid.Column="0"/>
-                        <Label Text="{Binding RecordedTime}" 
-                                       LineBreakMode="NoWrap"
-                                       Style="{DynamicResource ListItemDetailTextStyle}"
-                                       FontSize="Micro" Grid.Row="0" Grid.Column="1"/>
-
-                        <Label Text="Temperature: "    
-                                   LineBreakMode="NoWrap" 
-                                   Style="{DynamicResource ListItemTextStyle}" 
-                                   FontSize="Micro" Grid.Row="1" Grid.Column="0"/>
-                        <Label Text="{Binding Temperature}" 
-                                       LineBreakMode="NoWrap"
-                                       Style="{DynamicResource ListItemDetailTextStyle}"
-                                       FontSize="Micro" Grid.Row="1" Grid.Column="1"/>
-
-                        <Label Text="Humidity: "    
-                                   LineBreakMode="NoWrap" 
-                                   Style="{DynamicResource ListItemTextStyle}" 
-                                   FontSize="Micro" Grid.Row="2" Grid.Column="0"/>
-                        <Label Text="{Binding Humidity}" 
-                                       LineBreakMode="NoWrap"
-                                       Style="{DynamicResource ListItemDetailTextStyle}"
-                                       FontSize="Micro" Grid.Row="2" Grid.Column="1"/>
-
-                        <Label Text="Visibility: "    
-                                   LineBreakMode="NoWrap" 
-                                   Style="{DynamicResource ListItemTextStyle}" 
-                                   FontSize="Micro" Grid.Row="3" Grid.Column="0"/>
-                        <Label Text="{Binding Visibility}" 
-                                       LineBreakMode="NoWrap"
-                                       Style="{DynamicResource ListItemDetailTextStyle}"
-                                       FontSize="Micro" Grid.Row="3" Grid.Column="1"/>
-                    </Grid>
-                </ViewCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
-    <!--<StackLayout Spacing="20" Padding="15">
-        <ListView x:Name="WeatherSetListView">
+              HasUnevenRows="true"
+                          SeparatorColor="Black">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-
-                        <Grid Padding="8,8,8,8" >
-
+                        <Grid RowSpacing="0" ColumnSpacing="0">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*"  />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*"  />
-                                <RowDefinition Height="*" />
+                                <RowDefinition Height="20"  />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="16"  />
+                                    <RowDefinition Height="16" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="35*" />
+                                <ColumnDefinition Width="35*"  />
                                 <ColumnDefinition Width="65*" />
                             </Grid.ColumnDefinitions>
 
+                                    <BoxView Color="{StaticResource PrimaryLight}" Grid.Column="0" Grid.Row="0"/>
+                                    <BoxView Color="{StaticResource PrimaryLight}" Grid.Column="1" Grid.Row="0"/>
 
-                            <Label Text="Recorded Time: "    
+                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="0" Grid.Row="1"/>
+                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="1" Grid.Row="1"/>
+
+                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="0" Grid.Row="2"/>
+                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="1" Grid.Row="2"/>
+
+                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="0" Grid.Row="3"/>
+                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="1" Grid.Row="3"/>
+
+                                    <Label Text="Recorded Time: "    
                                    LineBreakMode="NoWrap" 
                                    Style="{DynamicResource ListItemTextStyle}" 
-                                   FontSize="Micro" Grid.Row="1" Grid.Column="0"/>
+                                   FontSize="Small" Grid.Row="0" Grid.Column="0"/>
                             <Label Text="{Binding RecordedTime}" 
                                        LineBreakMode="NoWrap"
                                        Style="{DynamicResource ListItemDetailTextStyle}"
-                                       FontSize="Micro" Grid.Row="1" Grid.Column="1"/>
+                                       FontSize="Small" Grid.Row="0" Grid.Column="1"/>
 
                             <Label Text="Temperature: "    
                                    LineBreakMode="NoWrap" 
                                    Style="{DynamicResource ListItemTextStyle}" 
-                                   FontSize="Micro" Grid.Row="2" Grid.Column="0"/>
+                                   FontSize="Micro" Grid.Row="1" Grid.Column="0"/>
                             <Label Text="{Binding Temperature}" 
                                        LineBreakMode="NoWrap"
                                        Style="{DynamicResource ListItemDetailTextStyle}"
-                                       FontSize="Micro" Grid.Row="2" Grid.Column="1"/>
+                                       FontSize="Micro" Grid.Row="1" Grid.Column="1"/>
 
                             <Label Text="Humidity: "    
                                    LineBreakMode="NoWrap" 
                                    Style="{DynamicResource ListItemTextStyle}" 
-                                   FontSize="Micro" Grid.Row="3" Grid.Column="0"/>
+                                   FontSize="Micro" Grid.Row="2" Grid.Column="0"/>
                             <Label Text="{Binding Humidity}" 
                                        LineBreakMode="NoWrap"
                                        Style="{DynamicResource ListItemDetailTextStyle}"
-                                       FontSize="Micro" Grid.Row="3" Grid.Column="1"/>
+                                       FontSize="Micro" Grid.Row="2" Grid.Column="1"/>
 
                             <Label Text="Visibility: "    
                                    LineBreakMode="NoWrap" 
                                    Style="{DynamicResource ListItemTextStyle}" 
-                                   FontSize="Micro" Grid.Row="4" Grid.Column="0"/>
+                                   FontSize="Micro" Grid.Row="3" Grid.Column="0"/>
                             <Label Text="{Binding Visibility}" 
                                        LineBreakMode="NoWrap"
                                        Style="{DynamicResource ListItemDetailTextStyle}"
-                                       FontSize="Micro" Grid.Row="4" Grid.Column="1"/>
+                                       FontSize="Micro" Grid.Row="3" Grid.Column="1"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-    </StackLayout>-->
+        </StackLayout>
+        </ContentView>
+    </ContentPage.Content>
 </ContentPage>

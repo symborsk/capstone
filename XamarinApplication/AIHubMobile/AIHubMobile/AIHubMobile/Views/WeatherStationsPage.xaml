@@ -10,12 +10,16 @@
              x:Class="AIHubMobile.WeatherStationsPage"
               Title="{Binding Title}"
              x:Name="ViewWeatherPage">
-    <ContentPage.ToolbarItems >
+    
+    <ContentPage.ToolbarItems>
         <ToolbarItem Text="Options" Clicked="AddItem_Clicked" />
     </ContentPage.ToolbarItems>
-	<ContentPage.Content>
-        <StackLayout>
-            <ListView x:Name="ItemsListView" 
+
+    <ContentPage.Content>
+        <ContentView>
+            <StackLayout>
+                
+                <ListView x:Name="ItemsListView" 
                 ItemsSource="{Binding Items}"
                 VerticalOptions="FillAndExpand"
                  HasUnevenRows="true"
@@ -24,41 +28,42 @@
                  IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                  CachingStrategy="RecycleElement"
                  ItemSelected="OnItemSelected">
-				<ListView.ItemTemplate>
-					<DataTemplate>
-						<ViewCell>
-                            <Grid Padding="16,16,16,16" >
-                                
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"  />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                
-                                <Label Text="Station ID: "    
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid Padding="16,16,16,16" >
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"  />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Text="Station ID: "    
                                    LineBreakMode="NoWrap" 
                                    Style="{DynamicResource ListItemTextStyle}" 
                                    FontSize="13" Grid.Row="0" Grid.Column="0"/>
-                                <Label Text="{Binding stationId}" 
+                                    <Label Text="{Binding stationId}" 
                                    LineBreakMode="NoWrap"
                                    Style="{DynamicResource ListItemDetailTextStyle}"
                                    FontSize="13" Grid.Row="0" Grid.Column="1"/>
-                                <Label Text="Recorded Time: "    
+                                    <Label Text="Recorded Time: "    
                                    LineBreakMode="NoWrap" 
                                    Style="{DynamicResource ListItemTextStyle}" 
                                    FontSize="13" Grid.Row="1" Grid.Column="0"/>
-                                <Label Text="{Binding stationId}" 
+                                    <Label Text="{Binding stationId}" 
                                        LineBreakMode="NoWrap"
                                        Style="{DynamicResource ListItemDetailTextStyle}"
                                        FontSize="13" Grid.Row="1" Grid.Column="1"/>
-                            </Grid>
-                        </ViewCell>
-					</DataTemplate>
-				</ListView.ItemTemplate>
-			</ListView>
-		</StackLayout>
-	</ContentPage.Content>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </ContentView>
+    </ContentPage.Content>
 </ContentPage>

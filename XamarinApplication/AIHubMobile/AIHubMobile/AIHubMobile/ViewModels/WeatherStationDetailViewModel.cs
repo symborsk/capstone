@@ -30,21 +30,5 @@ namespace AIHubMobile
             }
 
         }
-
-        //Async load of the items
-        async Task ExecuteLoadItemsCommand()
-        {
-            return;
-        }
-
-        async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
-        {
-            var item = args.SelectedItem as WeatherSet;
-            if (item == null)
-                return;
-
-        }
-
-
     }
 }

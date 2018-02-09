@@ -34,5 +34,10 @@ namespace AIHubMobile
             WeatherSetListView.ItemsSource = viewModel.rgSets;
             BindingContext = this.viewModel = viewModel;
         }
+
+        async void Config_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ChangeOptionsPage());
+        }
     }
 }
