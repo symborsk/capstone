@@ -6,21 +6,14 @@ from time import sleep
 import glob
 import os
 
-camera = PiCamera()
-
-camera.start_preview()
-sleep(1)
-camera.capture('/home/thor/capstone/pi_image/image_recognition/images/img_'+ str("{:%b_%d_%Y-%H:%M:%S}".format(datetime.datetime.now())) + ".jpg")
-camera.stop_preview()	
-
 class Camera:
 	def __init__(self):
 		self.camera = PiCamera()
 
 	def take_photo(self, path=None):
 		if not path:
-			path = "img/img_" + 
-			str("{:%b_%d_%Y-%H:%M:%S}".format(datetime.datetime.now())) + ".jpg"
+			path = ("img/img_" + 
+			  str("{:%b_%d_%Y-%H:%M:%S}".format(datetime.datetime.now())) + ".jpg")
 
 		self.camera.start_preview()
 		sleep(1)
