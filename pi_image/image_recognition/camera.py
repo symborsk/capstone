@@ -17,11 +17,11 @@ class Camera:
 	def __init__(self):
 		self.camera = PiCamera()
 
-	def take_photo(self):
-		take_photo('/home/thor/capstone/pi_image/image_recognition/img/img_'+ 
-			str("{:%b_%d_%Y-%H:%M:%S}".format(datetime.datetime.now())) + ".jpg", self)
+	def take_photo(self, path=None):
+		if not path:
+			path = "img/img_" + 
+			str("{:%b_%d_%Y-%H:%M:%S}".format(datetime.datetime.now())) + ".jpg"
 
-	def take_photo(path, self):
 		self.camera.start_preview()
 		sleep(1)
 		self.camera.capture(path)
@@ -33,3 +33,8 @@ class Camera:
 		list_of_files = glob.glob('/home/thor/capstone/pi_image/image_recognition/img/*.jpg')
 		latest_file = max(list_of_files, key=os.path.getctime)
 		return latest_file
+
+if __name__ == "__main__":
+	camera = Camera()
+	camera.take_photo()
+	print(camera.get_latest_photo_filename())
