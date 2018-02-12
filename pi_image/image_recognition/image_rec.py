@@ -14,7 +14,7 @@ import cv2
 from camera import Camera
 
 
-def get_visibility_rating(base, curr):
+def _get_visibility_rating(base, curr):
     baseline      = cv2.imread(base)
     base_histo    = cv2.calcHist([baseline], [0], None, [256], [0,256])
 
@@ -35,10 +35,10 @@ def get_visibility_rating(base, curr):
     return difference
 
     
-
-
-if __name__ == '__main__':
-    print("Grabbing a new snapshot")
+def get_current_visibility_rating():
     camera = Camera()
     camera.take_photo()
-    print(get_visibility_rating("img/baseline.jpg", camera.get_latest_photo_filename()))
+    return _get_visibility_rating("img/baseline.jpg", camera.get_latest_photo_filename())
+
+if __name__ == '__main__':
+    print(get_current_visibility_rating())
