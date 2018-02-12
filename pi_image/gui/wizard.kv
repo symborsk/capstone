@@ -170,12 +170,24 @@ ScreenManager:
 				TextInput:
 					id: sensor_name
 					font_size: 21
-					size_hint_x: None 
-					width: 300
 					size_hint_y: None 
 					height: 45
 					text: 'Sensor Name'
-				CustomDropDown:
+				Spinner:
+					id: sensor_bus_spinner
+					text: 'Single Bus Sensor'
+					values: ['Single Bus Sensor', 'Serial Communication Sensor', 'Analog Sensor']
+					font_size: 21
+					size_hint_y: None
+					height: 45
+					text: 'Sensor Bus Type'
+				Button
+					id: sensor_add_button
+					font_size: 21
+					size_hint_y: None 
+					height: 45
+					text: 'Add Sensor'
+					on_press: root.save_sensor()
 			Widget:
 		Widget:
 		BoxLayout:

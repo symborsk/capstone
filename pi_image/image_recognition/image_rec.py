@@ -11,13 +11,14 @@
 #############################################################################
 
 import cv2
+from camera import Camera
 
 
 def get_visibility_rating(base, curr):
-    baseline      = cv2.imread('baseline.jpg')
+    baseline      = cv2.imread(base)
     base_histo    = cv2.calcHist([baseline], [0], None, [256], [0,256])
 
-    current       = cv2.imread('test.jpg')
+    current       = cv2.imread(curr)
     current_histo = cv2.calcHist([current], [0], None, [256], [0,256])
 
     histograms = {'baseline': base_histo, 'current': current_histo}
@@ -37,4 +38,7 @@ def get_visibility_rating(base, curr):
 
 
 if __name__ == '__main__':
-    print(get_visibility_rating("baseline.jpg", "current.jpg"))
+    print("Grabbing a new snapshot")
+    camera = Camera()
+    camera.take_photo()
+    print(get_visibility_rating("img/baseline.jpg", camera.get_latest_photo_filename()))

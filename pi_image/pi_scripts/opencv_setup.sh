@@ -75,10 +75,11 @@ cmake -D MAKE_BUILD_TYPE=RELEASE \
 		-D CMAKE_INSTALL_PREFIX=/usr/local \
 		-D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib-3.1.0/modules ..
 
-echo "Final Make process"
-echo "This can take up to two hours"
-make -j4
+echo "Main Make process (single core - multicore kept failing)"
+echo "This can take up to 24 hours"
+sudo make
 
-cd ~/.virtualenvs/facecourse-py3/lib/python3.5/site-packages
-# The following line needs to be updated with the ocrrect path
-ln -s /usr/local/lib/python3.6/dist-packages/cv2.cpython-36m-x86_64-linux-gnu.so cv2.so
+echo "Make install process"
+sudo make install
+
+echo "script run to completion."

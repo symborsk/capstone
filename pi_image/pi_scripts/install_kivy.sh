@@ -13,12 +13,21 @@ echo "Instally Kivy on Ubuntu MATE for PI"
 
 echo "Dependencies"
 sudo apt-get update
-sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
-   pkg-config libgl1-mesa-dev libgles2-mesa-dev \
-   python-setuptools libgstreamer1.0-dev git-core \
-   gstreamer1.0-plugins-{bad,base,good,ugly} \
-   gstreamer1.0-alsa python-dev libmtdev-dev \
-   xclip
+sudo apt-get install libsdl2-dev 
+sudo apt-get install libsdl2-image-dev 
+sudo apt-get install libsdl2-mixer-dev 
+sudo apt-get install libsdl2-ttf-dev
+sudo apt-get install pkg-config 
+sudo apt-get install libgl1-mesa-dev 
+sudo apt-get install libgles2-mesa-dev
+sudo apt-get install python-setuptools 
+sudo apt-get install libgstreamer1.0-dev 
+sudo apt-get install git-core
+sudo apt-get install gstreamer1.0-plugins-{bad,base,good,ugly}
+sudo apt-get install gstreamer1.0-alsa 
+sudo apt-get install python-dev 
+sudo apt-get install libmtdev-dev
+sudo apt-get install xclip
 
 echo "Install cpython"
 sudo pip3 install -U Cython==0.27.3

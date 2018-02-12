@@ -12,6 +12,9 @@ from kivy.graphics.vertex_instructions import Line
 from kivy.graphics.context_instructions import Color
 from kivy.uix.progressbar import ProgressBar
 
+from kivy.base import runTouchApp
+from kivy.uix.spinner import Spinner
+
 
 class WelcomeScreen(Screen):
     welcome_label_text = "Wireless Sensor Hub Setup"
@@ -41,7 +44,8 @@ class SensorScreen(Screen):
     def on_next(self):
         pass # create sensor objs
 
-    def save_data(self):
+    def save_sensor(self):
+        # https://github.com/kivy/kivy/wiki/Styling-a-Spinner-and-SpinnerOption-in-KV
         pass
 
 
