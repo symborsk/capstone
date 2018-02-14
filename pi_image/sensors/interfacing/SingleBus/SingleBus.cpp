@@ -37,7 +37,8 @@ SingleBus::SingleBus(uint8_t pin, uint8_t type, uint8_t count, uint8_t bytes, ui
   _bit = digitalPinToBitMask(pin);
   _port = digitalPinToPort(pin);
 #endif
-_maxcycles = 1000/CLOCKS_PER_SEC;
+_maxcycles = 1000;
+
   // but so will the subtraction.
   _lastreadtime = -MIN_INTERVAL;
   DEBUG_PRINT("Max clock cycles: "); DEBUG_PRINTLN(_maxcycles, DEC);
@@ -59,11 +60,14 @@ void SingleBus::printData() {
 void SingleBus::sendDH11StartSignal() {
   // Go into high impedence state to let pull-up raise data line level and
   // start the reading process.
+  wiringPiSetup();
+  delay(500);
   digitalWrite(_pin, HIGH);
   delay(250);
 
   // First set data line low for 20 milliseconds.
   pinMode(_pin, OUTPUT);
+  delay(500);
   digitalWrite(_pin, LOW);
   delay(20);
 }
@@ -82,11 +86,9 @@ bool SingleBus::read(bool force) {
   for (i = 0; i < _bytes; i++) {
     data[i] = 0;
   }
-
   sendDH11StartSignal(); // this needs be made generic later
 
-
-
+  pinMode(_pin, INPUT);
   uint32_t cycles[80];
   {
     // End the start signal by setting data line high for 40 microseconds.
@@ -147,16 +149,22 @@ bool SingleBus::read(bool force) {
   }
   DEBUG_PRINTLN(sum, HEX);
 
+  
   return DH11Checksum(data);
 }
 
 bool SingleBus::DH11Checksum(uint8_t * data) {
+  
   if (data[4] == ((data[0] + data[1] + data[2] + data[3]) & 0xFF)) {
     _lastresult = true;
+
+    printf("Checksum passed on data[4] = %d\n", data[4]);
+    printf("The result of temp is %d\n", data[1]&0xFF);
     return _lastresult;
   }
   else {
     DEBUG_PRINTLN(F("Checksum failure!"));
+    printf("Checksum failed on data[4] = %d\n", data[4]);
     _lastresult = false;
     return _lastresult;
   }
@@ -178,7 +186,7 @@ uint32_t SingleBus::expectPulse(bool level) {
     if (count++ >= _maxcycles) {
       return 0; // Exceeded timeout, fail.
     }
-  }
+ } 
 
 #endif
 
@@ -186,11 +194,12 @@ uint32_t SingleBus::expectPulse(bool level) {
 } 
 
 int main(void){
+  
+
   SingleBus sensor = SingleBus(7, INPUT, 3, 5, 85);
   while(1){
   
   sensor.printData();
-  
   delay(2000);
 
   }
