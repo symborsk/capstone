@@ -18,9 +18,8 @@
     <ContentPage.Content>
         <ContentView>
             <StackLayout>
-                
                 <ListView x:Name="ItemsListView" 
-                ItemsSource="{Binding Items}"
+                ItemsSource="{Binding WeatherStations}"
                 VerticalOptions="FillAndExpand"
                  HasUnevenRows="true"
                  RefreshCommand="{Binding LoadItemsCommand}"
@@ -54,7 +53,7 @@
                                    LineBreakMode="NoWrap" 
                                    Style="{DynamicResource ListItemTextStyle}" 
                                    FontSize="13" Grid.Row="1" Grid.Column="0"/>
-                                    <Label Text="{Binding stationId}" 
+                                    <Label Text="{Binding latestTime}" 
                                        LineBreakMode="NoWrap"
                                        Style="{DynamicResource ListItemDetailTextStyle}"
                                        FontSize="13" Grid.Row="1" Grid.Column="1"/>

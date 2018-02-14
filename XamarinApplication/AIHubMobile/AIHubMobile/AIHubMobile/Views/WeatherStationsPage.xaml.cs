@@ -16,13 +16,13 @@ namespace AIHubMobile
 {
     public partial class WeatherStationsPage : ContentPage
     {
-        WeatherStationsViewModel viewModel;
+        WeatherStationsViewModel weatherStationViewModel;
 
         public WeatherStationsPage()
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new WeatherStationsViewModel();
+            BindingContext = weatherStationViewModel = new WeatherStationsViewModel();
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -47,8 +47,8 @@ namespace AIHubMobile
         {
             base.OnAppearing();
 
-            if (viewModel.Items.Count == 0)
-                viewModel.LoadItemsCommand.Execute(null);
+            if (weatherStationViewModel.WeatherStations.Count == 0)
+                weatherStationViewModel.LoadItemsCommand.Execute(null);
         }
     }
 }
