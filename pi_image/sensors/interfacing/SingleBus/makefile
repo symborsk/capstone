@@ -10,7 +10,7 @@
 
 CC = g++
 
-CFLAGS = -g -Wall
+CFLAGS = -g -Wall -std=gnu++11 -fno-stack-protector
 
 TARGET = SingleBus
 

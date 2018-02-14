@@ -27,31 +27,35 @@
 #include <time.h>
 #define MIN_INTERVAL 2000
 
+
 SingleBus::SingleBus(uint8_t pin, uint8_t type, uint8_t count, uint8_t bytes, uint8_t delay) {
   data = (uint8_t*) malloc(bytes * sizeof(uint8_t));
   _pin = pin;
   _type = type;
   _bytes = bytes;
   _delay = delay;
-#ifdef __AVR
-  _bit = digitalPinToBitMask(pin);
-  _port = digitalPinToPort(pin);
-#endif
-_maxcycles = 1000;
+  #ifdef __AVR
+    _bit = digitalPinToBitMask(pin);
+    _port = digitalPinToPort(pin);
+  #endif
+  _maxcycles = 1000;
+  _lastresult = false;
 
   // but so will the subtraction.
   _lastreadtime = -MIN_INTERVAL;
   DEBUG_PRINT("Max clock cycles: "); DEBUG_PRINTLN(_maxcycles, DEC);
 }
 
-void SingleBus::printData() {
+bool SingleBus::printData() {
   if (read(true)) {
     for (int i = 0; i < _bytes; i++) {
       printf("Data Byte %d: 0x%x\n", i, data[i]);
     }
+    return true;
   }
   else {
     printf("Could not read\n");
+    return false;
   }
 
 }
@@ -119,7 +123,6 @@ bool SingleBus::read(bool force) {
       cycles[i + 1] = expectPulse(HIGH);
     }
   }
-
     // Inspect pulses and determine which ones are 0 (high state cycle count < low
     // state cycle count), or 1 (high state cycle count > low state cycle count).
   for (int i = 0; i<40; ++i) {
@@ -158,13 +161,10 @@ bool SingleBus::DH11Checksum(uint8_t * data) {
   if (data[4] == ((data[0] + data[1] + data[2] + data[3]) & 0xFF)) {
     _lastresult = true;
 
-    printf("Checksum passed on data[4] = %d\n", data[4]);
-    printf("The result of temp is %d\n", data[1]&0xFF);
     return _lastresult;
   }
   else {
     DEBUG_PRINTLN(F("Checksum failure!"));
-    printf("Checksum failed on data[4] = %d\n", data[4]);
     _lastresult = false;
     return _lastresult;
   }
@@ -197,11 +197,9 @@ int main(void){
   
 
   SingleBus sensor = SingleBus(7, INPUT, 3, 5, 85);
-  while(1){
-  
-  sensor.printData();
-  delay(2000);
-
-  }
+  while (sensor.printData() == false) {
+    sensor.printData();
+    delay(2000);
+ }
 return 0;
 }

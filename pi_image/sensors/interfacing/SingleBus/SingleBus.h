@@ -49,7 +49,7 @@ class SingleBus {
 public:
 SingleBus(uint8_t pin, uint8_t type, uint8_t count, uint8_t bytes, uint8_t delay);
 void begin(void);
-void printData(void);
+bool printData(void);
 void sendDH11StartSignal(void);
 bool read(bool force=false);
 bool DH11Checksum(uint8_t * data);
