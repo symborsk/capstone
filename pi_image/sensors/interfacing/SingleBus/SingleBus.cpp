@@ -43,18 +43,17 @@ SingleBus::SingleBus(uint8_t pin, uint8_t type, uint8_t count, uint8_t bytes, ui
 
   // but so will the subtraction.
   _lastreadtime = -MIN_INTERVAL;
-  DEBUG_PRINT("Max clock cycles: "); DEBUG_PRINTLN(_maxcycles, DEC);
 }
 
 bool SingleBus::printData() {
   if (read(true)) {
     for (int i = 0; i < _bytes; i++) {
-      printf("Data Byte %d: 0x%x\n", i, data[i]);
+      printf("%x ", i, data[i]);
     }
+    printf("\n");
     return true;
   }
   else {
-    printf("Could not read\n");
     return false;
   }
 
@@ -107,12 +106,10 @@ bool SingleBus::read(bool force) {
                 // First expect a low signal for ~delay microseconds followed by a high signal
                 // for ~delay microseconds again.
     if (expectPulse(LOW) == 0) {
-      DEBUG_PRINTLN(F("Timeout waiting for start signal low pulse."));
       _lastresult = false;
       return _lastresult;
     }
     if (expectPulse(HIGH) == 0) {
-      DEBUG_PRINTLN(F("Timeout waiting for start signal high pulse."));
       _lastresult = false;
       return _lastresult;
     }
@@ -129,7 +126,6 @@ bool SingleBus::read(bool force) {
     uint32_t lowCycles = cycles[2 * i];
     uint32_t highCycles = cycles[2 * i + 1];
     if ((lowCycles == 0) || (highCycles == 0)) {
-      DEBUG_PRINTLN(F("Timeout waiting for pulse."));
       _lastresult = false;
       return _lastresult;
     }
@@ -144,14 +140,6 @@ bool SingleBus::read(bool force) {
     // stored data.
   }
 
-  DEBUG_PRINTLN(F("Received:"));
-  uint32_t sum = 0;
-  for (int j = 0; j < _bytes; j++) {
-    DEBUG_PRINT(data[j], HEX); DEBUG_PRINT(F(", "));
-    sum += data[j];
-  }
-  DEBUG_PRINTLN(sum, HEX);
-
   
   return DH11Checksum(data);
 }
@@ -164,7 +152,6 @@ bool SingleBus::DH11Checksum(uint8_t * data) {
     return _lastresult;
   }
   else {
-    DEBUG_PRINTLN(F("Checksum failure!"));
     _lastresult = false;
     return _lastresult;
   }
@@ -193,13 +180,12 @@ uint32_t SingleBus::expectPulse(bool level) {
   return count;
 } 
 
-int main(void){
-  
-
-  SingleBus sensor = SingleBus(7, INPUT, 3, 5, 85);
+int main(int argc; char ** argv){
+  int pin = atoi(argv[1]);
+  SingleBus sensor = SingleBus(pin, INPUT, 3, 5, 85);
   while (sensor.printData() == false) {
     sensor.printData();
     delay(2000);
  }
-return 0;
+return 0
 }
