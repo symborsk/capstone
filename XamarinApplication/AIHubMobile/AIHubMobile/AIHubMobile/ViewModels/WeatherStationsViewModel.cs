@@ -18,13 +18,13 @@ namespace AIHubMobile
     public class WeatherStationsViewModel : BaseViewModel
     {
         //Collection that can be viewed
-        public ObservableCollection<WeatherStation> Items { get; set; }
+        public ObservableCollection<WeatherStation> WeatherStations { get; set; }
         public Command LoadItemsCommand { get; set; }
 
         public WeatherStationsViewModel()
         {
             Title = "View Weather";
-            Items = new ObservableCollection<WeatherStation>();
+            WeatherStations = new ObservableCollection<WeatherStation>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             AppOptions options = new AppOptions();
 
@@ -48,12 +48,12 @@ namespace AIHubMobile
 
             try
             {
-                Items.Clear();
+                WeatherStations.Clear();
                 bool succ = await WeatherSet.RefreshWeatherSets();
                 IEnumerable<WeatherStation> items = await WeatherSet.GetAllWeatherSets(true);
                 foreach (var item in items)
                 {
-                    Items.Add(item);
+                    WeatherStations.Add(item);
                 }
             }
             catch (Exception ex)

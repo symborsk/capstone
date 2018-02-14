@@ -16,39 +16,39 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ContentView  >
-        <StackLayout>
-             
-                <StackLayout Orientation="Horizontal"  HorizontalOptions="FillAndExpand">
-                <StackLayout Orientation="Vertical"  HorizontalOptions="FillAndExpand">
-                        <Label Text="Start Range  : "    
-                                   LineBreakMode="NoWrap" 
-                                   FontSize="Small"
-                                   FontAttributes="Bold"                
-                                   VerticalOptions="CenterAndExpand"
-                                   HorizontalTextAlignment="Center"/>
-                    </StackLayout>
-                    <StackLayout Orientation="Vertical"  HorizontalOptions="FillAndExpand">
-                        <DatePicker VerticalOptions="CenterAndExpand" Date="Jan 1 2000">
-                            <DatePicker.Format>yyyy-MM-dd</DatePicker.Format>
-                        </DatePicker>
-                    </StackLayout>
-                </StackLayout>
+            <StackLayout>
+                <Grid RowSpacing="0" ColumnSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="35*"  />
+                        <ColumnDefinition Width="65*" />
+                    </Grid.ColumnDefinitions>
 
-                <StackLayout Orientation="Horizontal"  HorizontalOptions="FillAndExpand">
-                    <StackLayout Orientation="Vertical"  HorizontalOptions="FillAndExpand">
-                        <Label Text="End Range : "    
+                    <Label Text="Start Range : "    
                                    LineBreakMode="NoWrap" 
                                    FontSize="Small"
                                    FontAttributes="Bold"                
                                    VerticalOptions="CenterAndExpand"
-                                   HorizontalTextAlignment="Center"/>
-                    </StackLayout>
-                    <StackLayout Orientation="Vertical"  HorizontalOptions="FillAndExpand">
-                        <DatePicker VerticalOptions="CenterAndExpand" Date="{x:Static sys:DateTime.Now}">
-                            <DatePicker.Format>yyyy-MM-dd</DatePicker.Format>
-                        </DatePicker>
-                    </StackLayout>
-                </StackLayout>
+                                   HorizontalTextAlignment="Center"
+                                    Grid.Row="0" Grid.Column="0"/>
+                    <DatePicker VerticalOptions="CenterAndExpand"  HorizontalOptions="Fill" Date="Jan 1 2000" Grid.Row="0" Grid.Column="1">
+                        <DatePicker.Format>yyyy-MM-dd</DatePicker.Format>
+                    </DatePicker>
+
+                    <Label Text="End Range : "    
+                                   LineBreakMode="NoWrap" 
+                                   FontSize="Small"
+                                   FontAttributes="Bold"                
+                                   VerticalOptions="CenterAndExpand"
+                                   HorizontalTextAlignment="Center"
+                                    Grid.Row="1" Grid.Column="0"/>
+                    <DatePicker VerticalOptions="CenterAndExpand"  HorizontalOptions="Fill" Date="{x:Static sys:DateTime.Now}" Grid.Row="1" Grid.Column="1">
+                        <DatePicker.Format>yyyy-MM-dd</DatePicker.Format>
+                    </DatePicker>
+                </Grid>
 
                 <BoxView  
                     HorizontalOptions="Fill"

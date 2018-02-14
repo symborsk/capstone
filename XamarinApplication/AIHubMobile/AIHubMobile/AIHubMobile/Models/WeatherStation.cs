@@ -10,6 +10,14 @@ namespace AIHubMobile
         public List<WeatherSet> rgWeatherSets { get; set; }
         public StationOptions statOptions { get; set; }
         public long stationId { get; set; }
+        public DateTime latestTime
+        {
+            get
+            {
+                return GetLatestDate();
+            }
+    
+        }
         
         public WeatherStation(StationOptions givenStatOptions, long id)
         {
