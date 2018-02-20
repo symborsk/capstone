@@ -1,4 +1,4 @@
-with open("../../SingleBus/.data/dht22_1.dat") as file:
+with open("/home/thor/capstone/pi_image/sensors/interfacing/SingleBus/.data/dht22_1.dat") as file:
 	for line in file:
 		pass
 
