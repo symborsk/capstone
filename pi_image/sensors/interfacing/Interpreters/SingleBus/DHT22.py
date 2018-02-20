@@ -1,6 +1,9 @@
 with open("../../SingleBus/.data/dht22_1") as file:
 	for line in file:
-		read_bytes = line.split(" ")
+		pass
+
+# take latest line
+read_bytes = line.split(" ")
 
 # from adafruit library
 humidity = (read_bytes[0] * 256 + read_bytes[1]) / 10.0
