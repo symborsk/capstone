@@ -92,7 +92,7 @@ bool SingleBus::read(bool force) {
   sendDH11StartSignal(); // this needs be made generic later
 
   pinMode(_pin, INPUT);
-  uint32_t cycles[80];
+  uint32_t cycles[_maxcycles];
   {
     // End the start signal by setting data line high for 40 microseconds.
     // This is DH11 specific... Needs to be more general
