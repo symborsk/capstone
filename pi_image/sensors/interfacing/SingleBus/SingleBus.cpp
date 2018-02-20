@@ -48,7 +48,7 @@ SingleBus::SingleBus(uint8_t pin, uint8_t type, uint8_t count, uint8_t bytes, ui
 bool SingleBus::printData() {
   if (read(true)) {
     for (int i = 0; i < _bytes; i++) {
-      printf("%x ", i, data[i]);
+      printf("%d ", data[i]);
     }
     printf("\n");
     return true;
@@ -180,12 +180,12 @@ uint32_t SingleBus::expectPulse(bool level) {
   return count;
 } 
 
-int main(int argc; char ** argv){
+int main(int argc, char ** argv){
   int pin = atoi(argv[1]);
   SingleBus sensor = SingleBus(pin, INPUT, 3, 5, 85);
   while (sensor.printData() == false) {
     sensor.printData();
     delay(2000);
  }
-return 0
+return 0;
 }
