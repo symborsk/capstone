@@ -29,6 +29,7 @@
 
 
 SingleBus::SingleBus(uint8_t pin, uint8_t type, uint8_t count, uint8_t bytes, uint8_t delay) {
+  wiringPiSetup();
   data = (uint8_t*) malloc(bytes * sizeof(uint8_t));
   _pin = pin;
   _type = type;
@@ -63,7 +64,6 @@ bool SingleBus::printData() {
 void SingleBus::sendDH11StartSignal() {
   // Go into high impedence state to let pull-up raise data line level and
   // start the reading process.
-  wiringPiSetup();
   delay(500);
   digitalWrite(_pin, HIGH);
   delay(250);
