@@ -7,7 +7,7 @@
  * 
  * This class will interface with any single-line Serial sensor interfaced 
  * over a GPIO pin on the Raspberry Pi 3.
- *
+ *q
  * This code is a heavy modification of existing library code licensed under
  * the MIT license. A full copy of the MIT license is available in the legal
  * directory in the root of this project. 
