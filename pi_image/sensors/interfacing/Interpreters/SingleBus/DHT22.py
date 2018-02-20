@@ -1,4 +1,4 @@
-with open("../../SingleBus/dht22_1") as file:
+with open("../../SingleBus/.data/dht22_1") as file:
 	for line in file:
 		read_bytes = line.split(" ")
 

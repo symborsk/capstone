@@ -5,7 +5,7 @@
 import os
 
 single_bus_sensors = dict()
-single_bus_sensors[dht22_1] = 7
+single_bus_sensors["dht22_1"] = 7
 
 if __name__ == '__main__':
 	# https://stackoverflow.com/questions/13045593/using-sudo-with-python-script
