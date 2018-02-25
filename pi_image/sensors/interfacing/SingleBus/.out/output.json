@@ -1,0 +1,4 @@
+
+{"sensor": "DHT22", "data": {"humidity": 15.4, "temperature": 24.7}}
+{"data": {"temperature": 25.1, "humidity": 15.3}, "sensor": "DHT22"}
+{"data": {"temperature": 21.9, "humidity": 15.3}, "sensor": "DHT22"}

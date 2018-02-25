@@ -46,6 +46,17 @@
 
 #include "I2C.h"
 
+
+static void main(){
+  Adafruit_MPL115A2 barometer = new Adafruit_MPL115A2();
+  barometer.begin();
+  float pressure = barometer.getPressure();
+
+  printf("Pressure: %f\n", pressure);
+  
+
+}
+
 static uint8_t i2cread(void) {
   uint8_t x;
   x = Wire.receive();

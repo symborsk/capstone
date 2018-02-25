@@ -6,8 +6,6 @@
  *
  */
 
-#ifndef __MPL115A2__
-#define __MPL115A2__
 #include <stdint.h>
 #include "mpl115a2.h"
 #include <string.h>
@@ -20,7 +18,6 @@
 #include <linux/i2c-dev.h>
 #include <time.h>
 #include <math.h>
-#endif
 
 typedef struct {
 	/* file descriptor */

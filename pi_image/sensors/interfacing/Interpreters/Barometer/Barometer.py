@@ -1,13 +1,13 @@
 import json
 
 # File variables
-data_path = "/home/thor/capstone/pi_image/sensors/interfacing/SingleBus/.data/"
-data_file = "dht22_1.dat"
-output_path = r"/home/thor/capstone/pi_image/sensors/interfacing/SingleBus/.out/"
+data_path = "/home/thor/capstone/pi_image/sensors/interfacing/Barometer/.data/"
+data_file = "barometer_1.dat"
+output_path = r"/home/thor/capstone/pi_image/sensors/interfacing/Barometer/.out/"
 output_file = r"output.json"
 
 # JSON Output Variable
-sensor_name = "DHT22"
+sensor_name = "Barometer"
 read_bytes = ""
 # Load the raw bytes
 with open(data_path + data_file) as file:
@@ -17,16 +17,14 @@ with open(data_path + data_file) as file:
 
 
 
-# from adafruit library
-humidity = (int(read_bytes[0]) * 256 + int(read_bytes[1])) / 10.0
-temp =     ((int(read_bytes[2]) & 0x7F) * 256 + int(read_bytes[3])) / 10.0
+# From the last read line get the pressure
+pressure = read_bytes
 
 # Build the JSON output object
 output = {
 			"sensor": sensor_name,
 			"data": {
-				"humidity":humidity,
-				"temperature":temp
+				"pressure":pressure
 			}
 		}
 
