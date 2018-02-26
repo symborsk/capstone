@@ -29,7 +29,7 @@
 
 
 SingleBus::SingleBus(uint8_t pin, uint8_t type, uint8_t count, uint8_t bytes, uint8_t delay) {
-  wiringPiSetup();
+  wiringPiSetupGpio();
   data = (uint8_t*) malloc(bytes * sizeof(uint8_t));
   _pin = pin;
   _type = type;

@@ -319,9 +319,9 @@ float SDL_Weather_80422::get_current_wind_speed_when_sampling()
 
  int main() {
   wiringPiSetup();
-  SDL_Weather_80422 *station =  new SDL_Weather_80422(13, 19);
+  SDL_Weather_80422 *station =  new SDL_Weather_80422(16, 20);
   printf("Hello world!\n");
   //station->current_wind_speed();
-  printf("Speed: %f, Rain: %f, Dir: %f\n", station->current_wind_speed(), station->get_current_rain_total(), station->current_wind_direction());
+  printf("Speed: %f, Rain: , Dir: %f\n", station->current_wind_speed(), station->get_current_rain_total());
   printf("Goodbye world!\n");
 }
