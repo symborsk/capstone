@@ -1,7 +1,7 @@
 '''
   ADC.py
 
-  By: Joey-Michael Fallone
+  By: Joey-Michael Fallone and Dallin Toth
 
   Uses the existing Adafruit_ADS1x15 library to print out a 
   ADC value read to stdout

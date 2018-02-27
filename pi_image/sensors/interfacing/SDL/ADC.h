@@ -22,6 +22,6 @@ class ADC {
     float readVoltage();
 
   private:
-    float convertReadingToVoltage(int reading);
+    float  convertReadingToVoltage(int reading);
 
 };

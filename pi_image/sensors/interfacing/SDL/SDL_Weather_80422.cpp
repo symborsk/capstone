@@ -134,23 +134,16 @@ void serviceInterruptAnem()
 }
 
 
-unsigned long currentRainMin;
 unsigned long lastRainTime;
 
 void serviceInterruptRain()
 {
-  printf("rain interrupt routine\n");
   unsigned long currentTime=(unsigned long) (micros()-lastRainTime);
-
+  printf("rain interrupt routine: curr time = %lu\n", currentTime);
   lastRainTime=micros();
   if(currentTime>500)   // debounce
   {
        SDL_Weather_80422::_currentRainCount++;
-    if(currentTime<currentRainMin)
-    {
-     currentRainMin=currentTime;
-    }
- 
   }
 
   
@@ -195,7 +188,7 @@ SDL_Weather_80422::SDL_Weather_80422(int pinAnem, int pinRain)
   
   // Attach the intterupt to the pin
   wiringPiISR(pinAnem, INT_EDGE_RISING, &serviceInterruptAnem);
-  wiringPiISR(pinRain, INT_EDGE_RISING, &serviceInterruptAnem);
+  wiringPiISR(pinRain, INT_EDGE_RISING, &serviceInterruptRain);
   printf("finished constructor\n");
 
 }
@@ -203,6 +196,7 @@ SDL_Weather_80422::SDL_Weather_80422(int pinAnem, int pinRain)
 
 float SDL_Weather_80422::get_current_rain_total()
 {
+        printf("current rain count: %li\n", _currentRainCount);
         float rain_amount = 0.2794 * _currentRainCount/2;  // mm of rain - we get two interrupts per bucket
         _currentRainCount = 0;
 	return rain_amount;
@@ -318,10 +312,12 @@ float SDL_Weather_80422::get_current_wind_speed_when_sampling()
   
 
  int main() {
-  wiringPiSetup();
+  wiringPiSetupGpio();
   SDL_Weather_80422 *station =  new SDL_Weather_80422(16, 20);
   printf("Hello world!\n");
   //station->current_wind_speed();
-  printf("Speed: %f, Rain: , Dir: %f\n", station->current_wind_speed(), station->get_current_rain_total());
+ printf("current direction: %f\n", station->current_wind_direction());
+  printf("Speed: %f, Rain: %f, Dir: %f\n", station->current_wind_speed(), station->get_current_rain_total(), station->current_wind_direction());
+  printf("current direction: %f\n", station->current_wind_direction());
   printf("Goodbye world!\n");
 }
