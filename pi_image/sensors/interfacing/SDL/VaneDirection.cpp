@@ -8,12 +8,8 @@ include the wind vane direction sensor as a separated process
 INCLUDE REFERENCES AND LICENSING INFO****
 
 
-<<<<<<< HEAD
 */
 #include <time.h>
-=======
-*/#include <time.h>
->>>>>>> 1ce4412cc52d814b96025c49a8becc6611653393
 #include <stdio.h>
 #include "VaneDirection.h"
 #include <wiringPi.h>
@@ -24,17 +20,10 @@ VaneDirection::VaneDirection() {
 	_adc = new ADC();
 
 	//Default set to North or 0 
-<<<<<<< HEAD
 	float _direction = 0.0;
 }
 
 bool VaneDirection::allowedThreshold(float compareValue, float value)
-=======
-	unsigned long _direction = 0.0;
-}
-
-bool allowedThreshold(float compareValue, float value)
->>>>>>> 1ce4412cc52d814b96025c49a8becc6611653393
 {
 #define VARYVALUE 0.15
 
@@ -49,11 +38,7 @@ bool allowedThreshold(float compareValue, float value)
 
 }
 
-<<<<<<< HEAD
 float VaneDirection::voltageToDegrees(float value, float defaultWindDirection)
-=======
-float voltageToDegrees(float value, float defaultWindDirection)
->>>>>>> 1ce4412cc52d814b96025c49a8becc6611653393
 {
 
 	// Note:  The original documentation for the wind vane says 16 positions.  Typically only recieve 8 positions.  And 315 degrees was wrong.
@@ -121,11 +106,7 @@ float VaneDirection::currentWindDirection()
 	voltageValue = _adc->readVoltage();
 	printf("insdie currentwinddir");
 
-<<<<<<< HEAD
 	float direction = voltageToDegrees(voltageValue, getCurrentWindDirection());
-=======
-	float direction = voltageToDegrees(voltageValue, _direction);
->>>>>>> 1ce4412cc52d814b96025c49a8becc6611653393
 
 	return direction;
 }
@@ -140,10 +121,5 @@ int main() {
 
 	VaneDirection* vane = new VaneDirection();
 
-<<<<<<< HEAD
 	printf("current direction: %f\n", vane->currentWindDirection());
 }
-=======
-	printf("current direction: %f\n", vane->getCurrentWindDirection());
-}
->>>>>>> 1ce4412cc52d814b96025c49a8becc6611653393
