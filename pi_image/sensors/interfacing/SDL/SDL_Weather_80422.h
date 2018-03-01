@@ -21,27 +21,18 @@ class SDL_Weather_80422
   public:
     SDL_Weather_80422(int pinAnem, int pinRain);
   
-    float get_current_rain_total();
-    float current_wind_speed();
-    float current_wind_direction();
-    float get_wind_gust();
-    void reset_rain_total();
-    void reset_wind_gust();
-  
-  
-  
-  
+    float getCurrentRainTotal();
+    float getCurrentWindSpeed();
+    float getWindGust();
+    void resestRainTotal();
+    void resetWindGust();
 
     static unsigned long _shortestWindTime;
     static long _currentRainCount;
     static long _currentWindCount;
-    
 
-     
-    float accessInternalCurrentWindDirection();
-
-  friend void serviceInterruptAnem();
-  friend void serviceInterruptRain(); 
+	friend void serviceInterruptAnem();
+	friend void serviceInterruptRain(); 
   
   private:
 
@@ -49,15 +40,15 @@ class SDL_Weather_80422
     int _pinRain;    
     float _sampleTime;
 
-    ADC * _adc;
+   
    
     unsigned long _startSampleTime;
 
     float _currentWindSpeed;
-    float _currentWindDirection;
+   
     
     void startWindSample(float sampleTime);
-    float get_current_wind_speed_when_sampling();
+    float getSampingWindSpeed();
 };
 
 #endif
