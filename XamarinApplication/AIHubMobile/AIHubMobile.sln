@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AIHubMobile", "AIHubMobile\AIHubMobile\AIHubMobile.shproj", "{B4A4F676-EC53-4B8D-AE6D-81934642F7E7}"
 EndProject
@@ -9,14 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIHubMobile.Android", "AIHu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIHubMobile.iOS", "AIHubMobile\AIHubMobile.iOS\AIHubMobile.iOS.csproj", "{0AB6D4C5-44E6-4848-9481-6234E8DDDE25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIHubMobile.UWP", "AIHubMobile\AIHubMobile.UWP\AIHubMobile.UWP.csproj", "{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}"
-EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		AIHubMobile\AIHubMobile\AIHubMobile.projitems*{0ab6d4c5-44e6-4848-9481-6234e8ddde25}*SharedItemsImports = 4
 		AIHubMobile\AIHubMobile\AIHubMobile.projitems*{b4a4f676-ec53-4b8d-ae6d-81934642f7e7}*SharedItemsImports = 13
 		AIHubMobile\AIHubMobile\AIHubMobile.projitems*{d9eeb3c9-9f89-47a5-a743-eff647db5492}*SharedItemsImports = 4
-		AIHubMobile\AIHubMobile\AIHubMobile.projitems*{f2ac44f0-23fd-4683-9bbe-3d239f6d3495}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,30 +82,6 @@ Global
 		{0AB6D4C5-44E6-4848-9481-6234E8DDDE25}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{0AB6D4C5-44E6-4848-9481-6234E8DDDE25}.Release|x64.ActiveCfg = Release|iPhone
 		{0AB6D4C5-44E6-4848-9481-6234E8DDDE25}.Release|x86.ActiveCfg = Release|iPhone
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Debug|ARM.ActiveCfg = Debug|ARM
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Debug|ARM.Build.0 = Debug|ARM
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Debug|ARM.Deploy.0 = Debug|ARM
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Debug|iPhone.ActiveCfg = Debug|x86
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Debug|iPhoneSimulator.ActiveCfg = Debug|x86
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Debug|x64.ActiveCfg = Debug|x64
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Debug|x64.Build.0 = Debug|x64
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Debug|x64.Deploy.0 = Debug|x64
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Debug|x86.ActiveCfg = Debug|x86
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Debug|x86.Build.0 = Debug|x86
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Debug|x86.Deploy.0 = Debug|x86
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Release|Any CPU.ActiveCfg = Release|x86
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Release|ARM.ActiveCfg = Release|ARM
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Release|ARM.Build.0 = Release|ARM
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Release|ARM.Deploy.0 = Release|ARM
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Release|iPhone.ActiveCfg = Release|x86
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Release|iPhoneSimulator.ActiveCfg = Release|x86
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Release|x64.ActiveCfg = Release|x64
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Release|x64.Build.0 = Release|x64
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Release|x64.Deploy.0 = Release|x64
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Release|x86.ActiveCfg = Release|x86
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Release|x86.Build.0 = Release|x86
-		{F2AC44F0-23FD-4683-9BBE-3D239F6D3495}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -64,9 +64,9 @@ void loop()
 {
   Serial.println("----------------");
 
-  currentWindSpeed = weatherStation.current_wind_speed()/1.6;
-  currentWindGust = weatherStation.get_wind_gust()/1.6;
-  totalRain = totalRain + weatherStation.get_current_rain_total()/25.4;
+  currentWindSpeed = weatherStation.getCurrentWindSpeed()/1.6;
+  currentWindGust = weatherStation.getWindGust()/1.6;
+  totalRain = totalRain + weatherStation.getCurrentRainTotal()/25.4;
   Serial.print("rain_total=");
   Serial.print(totalRain);
   Serial.print(""" wind_speed=");
