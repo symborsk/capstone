@@ -55,5 +55,3 @@ float ADC::readVoltage() {
 float ADC::convertReadingToVoltage(int reading) {
   return ((reading*VDD)/MAX_READ);
 }
-
-
