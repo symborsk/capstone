@@ -13,7 +13,6 @@
 #ifndef SDL_Weather_80422_h
 #define SDL_Weather_80422_h
 
-#include "ADC.h"
 
 void serviceInterruptAnem();
 void serviceInterruptRain();
