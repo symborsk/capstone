@@ -104,7 +104,6 @@ float VaneDirection::currentWindDirection()
 
 	// Get the voltage from the vane
 	voltageValue = _adc->readVoltage();
-	printf("insdie currentwinddir");
 
 	float direction = voltageToDegrees(voltageValue, getCurrentWindDirection());
 
