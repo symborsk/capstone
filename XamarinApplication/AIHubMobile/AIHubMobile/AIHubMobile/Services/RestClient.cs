@@ -74,7 +74,6 @@ namespace AIHubMobile
         public async Task<BlobResultSegment> ListBlobsAsync(CloudBlobContainer con)
         {
 
-            int i = 0;
             BlobContinuationToken continuationToken = null;
             BlobResultSegment resultSegment = null;
 
