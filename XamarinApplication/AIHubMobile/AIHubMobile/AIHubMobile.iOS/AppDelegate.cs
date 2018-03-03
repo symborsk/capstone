@@ -12,7 +12,14 @@ namespace AIHubMobile.iOS
 			global::Xamarin.Forms.Forms.Init();
 			LoadApplication(new App());
 
-			return base.FinishedLaunching(app, options);
-		}
-	}
+            //If in the test cloud enable the service
+            #if ENABLE_TEST_CLOUD
+                        Xamarin.Calabash.Start();
+            #endif
+
+            return base.FinishedLaunching(app, options);
+
+       
+        }
+    }
 }
