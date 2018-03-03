@@ -37,7 +37,7 @@ public:
 	VaneDirection();
   void setupDirectionArray(); 
 	int getWindDirection();
-
+  void printDirection();
 private:
 	float _direction;
 	ADC * _adc;

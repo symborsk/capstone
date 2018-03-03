@@ -18,7 +18,7 @@ with open(data_path + data_file) as file:
 
 
 # From the last read line get the direction
-direction = read_bytes
+direction = read_bytes[0]
 
 # Build the JSON output object
 output = {
