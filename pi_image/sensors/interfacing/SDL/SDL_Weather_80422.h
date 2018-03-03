@@ -13,8 +13,9 @@
 #ifndef SDL_Weather_80422_h
 #define SDL_Weather_80422_h
 
-#include "ADC.h"
 
+void serviceInterruptAnem();
+void serviceInterruptRain();
 
 class SDL_Weather_80422
 {
@@ -31,8 +32,6 @@ class SDL_Weather_80422
     static long _currentRainCount;
     static long _currentWindCount;
 
-	friend void serviceInterruptAnem();
-	friend void serviceInterruptRain(); 
   
   private:
 

@@ -40,6 +40,7 @@ bool VaneDirection::allowedThreshold(float compareValue, float value)
 
 float VaneDirection::voltageToDegrees(float value, float defaultWindDirection)
 {
+printf("voltage: %f\n", value);
 
 	// Note:  The original documentation for the wind vane says 16 positions.  Typically only recieve 8 positions.  And 315 degrees was wrong.
 	if (allowedThreshold(3.84 * VDDPERCENTAGE, value))
@@ -104,7 +105,6 @@ float VaneDirection::currentWindDirection()
 
 	// Get the voltage from the vane
 	voltageValue = _adc->readVoltage();
-	printf("insdie currentwinddir");
 
 	float direction = voltageToDegrees(voltageValue, getCurrentWindDirection());
 
