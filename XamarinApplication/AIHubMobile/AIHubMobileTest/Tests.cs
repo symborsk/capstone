@@ -37,6 +37,27 @@ namespace AIHubMobileTest
         {
             app.Screenshot("First screen.");
         }
+
+        [Test]
+        public void ClickOptions()
+        {
+            app.Tap("Options");
+            app.WaitForElement("Mock Option", "Options button did not respond!", new TimeSpan(0, 0, 10));
+
+            //TODO: fill in some options
+
+            //app.Tap("UPDATE");
+            //app.WaitForElement("Ab", "Update", new TimeSpan(0, 0, 10));
+        }
+
+        [Test]
+        public void ClickAbout()
+        {
+            app.Tap("About");
+            app.WaitForElement("View Web Portal", "About did not respond.", new TimeSpan(0, 0, 10));
+        }
+
+
     }
 }
 

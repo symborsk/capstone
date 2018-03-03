@@ -12,7 +12,7 @@
              x:Name="ViewWeatherPage">
     
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Options" Clicked="AddItem_Clicked" />
+        <ToolbarItem AutomationId="ChangeOptions" Text="Options" Clicked="AddItem_Clicked" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
