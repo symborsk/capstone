@@ -6,5 +6,10 @@
 python3 ~/capstone/pi_image/sensors/interfacing/SingleBus/run_single_bus.py
 python3 ~/capstone/pi_image/sensors/interfacing/Interpreters/SingleBus/DHT22.py
 
+# WindVane
+
+python3 ~capstone/pi_image/sensors/interfacing/WindVane/runVaneDirection.py
+python3 ~capstone/pi_image/sensors/interfacing/Interpreters/WindVane/WindVane.py
+
 # IoT Hub Message
 python3 ~/capstone/pi_image/sensors/iot_hub_transfer.py
