@@ -3,7 +3,7 @@ import json
 # File variables
 data_path = "/home/thor/capstone/pi_image/sensors/interfacing/SDL/.data/"
 data_file = "station.dat"
-output_path = r"/home/thor/capstone/pi_image/sensors/interfacing/SDL/.out/"
+output_path = r"/home/thor/capstone/pi_image/sensors/.out/"
 output_file = r"output.json"
 
 # JSON Output Variable
