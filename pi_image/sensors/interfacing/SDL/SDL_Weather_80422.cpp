@@ -55,7 +55,6 @@ SDL_Weather_80422::SDL_Weather_80422(int pinAnem, int pinRain)
 
 void serviceInterruptAnem()
 {
-  printf("anem interrupt routine\n");
   unsigned long currentTime= (unsigned long)(micros()-lastWindTime);
 
   lastWindTime=micros();
@@ -77,7 +76,6 @@ void serviceInterruptAnem()
 void serviceInterruptRain()
 {
   unsigned long currentTime=(unsigned long) (micros()-lastRainTime);
-  printf("rain interrupt routine: curr time = %lu\n", currentTime);
   lastRainTime=micros();
   if(currentTime>500)   // debounce
   {
@@ -85,15 +83,11 @@ void serviceInterruptRain()
   }
 
   
-
-  
-  
 }
 
 
 float SDL_Weather_80422::getCurrentRainTotal()
 {
-        printf("current rain count: %li\n", _currentRainCount);
         float rain_amount = 0.2794 * _currentRainCount/2;  // mm of rain - we get two interrupts per bucket
         _currentRainCount = 0;
 	return rain_amount;
@@ -152,7 +146,7 @@ float SDL_Weather_80422::getSampingWindSpeed()
     {
       // sample time exceeded, calculate currentWindSpeed
       float _timeSpan;
- //     _timeSpan = (unsigned long)(micros() - _startSampleTime);
+      // _timeSpan = (unsigned long)(micros() - _startSampleTime);
       _timeSpan = (micros() - _startSampleTime);
  
       _currentWindSpeed = ((float)_currentWindCount/(_timeSpan)) * WIND_FACTOR*1000000;
@@ -161,16 +155,8 @@ float SDL_Weather_80422::getSampingWindSpeed()
       
       _startSampleTime = micros();
 
-
-      }
-      else
-      {
-        //Serial.println("NOT Triggered");
-        //Serial.print("time = ");
-        //Serial.println(micros() - _startSampleTime);
-        // if not, then return last wind speed
+    }
   
-      }
   
     return _currentWindSpeed;
 }
@@ -178,10 +164,7 @@ float SDL_Weather_80422::getSampingWindSpeed()
  int main() {
   wiringPiSetupGpio();
   SDL_Weather_80422 *station =  new SDL_Weather_80422(16, 20);
-  printf("Hello world!\n");
-
  
-  printf("Speed: %f, Rain: %f\n", station->getCurrentWindSpeed(), station->getCurrentRainTotal());
+  printf("Speed: %f Rain: %f Gust: %f", station->getCurrentWindSpeed(), station->getCurrentRainTotal(), station->getWindGust());
   
-  printf("Goodbye world!\n");
 }
