@@ -14,5 +14,8 @@ python /home/thor/capstone/pi_image/sensors/interfacing/Interpreters/WindVane/Wi
 python /home/thor/capstone/pi_image/sensors/interfacing/SDL/runStation.py
 python /home/thor/capstone/pi_image/sensors/interfacing/Interpreters/SDL/SDL.py
 
+# Barometer
+python /home/thor/capstone/pi_image/sensors/interfacing/Barometer/run_barometer.py
+
 # IoT Hub Message
 python /home/thor/capstone/pi_image/sensors/iot_hub_transfer.py

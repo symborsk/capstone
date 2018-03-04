@@ -2,7 +2,7 @@ import json
 
 # File variables
 data_path = "/home/thor/capstone/pi_image/sensors/interfacing/Barometer/.data/"
-data_file = "barometer_1.dat"
+data_file = "Barometer.dat"
 output_path = r"/home/thor/capstone/pi_image/sensors/.out/"
 output_file = r"output.json"
 
