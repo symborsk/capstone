@@ -5,7 +5,7 @@ Created by Dallin Toth
 Adapted code from SDL_Weather_80422.cpp extracted to only
 include the wind vane direction sensor as a separated process
 
-INCLUDE REFERENCES AND LICENSING INFO****
+License information is available in the legal dir
 
 
 */

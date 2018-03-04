@@ -1,3 +1,12 @@
+'''
+	camera.py
+	By: Joey-Michael Fallone
+
+	The following script takes a photo with the camera and saves it for 
+	future use with the image recognition algorithm
+'''
+
+
 import datetime
 
 from picamera import PiCamera

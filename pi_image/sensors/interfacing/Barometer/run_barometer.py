@@ -1,3 +1,11 @@
+'''
+  run_barometer.py
+  By: Joey-Michael Fallone
+
+  The following runs the Barometer process inline with the batch read 
+  we have set up for our process
+'''
+
 import os
 import base64
 

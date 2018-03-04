@@ -1,6 +1,10 @@
 '''
-  We need to have a list of single bus pins here (populated
-  by the setup wizard)
+  run_single_bus.py 
+
+  By: Joey-Michael Fallone & Dallin Toth
+
+  This script runs the single bus driver in compliance with the overall
+  system's batch read methodology
 '''
 import os
 import base64

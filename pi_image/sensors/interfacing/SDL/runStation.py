@@ -1,6 +1,9 @@
 '''
-  We need to have a list of single bus pins here (populated
-  by the setup wizard)
+  runVaneDirection.py
+  By: Dallin Toth and Joey-Michael Fallone
+
+  The following runs the rain/wind speed process inline with the batch read 
+  we have set up for our process
 '''
 import os
 import base64

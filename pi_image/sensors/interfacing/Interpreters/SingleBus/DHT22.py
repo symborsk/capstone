@@ -1,3 +1,10 @@
+'''
+	DHT22.py
+	By: Brett Wilkinson & Dallin Toth
+
+	The following creates the json output obj for DHT22 data
+'''
+
 import json
 
 # File variables

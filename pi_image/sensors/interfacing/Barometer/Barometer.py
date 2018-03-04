@@ -1,3 +1,17 @@
+'''
+	Barometer.py
+
+	By: Joey-Michael Fallone
+
+	The following is a (very slightly) modified library for the Barometer. 
+
+	More changes will be coming to this library when the shutdown 
+	and reset pins are modified to save power in the system
+
+	Original header follows:
+'''
+
+
 # Distributed with a free-will license.
 # Use it any way you want, profit or free, provided it fits in the licenses of its associated works.
 # MPL115A2

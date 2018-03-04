@@ -1,3 +1,11 @@
+'''
+	windvane.py
+	By: Brett Wilkinson & Dallin Toth
+
+	The following creates the json output obj for windvane data
+'''
+
+
 import json
 
 # File variables

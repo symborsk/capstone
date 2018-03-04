@@ -1,3 +1,10 @@
+'''
+	Barometer.py
+	By: Brett Wilkinson & Dallin Toth
+
+	The following creates the json output obj for barometer data
+'''
+
 import json
 
 # File variables

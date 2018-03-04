@@ -1,3 +1,12 @@
+'''
+    iot_hub_transfer.py
+    By: Brett Wilkinson and Dallin Toth
+    
+    This python script generates the JSON objects of our sensor data 
+    and transmits them up to the Azure server. 
+'''
+
+
 import base64
 import hmac
 import hashlib

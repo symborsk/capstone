@@ -1,6 +1,13 @@
 /*
-  HEAVILY MODIFIED BY DALLIN AND JOEY FOR RASPBERRY PI
-  FIX THIS HEADER
+  SDL_Weather_80422.h
+
+  The following is a *very* heavily modified version of the library 
+  for this sensor (originally written for Arduino) modified to run 
+  on the raspberry pi 3 and to match our own personal usage. 
+
+  By: Joey-Michael Fallone and Dallin Toth
+
+  Original header: 
   SDL_Weather_80422.h - Library for Weather Sensor
   Designed for:  SwitchDoc Labs WeatherRack www.switchdoc.com
   Argent Data Systems

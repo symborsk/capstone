@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# batch_read.sh
+# By: Joey-Michael Fallone, Dallin Toth and Brett Wilkinson
 # This file does a batch read of all sensors & sends the data to the IoT Hub
 
 # DHT22

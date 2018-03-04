@@ -1,3 +1,15 @@
+/*
+	VaneDirection.h
+
+	By: Dallin Toth
+
+	This is the header file for the windvane object found in 
+	VaneDirection.cpp
+*/
+
+
+
+
 #ifndef VaneDirection_H
 #define VaneDirection_H
 

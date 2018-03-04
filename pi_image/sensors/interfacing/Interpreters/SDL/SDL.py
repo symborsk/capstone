@@ -1,3 +1,10 @@
+'''
+	SDL.py
+	By: Brett Wilkinson & Dallin Toth
+
+	The following creates the json output obj for SDL data
+'''
+
 import json
 
 # File variables
