@@ -10,7 +10,7 @@ import json
 import os
 
 # File variables
-output_path = "/home/thor/capstone/pi_image/sensors/interfacing/SingleBus/.out/"
+output_path = "/home/thor/capstone/pi_image/sensors/.out/"
 output_file = "output.json"
 
 # JSON Object Variables

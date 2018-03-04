@@ -72,7 +72,7 @@ void VaneDirection::printDirection(){
              break;
     default: curDirection = "No reading";
   }
-  printf("%s\n",curDirection);
+  printf("%s",curDirection);
 }
 
 

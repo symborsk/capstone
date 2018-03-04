@@ -39,7 +39,7 @@ float ADC::readVoltage() {
 	pipe2(pipefd, NON_BLOCKING);
 
 	dup2(pipefd[1], fileno(stdout));
-	system("python ADC.py");
+	system("python /home/thor/capstone/pi_image/sensors/interfacing/WindVane/ADC.py");
 	fflush(stdout);
 	close(pipefd[1]);
 
