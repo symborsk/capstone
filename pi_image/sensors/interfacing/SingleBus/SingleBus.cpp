@@ -26,6 +26,10 @@
 #include <wiringPi.h>
 #include <time.h>
 #define MIN_INTERVAL 2000
+#define COUNT 3
+#define TEMP_BYTES 5
+#define SENSOR_DELAY 85
+#define PEAK_MAX 40
 
 
 SingleBus::SingleBus(uint8_t pin, uint8_t type, uint8_t count, uint8_t bytes, uint8_t delay) {
@@ -122,7 +126,7 @@ bool SingleBus::read(bool force) {
   }
     // Inspect pulses and determine which ones are 0 (high state cycle count < low
     // state cycle count), or 1 (high state cycle count > low state cycle count).
-  for (int i = 0; i<40; ++i) {
+  for (int i = 0; i<PEAK_MAX; ++i) {
     uint32_t lowCycles = cycles[2 * i];
     uint32_t highCycles = cycles[2 * i + 1];
     if ((lowCycles == 0) || (highCycles == 0)) {
@@ -182,10 +186,10 @@ uint32_t SingleBus::expectPulse(bool level) {
 
 int main(int argc, char ** argv){
   int pin = atoi(argv[1]);
-  SingleBus sensor = SingleBus(pin, INPUT, 3, 5, 85);
+  SingleBus sensor = SingleBus(pin, INPUT, COUNT, TEMP_BYTES, SENSOR_DELAY);
   while (sensor.printData() == false) {
     sensor.printData();
-    delay(2000);
+    delay(MIN_INTERVAL);
  }
 return 0;
 }
