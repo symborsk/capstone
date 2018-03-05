@@ -16,12 +16,14 @@ import glob
 import os
 
 class Camera:
+	img_path = r'/home/thor/capstone/pi_image/image_recognition/img/'
+
 	def __init__(self):
 		self.camera = PiCamera()
 
 	def take_photo(self, path=None):
 		if not path:
-			path = ("img/img_" + 
+			path = (Camera.img_path + "img_" + 
 			  str("{:%b_%d_%Y-%H:%M:%S}".format(datetime.datetime.now())) + ".jpg")
 
 		self.camera.start_preview()
