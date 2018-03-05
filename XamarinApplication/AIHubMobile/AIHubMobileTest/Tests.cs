@@ -1,4 +1,11 @@
-﻿using System;
+﻿/**
+ * Test.cs
+ * By: John Symborski
+ * Capstone Group 2
+ * The UI tests and initializations of the 
+ * */
+
+using System;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
@@ -39,19 +46,18 @@ namespace AIHubMobileTest
         }
 
         [Test]
-        public void ClickOptions()
+        public void UpdateOptions()
         {
             app.Tap("Options");
             app.WaitForElement("Mock Option", "Options button did not respond!", new TimeSpan(0, 0, 10));
 
-            //TODO: fill in some options
-
-            //app.Tap("UPDATE");
-            //app.WaitForElement("Ab", "Update", new TimeSpan(0, 0, 10));
+            //Ensure the update screen redirected to the main screen with
+            app.Tap("UPDATE");
+            app.WaitForElement("About", "Update command failed", new TimeSpan(0, 0, 10));
         }
 
         [Test]
-        public void ClickAbout()
+        public void ViewAbout()
         {
             app.Tap("About");
             app.WaitForElement("View Web Portal", "About did not respond.", new TimeSpan(0, 0, 10));
