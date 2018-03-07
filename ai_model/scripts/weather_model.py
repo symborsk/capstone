@@ -1,9 +1,11 @@
+import os
 import tensorflow as tf
 import pandas_formatting as pf
 import numpy as np
 import decision_forest as df
 import time
 import sys
+import json
 
 # Lists for the two types of columns
 categorical_keys = ['month', 'day', 'hour']
@@ -14,9 +16,19 @@ numeric_cols = dict()
 # Mapping of boundaries to be used for the categorical data
 categorical_boundaries = {'month':[x for x in range(2, 13)], 'day':[x for x in range(2, 32)], 'hour':[x for x in range(0, 23, 4)]}
 
-# Runtime of the program
+# Runtime of the program & folder creation
 runtime = round(time.time())
+os.makedirs('../logs/{0}/train/'.format(runtime))
+os.makedirs('../logs/{0}/eval/'.format(runtime))
+os.makedirs('../models/{0}/'.format(runtime))
 
+
+""" Function that encompasses the weather model.
+
+	Attributes
+		n_labels: Number of label columns expected
+		spring, summer, fall, winter: Lists of months corresponding to those seasons
+	"""
 class weather_model():
 	# Number of label columns
 	n_labels = 3
@@ -30,28 +42,27 @@ class weather_model():
 	""" Model initialization function. Either loads model from JSON object or builds new model based on weather data.
 
 		Inputs
-			model_string: JSON object dictionary (loaded from file using json.loads())
+			model_file: JSON object dictionary (loaded from file using json.loads())
 			weather_data: List of pandas dataframes where weather_data[0] is the current feature & future label
 			offset: Time in hours which weather_data[0] is shifted to get label values
 			log_output: Boolean to indicate command line logging vs file output logging
 		"""
-	def __init__(self, model_string = None, weather_data = None, offset=None, log_output=False):
+	def __init__(self, model_file = None, weather_data = None, offset=None, log_output=False):
 		if (weather_data!=None) & (offset!=None):
-			# Build & evaluate the model
-			self.offset = offset
-			self.forests, eval_input = self.build(weather_data)
-			self.MAE = 	self.evaluate(eval_input, log_output=log_output)
-
 			# Folder to be used to store the models & logs
 			self.log_dir = '../logs/{0}/'.format(runtime)
 			self.model_dir = '../models/{0}/'.format(runtime)
 
-		elif model_string!=None:
-			# TODO: BUILD JSON LOADING FUNC
-			model_str = json.loads(model_string)
+			# Build & evaluate the model
+			self.offset = offset
+			self.forests, eval_input = self.build(weather_data)
+			self.MAE = 	self.evaluate(eval_input.values.tolist(), log_output=log_output)
+
+		elif model_file!=None:
+			self.load(model_file)
 
 		else:
-			raise Exception('Insufficient loading information provided:\nmodel_string: {0}\nweather_data: {1}\noffset:{2}'.format(model_string, weather_data, offset))
+			raise Exception('Insufficient loading information provided:\nmodel_file: {0}\nweather_data: {1}\noffset:{2}'.format(model_file, weather_data, offset))
 
 	""" Function to build a decision forest regression model for weather prediction 
 
@@ -75,12 +86,12 @@ class weather_model():
 		# Build the forests
 		model = dict()
 		model['spring'] = df.DecisionForest(spring.values.tolist(), n_labels=weather_model.n_labels)
-		model['summer'] = df.DecisionForest(summer.values.tolist(), n_labels=weather_modeln_labels)
+		model['summer'] = df.DecisionForest(summer.values.tolist(), n_labels=weather_model.n_labels)
 		model['fall'] = df.DecisionForest(fall.values.tolist(), n_labels=weather_model.n_labels)
 		model['winter'] = df.DecisionForest(winter.values.tolist(), n_labels=weather_model.n_labels)
 
 		# Write the results to the file
-		with open('{0}train/{1}h_build.log'.format(self.log_dir, self.offset), 'x') as file:
+		with open('{0}train/{1}h_build.log'.format(self.log_dir, self.offset), 'x+') as file:
 			for key in model.keys():
 				file.write('Model: {0}\n{1}\n'.format(key, model[key].results_to_str()))
 
@@ -106,12 +117,11 @@ class weather_model():
 			breakdown_log = print
 		breakdown_log('Number of labels: {1}\n'.format(self.offset, weather_model.n_labels))
 
-
 		# Loop over all rows in test set & compute their absolute errors
 		AE = []
 		for row in rows:
 			labels = row[-weather_model.n_labels:]
-			
+
 			expected = self.run(row[:-weather_model.n_labels], log=breakdown_log)
 
 			row_ae = [abs(expected[i] - labels[i]) for i in range(weather_model.n_labels)]
@@ -120,7 +130,7 @@ class weather_model():
 			AE += [row_ae]
 
 			# Log results
-			breakdown_log.write('Expected: {0}\tActual: {1}\tAbsolute Error: {2}\n'.format(expected, labels, row_ae))
+			breakdown_log('Expected: {0}\tActual: {1}\tAbsolute Error: {2}\n'.format(expected, labels, row_ae))
 
 		# Close the breakdown file if necessary
 		if log_output:
@@ -148,6 +158,20 @@ class weather_model():
 		# Write to model_dir file
 		with open('{0}{1}h_model.json'.format(self.model_dir, self.offset), 'x+') as f:
 			f.write(json.dumps(self, default=default_save_fn))
+
+	def load(self, model_file):
+		with open(model_file) as f:
+			model_dict = json.loads(f.read())
+
+		self.offset = model_dict['offset']
+		self.MAE = model_dict['MAE']
+
+		self.log_dir = model_dict['log_dir']
+		self.model_dir = model_dict['model_dir']
+
+		self.forests = dict()
+		for season, forest in model_dict['forests'].items():
+			self.forests[season] = None # TODO: Load DecisionForest object
 
 	""" Function to compute the labels for a row of input features
 
