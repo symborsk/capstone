@@ -11,11 +11,11 @@ precision = 5
 ideal_weight = 0.5
 
 # Acceptable percent difference between deltas to compare using weights instead
-acceptable_margin = 5
+acceptable_margin = 20
 
 # Variable which controls the maximum possible standard deviation or minimum change in standard deviation for a leaf node
-std_dev_threshold = 1
-delta_threshold = 0.05
+std_dev_threshold = 1.5
+delta_threshold = 0.1
 
 # # # # # #
 # Classes #
@@ -30,18 +30,12 @@ delta_threshold = 0.05
 		avg_std_dev: Average standard deviation for each label in a forest
 	"""
 class DecisionForest(): 
-	def __init__(self, rows, n_labels = 1, n_trees = 128, batch_size = 512):
+	def __init__(self, rows, n_labels = 1, n_trees = 192, batch_size = 1024):
 		self.n_labels = n_labels
 		self.n_trees = n_trees
 		self.batch_size = batch_size
 		self.trees = build_forest(rows, n_labels, n_trees, batch_size)
 		self.avg_std_dev = [np.mean([tree.leaf_mean[label] for tree in self.trees]) for label in range(n_labels)]
-
-	# Method to display results of a forest
-	def print_results(self): 
-		print('Decision Tree Attributes:\nLabel #: {0} Batch Size: {1} Tree Count: {2}\nAvg Std Deviation: {3}'.format(self.n_labels, self.batch_size, self.n_trees, self.avg_std_dev))
-		for i in range(len(self.trees)):
-			print('Tree #: {0}\tDepth: {1}\tMean: {2}'.format(i, self.trees[i].depth, self.trees[i].leaf_mean))
 
 	# Method to get string of results
 	def results_to_str(self): 

@@ -19,5 +19,8 @@ python /home/thor/capstone/pi_image/sensors/interfacing/Interpreters/SDL/SDL.py
 # Barometer
 python /home/thor/capstone/pi_image/sensors/interfacing/Barometer/run_barometer.py
 
+# Visibility
+python /home/thor/capstone/pi_image/image_recognition/image_rec.py
+
 # IoT Hub Message
 python /home/thor/capstone/pi_image/sensors/iot_hub_transfer.py

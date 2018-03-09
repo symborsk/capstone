@@ -10,7 +10,8 @@ import os
 import base64
 
 single_bus_sensors = dict()
-single_bus_sensors["dht22_1"] = 4
+single_bus_sensors['dht22_ext'] = 4
+single_bus_sensors['dht22_bat'] = 21
 custom_dir = "/home/thor/capstone/pi_image/sensors/interfacing/SingleBus/"
 
 if __name__ == '__main__':
