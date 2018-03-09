@@ -19,7 +19,7 @@ namespace AIHubMobile
 
         public WeatherStationDetailViewModel(WeatherStation item = null)
         {
-            Title = "Station Name: " + item?.stationId;
+            Title = "Station Name: " + item?.StationName;
             Item = item;
 
             rgSets = new ObservableCollection<WeatherSet>();

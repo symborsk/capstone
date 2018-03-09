@@ -20,10 +20,8 @@ namespace AIHubMobile
         public WeatherItemDetailPage()
         {
             InitializeComponent();
-            //sets = viewModel.rgSets;
             viewModel = new WeatherStationDetailViewModel();
             BindingContext = viewModel;
-            //WeatherSetListView.ItemsSource = sets;
         }
 
         //When the page is connected we simply bind the proper view model class
@@ -38,6 +36,11 @@ namespace AIHubMobile
         async void Config_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new ChangeOptionsPage());
+        }
+
+        private void Picker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

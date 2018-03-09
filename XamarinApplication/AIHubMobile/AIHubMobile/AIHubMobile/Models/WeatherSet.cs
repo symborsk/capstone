@@ -13,21 +13,21 @@ namespace AIHubMobile
 {
     public class WeatherSet
     {
-        public WeatherSet(long statId, DateTime recordedTime, int temp, int hum, int vis, int acc)
+        public WeatherSet()
         {
-            StationId = statId;
-            RecordedTime = recordedTime;
-            Temperature = temp;
-            Humidity = hum;
-            Visibility = vis;
-            Acceleration = acc;
+
         }
 
-        public long StationId { get; set; }
         public DateTime RecordedTime { get; set; }
-        public int Temperature { get; set; }
-        public int Humidity { get; set; }
-        public int Visibility { get; set; }
-        public int Acceleration { get; set; }
+
+        //All of these are string as we are simply displaying them
+        //This simplifies the downloading process from azure blob storage
+        public string temperature { get; set; }
+        public string humidity { get; set; }
+        public string direction { get; set; }
+        public string gust { get; set; }
+        public string rain { get; set; }
+        public string windSpeed { get; set; }
     }
+
 }

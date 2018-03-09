@@ -15,6 +15,7 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using System.Reflection;
 
 [assembly:Xamarin.Forms.Dependency(typeof(AIHubMobile.RestClient))]
 namespace AIHubMobile
@@ -34,16 +35,6 @@ namespace AIHubMobile
             storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=pcldevbgwilkinson01;AccountKey=NPkk2BjPvlG1Am78JrSi4ylEQNB3F6tacE/G8P3x8zLOe/BqZwvYMCXP+ni9KMwmx+px/f+J+n9QJq+v9eVSGg==;BlobEndpoint=https://pcldevbgwilkinson01.blob.core.windows.net/;QueueEndpoint=https://pcldevbgwilkinson01.queue.core.windows.net/;TableEndpoint=https://pcldevbgwilkinson01.table.core.windows.net/;FileEndpoint=https://pcldevbgwilkinson01.file.core.windows.net/");
 
             Items = new List<WeatherStation>();
-
-            //This is hardoded now it will eventually get the data from a WEB APi
-            List<WeatherSet> weatherSets = new List<WeatherSet>();
-            ReadOnlyStationOptions roOptions = new ReadOnlyStationOptions(88, 21, true);
-            EditableStationOptions editOptions = new EditableStationOptions(true, new TimeSpan(1, 0, 0));
-            weatherSets.Add(new WeatherSet(1, Convert.ToDateTime("2016-01-01"), 22, 60, 8, 20));
-            weatherSets.Add(new WeatherSet(2, Convert.ToDateTime("2016-03-01"), 22, 60, 8, 20));
-            weatherSets.Add(new WeatherSet(3, Convert.ToDateTime("2016-02-01"), 22, 60, 8, 20));
-
-            Items.Add(new WeatherStation(new StationOptions(editOptions, roOptions), 1, weatherSets));
         }
 
         public async Task<bool> RefreshWeatherSets()
@@ -57,9 +48,11 @@ namespace AIHubMobile
             CloudBlobContainer container = blobClient.GetContainerReference("sensor-hub");
 
             BlobResultSegment seg = await ListBlobsAsync(container);
+            bool succ = await CreateWeatherStationsFromBlob(seg);
 
             // Retrieve reference to a blob named "myblob".
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference("sensor-hub");
+            //TODO: change the date of the stuff we pull in
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(@"sensor-hub/log/2018/03/04");
 
             //Hardcoded for now but we will have web api calls updating in this fucntion
 
@@ -87,22 +80,7 @@ namespace AIHubMobile
                     //or by calling a different overload.
                     // from: https://hahoangv.wordpress.com/2016/05/16/azure-storage-step-4-blobs-storage-in-action/
                     resultSegment = await con.ListBlobsSegmentedAsync("", true, BlobListingDetails.All, 10, continuationToken, null, null);
-                    foreach (CloudAppendBlob blobItem in resultSegment.Results)
-                    {
-                        string text;                   
-                        text = await blobItem.DownloadTextAsync();
-                        var objects = JArray.Parse(text);
 
-                        foreach (JObject root in objects)
-                        {
-                            foreach (KeyValuePair<String, JToken> tag in root)
-                            {
-                                String tagName = tag.Key.ToString();
-                                String tagValue = tag.Value.ToString();
-                                Console.WriteLine("{0} : {1}", tagName, tagValue);
-                            }
-                        }
-                    }
                     Console.WriteLine();
 
                     //Get the continuation token.
@@ -116,6 +94,73 @@ namespace AIHubMobile
             }
 
             return resultSegment;
+        }
+
+        private async Task<bool> CreateWeatherStationsFromBlob(BlobResultSegment seg)
+        {
+            Items.Clear();
+            foreach (CloudBlockBlob blobItem in seg.Results)
+            {
+                string text;
+                try
+                {
+                    text = await blobItem.DownloadTextAsync();
+                    JArray allDataSets = JArray.Parse(text);
+                    Type weatherSetClass = typeof(WeatherSet);
+
+                    foreach (JObject root in allDataSets)
+                    {
+                        string devName = root["device_name"].ToString();
+                        double lat = Convert.ToDouble(root["location"]["lat"].ToString());
+                        double lon = Convert.ToDouble(root["location"]["lon"].ToString());
+
+                        int currStationIndex = Items.FindIndex(x => x.StationName == devName);
+                        
+                        //If a station of that type does not exist add it now and set current index as that
+                        if (currStationIndex == -1)
+                        {
+                            Items.Add(new WeatherStation(devName, lat, lon));
+                            currStationIndex = Items.Count - 1;
+                        }
+
+                        //Set the recorded time of this in local time, as it is stored in UTC time on server
+                        WeatherSet newSet = new WeatherSet();
+                        DateTime utcTime = DateTime.Parse(root["EventProcessedUtcTime"].ToString());
+                        newSet.RecordedTime = utcTime.ToLocalTime();
+
+                        //Sensors are another array that we need to dive into
+                        JArray sensorArray = JArray.Parse(root["sensors"].ToString());
+
+                        foreach (JObject sensorRoot in sensorArray)
+                        {              
+                            JObject dataObj = JObject.Parse(sensorRoot["data"].ToString());
+                            foreach (KeyValuePair<String, JToken> tag in dataObj)
+                            {
+                                String tagName = tag.Key.ToString();
+                                String tagValue = tag.Value.ToString();
+
+                                //This may seem strange but this will allows us to download the data and simply check and see what sensors have data
+                                //This allows the sensors at the station side to be easily turned on or off without crashing the app
+                                //If we have a property that matched the data we will
+                                PropertyInfo info = weatherSetClass.GetProperty(tagName);
+                                if (info != null)
+                                {
+                                    info.SetValue(newSet, tagValue, null);
+                                }
+                            }
+                        }
+
+                        //Add the set once this is done
+                        Items[currStationIndex].AddWeatherSet(newSet);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine("Failure getting a blob: " + ex.Message);
+                }
+            }
+
+            return await Task.FromResult(true);
         }
     }
 }
