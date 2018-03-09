@@ -1,0 +1,14 @@
+# https://raspberrypi.stackexchange.com/questions/70593/turning-off-leds-on-raspberry-pi-3
+# https://github.com/geerlingguy/raspberry-pi-dramble/issues/58
+# https://www.raspberrypi.org/forums/viewtopic.php?t=162539
+
+# Disable HDMI
+/usr/bin/tvservice -o
+
+# Disable LEDs
+sudo sh -c 'echo none > /sys/class/leds/led0/trigger'
+sudo sh -c 'echo none > /sys/class/leds/led1/trigger'
+sudo sh -c 'echo 0 > /sys/class/leds/led0/brightness'
+sudo sh -c 'echo 0 > /sys/class/leds/led1/brightness'
+
+exit 0
