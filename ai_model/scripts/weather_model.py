@@ -33,11 +33,12 @@ class weather_model():
 	# Number of label columns
 	n_labels = 3
 
-	# Define seasons to split the weather
-	spring = [3, 4, 5]
-	summer = [6, 7, 8]
-	fall = [9, 10, 11]
+	# Define dictionaries based on correlated weather
 	winter = [12, 1, 2]
+	winter_buf = [3, 11]
+	sprall = [4, 10]
+	summer_buf = [5, 9]
+	summer = [6, 7, 8]
 
 	""" Model initialization function. Either loads model from JSON object or builds new model based on weather data.
 
@@ -81,14 +82,15 @@ class weather_model():
 		# Prepare the datasets
 		weather = pf.build_dataset(dataframes, self.offset)
 		train, test = pf.split_data(weather, split_fraction=split_fraction)
-		spring, summer, fall, winter = self.split_weather(train)
+		w_dat, wb_dat, sf_dat, sb_dat, s_dat = self.split_weather(train)
 		
 		# Build the forests
 		model = dict()
-		model['spring'] = df.DecisionForest(spring.values.tolist(), n_labels=weather_model.n_labels)
-		model['summer'] = df.DecisionForest(summer.values.tolist(), n_labels=weather_model.n_labels)
-		model['fall'] = df.DecisionForest(fall.values.tolist(), n_labels=weather_model.n_labels)
-		model['winter'] = df.DecisionForest(winter.values.tolist(), n_labels=weather_model.n_labels)
+		model['winter'] = df.DecisionForest(w_dat.values.tolist(), n_labels=weather_model.n_labels)
+		model['w_buf'] = df.DecisionForest(wb_dat.values.tolist(), n_labels=weather_model.n_labels)
+		model['sprall'] = df.DecisionForest(sf_dat.values.tolist(), n_labels=weather_model.n_labels)
+		model['s_buf'] = df.DecisionFores(sb_dat.values.tolist(), n_labels=weather_model.n_labels)
+		model['summer'] = df.DecisionForest(s_dat.values.tolist(), n_labels=weather_model.n_labels)
 
 		# Write the results to the file
 		with open('{0}train/{1}h_build.log'.format(self.log_dir, self.offset), 'x+') as file:
@@ -187,14 +189,16 @@ class weather_model():
 		month = int(input_row[1])
 
 		# Move the row down the appropriate forest
-		if month in weather_model.spring:
-			expected = self.forests['spring'].get_expected(input_row)
+		if month in weather_model.winter:
+			expected = self.forests['winter'].get_expected(input_row)
+		elif month in weather_model.winter_buf:
+			expected = self.forests['w_buf'].get_expected(input_row)
+		elif month in weather_model.sprall:
+			expected = self.forests['sprall'].get_expected(input_row)
+		elif month in weather_model.summer_buf:
+			expected = self.forests['s_buf'].get_expected(input_row)
 		elif month in weather_model.summer:
 			expected = self.forests['summer'].get_expected(input_row)
-		elif month in weather_model.fall:
-			expected = self.forests['fall'].get_expected(input_row)
-		elif month in weather_model.winter:
-			expected = self.forests['winter'].get_expected(input_row)
 		else:
 			log('Error: Month not within season range - month = {0}\n'.format(month))
 			expected = [None]
@@ -209,12 +213,13 @@ class weather_model():
 			4 Pandas dataframes whose union == Input data
 		"""
 	def split_weather(self, data): 
-		spring_data = data.loc[data['month'].isin(weather_model.spring)]
-		summer_data = data.loc[data['month'].isin(weather_model.summer)]
-		fall_data = data.loc[data['month'].isin(weather_model.fall)]
 		winter_data = data.loc[data['month'].isin(weather_model.winter)]
+		wbuf_data = data.loc[data['month'].isin(weather_model.winter_buf)]
+		sprall_data = data.loc[data['month'].isin(weather_model.sprall)]
+		sbuf_data = data.loc[data['month'].isin(weather_model.summer_buf)]
+		summer_data = data.loc[data['month'].isin(weather_model.summer)]
 
-		return spring_data, summer_data, fall_data, winter_data
+		return winter_data, wbuf_data, sprall_data, sbuf_data, summer_data
 
 if __name__=='__main__': 
 	# Build dataframes
