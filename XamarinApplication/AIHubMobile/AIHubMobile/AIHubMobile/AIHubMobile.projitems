@@ -28,6 +28,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Models\AppOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RangeObservableCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\EditableStationOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ReadOnlyStationOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\StationOptions.cs" />

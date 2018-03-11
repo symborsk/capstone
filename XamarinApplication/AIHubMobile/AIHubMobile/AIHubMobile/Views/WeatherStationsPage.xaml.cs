@@ -31,8 +31,8 @@ namespace AIHubMobile
             if (item == null)
                 return;
 
-            //Async loading of the deatil page
-            await Navigation.PushAsync(new WeatherItemDetailPage(new WeatherStationDetailViewModel(item)));
+            //Async loading of the deail page
+            await Navigation.PushAsync(new WeatherStationDetailPage(new WeatherStationDetailViewModel(item)));
 
             // Manually deselect item
             ItemsListView.SelectedItem = null;

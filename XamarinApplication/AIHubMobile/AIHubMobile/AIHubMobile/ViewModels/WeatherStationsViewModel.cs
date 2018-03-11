@@ -33,9 +33,11 @@ namespace AIHubMobile
             {
                 var _item = option as AppOptions;
                 options = _item;
-                await WeatherSet.RefreshWeatherSets();
-                await WeatherSet.GetAllWeatherSets();
+                await WeatherStationDependency.RefreshWeatherSets(WeatherSet.WeatherSetDateRanges.AllTime);
+                await WeatherStationDependency.GetAllWeatherSets();
             });
+
+
         }
 
         //Async load of the items
@@ -49,8 +51,10 @@ namespace AIHubMobile
             try
             {
                 WeatherStations.Clear();
-                bool succ = await WeatherSet.RefreshWeatherSets();
-                IEnumerable<WeatherStation> items = await WeatherSet.GetAllWeatherSets(true);
+                //From the main page we want to always show them all the data
+                bool succ = await WeatherStationDependency.RefreshWeatherSets(WeatherSet.WeatherSetDateRanges.AllTime);
+                IEnumerable<WeatherStation> items = await WeatherStationDependency.GetAllWeatherSets(true);
+                
                 foreach (var item in items)
                 {
                     WeatherStations.Add(item);

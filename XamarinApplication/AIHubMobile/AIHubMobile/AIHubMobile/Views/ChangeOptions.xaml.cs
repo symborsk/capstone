@@ -34,9 +34,10 @@ namespace AIHubMobile
             await Navigation.PopToRootAsync();
         }
 
-        private void UpdateOptions_Clicked(object sender, EventArgs e)
+         private void UpdateOptions_Clicked(object sender, EventArgs e)
         {
-            //TODO: Update Options functionality
+
         }
+       
     }
 }

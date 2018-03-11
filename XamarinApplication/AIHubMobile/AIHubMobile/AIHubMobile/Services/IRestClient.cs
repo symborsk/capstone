@@ -15,7 +15,7 @@ namespace AIHubMobile
 {
     public interface IRestClient<T>
     {
-        Task<bool> RefreshWeatherSets();
-        Task<IEnumerable<WeatherStation>> GetAllWeatherSets(bool forceRefresh = false);
+        Task<bool> RefreshWeatherSets(WeatherSet.WeatherSetDateRanges range);
+        Task<IEnumerable<WeatherStation>> GetAllWeatherSets(bool forceRefresh = false, WeatherSet.WeatherSetDateRanges range = WeatherSet.WeatherSetDateRanges.Today);
     }
 }

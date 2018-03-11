@@ -18,13 +18,16 @@ namespace AIHubMobile
     public class BaseViewModel : INotifyPropertyChanged
     {
         //Define the factory dependeny service for getting the weather sets
-        public IRestClient<WeatherStation> WeatherSet => DependencyService.Get<IRestClient<WeatherStation>>() ?? new RestClient();
+        public IRestClient<WeatherStation> WeatherStationDependency => DependencyService.Get<IRestClient<WeatherStation>>() ?? new RestClient();
 
         bool isBusy = false;
         public bool IsBusy
         {
             get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
+            set {
+                SetProperty(ref isBusy, value);
+                OnPropertyChanged("IsBusy");
+            }
         }
 
         string title = string.Empty;

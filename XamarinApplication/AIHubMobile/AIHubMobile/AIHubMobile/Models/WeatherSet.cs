@@ -28,6 +28,17 @@ namespace AIHubMobile
         public string gust { get; set; }
         public string rain { get; set; }
         public string windSpeed { get; set; }
-    }
 
+
+        public enum WeatherSetDateRanges
+        {
+            Today = 0,
+            PastThreeDays = 1,
+            PastWeek = 2,
+            ThisMonth = 3,
+            ThisYear = 4,
+            AllTime = 5
+        };
+
+    }
 }

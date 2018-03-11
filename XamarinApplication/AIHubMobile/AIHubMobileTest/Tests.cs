@@ -63,7 +63,6 @@ namespace AIHubMobileTest
             app.WaitForElement("View Web Portal", "About did not respond.", new TimeSpan(0, 0, 10));
         }
 
-
     }
 }
 
