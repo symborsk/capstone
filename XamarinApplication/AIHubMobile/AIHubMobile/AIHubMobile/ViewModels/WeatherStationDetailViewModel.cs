@@ -16,10 +16,8 @@ namespace AIHubMobile
     public class WeatherStationDetailViewModel : BaseViewModel
     {
         public WeatherStation Item { get; set; }
-        //private ObservableCollection<WeatherSet> _rgSets;
-        //public RangeObservableCollection<WeatherSet> RgSets {get; set;}
-        private IList<WeatherSet> _rgSets;
-        public  IList<WeatherSet> RgSets {get; set;}
+        private ObservableCollection<WeatherSet> _rgSets;
+        public RangeObservableCollection<WeatherSet> RgSets {get; set;}
         public WeatherSet.WeatherSetDateRanges dateRange;
         public Command RefreshWeatherSets { get; set; }
 
@@ -73,16 +71,17 @@ namespace AIHubMobile
                             break;
                     }
 
-                    RgSets.Clear();
+                    _rgSets.Clear();
                     foreach (WeatherSet weatherItem in Item.rgWeatherSets)
                     {
                         if (weatherItem.RecordedTime <= upperbound.AddMinutes(1) && weatherItem.RecordedTime >= lowerbound)
                         {
-                            RgSets.Add(weatherItem);
+                            _rgSets.Add(weatherItem);
                         }
                     }
 
-                    //RgSets.ClearAndAddRange(_rgSets);
+                    RgSets.ClearAndAddRange(_rgSets);
+
                 }
                 catch (Exception ex)
                 {

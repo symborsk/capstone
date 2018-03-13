@@ -13,12 +13,6 @@ namespace AIHubMobile
     {
         private bool _suppressNotification = false;
 
-
-        public List<T> ObservableList {
-            get;
-            set;
-        }
-
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             if (!_suppressNotification)

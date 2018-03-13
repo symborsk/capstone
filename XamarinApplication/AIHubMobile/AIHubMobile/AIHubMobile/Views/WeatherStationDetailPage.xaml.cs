@@ -41,7 +41,7 @@ namespace AIHubMobile
             await Navigation.PushAsync(new ChangeOptionsPage());
         }
 
-        private void Picker_SelectedIndexChanged(object sender, EventArgs e)
+        private async void Picker_SelectedIndexChanged(object sender, EventArgs e)
         {
             //TODO: Update Options functionality
             Picker pick = (Picker)sender;
@@ -71,19 +71,13 @@ namespace AIHubMobile
             }
             viewModel.dateRange = range;
 
-            if(DetailWeatherSets != null)
-            {
-                MessageText.Text = "Loading...";
-                DetailWeatherSets.BeginRefresh();
-                MessageText.Text = "Records: ";
-                DetailWeatherSets.EndRefresh();
+            //Refresh the weather sets
+            if (DetailWeatherSets != null)
+            { 
+                viewModel.RefreshWeatherSets.Execute(null);
             }   
         }
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            //your code here;
 
-        }
+
     }
 }

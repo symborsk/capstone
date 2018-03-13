@@ -33,7 +33,6 @@
 
                 <Label x:Name="MessageText" Text="Recordings : " LineBreakMode="NoWrap" FontSize="Medium" FontAttributes="Bold"/>
 
-                <!--<ActivityIndicator Color="Red" IsVisible="True" IsRunning="True"></ActivityIndicator>-->
                 <ListView x:Name="DetailWeatherSets"       
                  HasUnevenRows="true"
                  ItemsSource="{Binding RgSets}"
@@ -46,7 +45,7 @@
                             <ViewCell>
                                 <Grid RowSpacing="0" ColumnSpacing="0">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="20"  />
+                                        <RowDefinition Height="25"  />
                                         <RowDefinition Height="16" />
                                         <RowDefinition Height="16"  />
                                         <RowDefinition Height="16" />
@@ -55,33 +54,15 @@
                                         <RowDefinition Height="16" />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="100"  />
-                                        <ColumnDefinition Width="200" />
+                                        <ColumnDefinition Width="40*"  />
+                                        <ColumnDefinition Width="60*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <!--<BoxView Color="{StaticResource PrimaryLight}" Grid.Column="0" Grid.Row="0"/>
+                                    <BoxView Color="{StaticResource PrimaryLight}" Grid.Column="0" Grid.Row="0"/>
                                     <BoxView Color="{StaticResource PrimaryLight}" Grid.Column="1" Grid.Row="0"/>
 
-                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="0" Grid.Row="1"/>
-                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="1" Grid.Row="1"/>
-
-                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="0" Grid.Row="2"/>
-                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="1" Grid.Row="2"/>
-
-                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="0" Grid.Row="3"/>
-                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="1" Grid.Row="3"/>
-
-                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="0" Grid.Row="4"/>
-                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="1" Grid.Row="4"/>
-
-                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="0" Grid.Row="5"/>
-                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="1" Grid.Row="5"/>
-
-                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="0" Grid.Row="6"/>
-                                    <BoxView Color="{StaticResource AccentLight}" Grid.Column="1" Grid.Row="6"/>-->
-
-                                    <Label Text="Recorded Time: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" Grid.Row="0" Grid.Column="0"/>
-                                    <Label Text="{Binding RecordedTime}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" Grid.Row="0" Grid.Column="1"/>
+                                    <Label Text="Recorded Time: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium" Grid.Row="0" Grid.Column="0"/>
+                                    <Label Text="{Binding RecordedTime}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium" Grid.Row="0" Grid.Column="1"/>
 
                                     <Label Text="Temperature: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="1" Grid.Column="0"/>
                                     <Label Text="{Binding temperature}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="1" Grid.Column="1"/>
