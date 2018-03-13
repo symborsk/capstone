@@ -154,12 +154,9 @@ class weather_model():
 	
 		"""
 	def save(self): 
-		# Lambda function to dump attribute-value object dictionaries
-		default_save_fn = lambda f: f.__dict__
-
 		# Write to model_dir file
 		with open('{0}{1}h_model.json'.format(self.model_dir, self.offset), 'x+') as f:
-			f.write(json.dumps(self, default=default_save_fn))
+			f.write(json.dumps(self, default=serialize))
 
 	def load(self, model_file):
 		with open(model_file) as f:
@@ -220,6 +217,16 @@ class weather_model():
 		summer_data = data.loc[data['month'].isin(weather_model.summer)]
 
 		return winter_data, wbuf_data, sprall_data, sbuf_data, summer_data
+
+# Function used to serialize the model
+def serialize(x):
+	try:
+		return x.__dict__
+	except AttributeError:
+		try:
+			return x.tolist()
+		except AttributeError:
+			return x
 
 if __name__=='__main__': 
 	# Build dataframes

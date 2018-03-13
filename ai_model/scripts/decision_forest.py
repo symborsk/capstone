@@ -11,11 +11,11 @@ precision = 5
 ideal_weight = 0.5
 
 # Acceptable percent difference between deltas to compare using weights instead
-acceptable_margin = 20
+acceptable_margin = 5
 
 # Variable which controls the maximum possible standard deviation or minimum change in standard deviation for a leaf node
 std_dev_threshold = 1.5
-delta_threshold = 0.1
+delta_threshold = 0.5
 
 # # # # # #
 # Classes #
@@ -30,7 +30,7 @@ delta_threshold = 0.1
 		avg_std_dev: Average standard deviation for each label in a forest
 	"""
 class DecisionForest(): 
-	def __init__(self, rows, n_labels = 1, n_trees = 192, batch_size = 1024):
+	def __init__(self, rows, n_labels = 1, n_trees = 128, batch_size = 1536):
 		self.n_labels = n_labels
 		self.n_trees = n_trees
 		self.batch_size = batch_size
