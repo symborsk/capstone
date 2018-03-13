@@ -9,11 +9,12 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Xamarin.Forms.Xaml;
 using Xamarin.Forms;
 
 namespace AIHubMobile
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class WeatherStationsPage : ContentPage
     {
         WeatherStationsViewModel weatherStationViewModel;

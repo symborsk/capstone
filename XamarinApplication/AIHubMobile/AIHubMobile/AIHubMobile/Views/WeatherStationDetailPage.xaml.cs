@@ -10,9 +10,11 @@ using System;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
 using System.Threading.Tasks;
+using Xamarin.Forms.Xaml;
 
 namespace AIHubMobile
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class WeatherStationDetailPage : ContentPage
     {
         WeatherStationDetailViewModel viewModel;
