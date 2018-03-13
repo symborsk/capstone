@@ -9,11 +9,12 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Xamarin.Forms.Xaml;
 using Xamarin.Forms;
 
 namespace AIHubMobile
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class WeatherStationsPage : ContentPage
     {
         WeatherStationsViewModel weatherStationViewModel;
@@ -31,8 +32,8 @@ namespace AIHubMobile
             if (item == null)
                 return;
 
-            //Async loading of the deatil page
-            await Navigation.PushAsync(new WeatherItemDetailPage(new WeatherStationDetailViewModel(item)));
+            //Async loading of the deail page
+            await Navigation.PushAsync(new WeatherStationDetailPage(new WeatherStationDetailViewModel(item)));
 
             // Manually deselect item
             ItemsListView.SelectedItem = null;

@@ -7,12 +7,13 @@
  * */
 
 using System;
-
+using Xamarin.Forms.Xaml;
 using Xamarin.Forms;
 
 namespace AIHubMobile
 {
-	public partial class AboutPage : ContentPage
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class AboutPage : ContentPage
 	{
 		public AboutPage()
 		{

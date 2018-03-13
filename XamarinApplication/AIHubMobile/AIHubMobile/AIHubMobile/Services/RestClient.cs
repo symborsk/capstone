@@ -37,34 +37,30 @@ namespace AIHubMobile
             Items = new List<WeatherStation>();
         }
 
-        public async Task<bool> RefreshWeatherSets()
+        public async Task<bool> RefreshWeatherSets(WeatherSet.WeatherSetDateRanges range)
         {
-            
+
             // Create the blob client.
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            Console.WriteLine("Test Statment ---------------------------------------------");
 
             // Retrieve reference to a previously created container.
             CloudBlobContainer container = blobClient.GetContainerReference("sensor-hub");
 
-            BlobResultSegment seg = await ListBlobsAsync(container);
+            BlobResultSegment seg = await ListBlobsAsync(container, range);
+            
             bool succ = await CreateWeatherStationsFromBlob(seg);
 
             // Retrieve reference to a blob named "myblob".
-            //TODO: change the date of the stuff we pull in
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference(@"sensor-hub/log/2018/03/04");
-
-            //Hardcoded for now but we will have web api calls updating in this fucntion
 
             return await Task.FromResult(true);
         }
 
-        public async Task<IEnumerable<WeatherStation>> GetAllWeatherSets(bool forceRefresh = false)
+        public async Task<IEnumerable<WeatherStation>> GetAllWeatherSets(bool forceRefresh = false, WeatherSet.WeatherSetDateRanges range = WeatherSet.WeatherSetDateRanges.Today)
         {
             return await Task.FromResult(Items);
         }
 
-        public async Task<BlobResultSegment> ListBlobsAsync(CloudBlobContainer con)
+        public async Task<BlobResultSegment> ListBlobsAsync(CloudBlobContainer con, WeatherSet.WeatherSetDateRanges range)
         {
 
             BlobContinuationToken continuationToken = null;
@@ -79,8 +75,20 @@ namespace AIHubMobile
                     //This overload allows control of the page size. You can return all remaining results by passing null for the maxResults parameter,
                     //or by calling a different overload.
                     // from: https://hahoangv.wordpress.com/2016/05/16/azure-storage-step-4-blobs-storage-in-action/
-                    resultSegment = await con.ListBlobsSegmentedAsync("", true, BlobListingDetails.All, 10, continuationToken, null, null);
-
+                    List<string> prefixForBlob = GeneratePrefixStrings(WeatherSet.WeatherSetDateRanges.AllTime);
+                    foreach(string prefix in prefixForBlob)
+                    {
+                        if(resultSegment == null)
+                        {
+                            resultSegment = await con.ListBlobsSegmentedAsync(prefix, true, BlobListingDetails.All, 1000, continuationToken, null, null);
+                        }
+                        else
+                        {
+                            BlobResultSegment temp = await con.ListBlobsSegmentedAsync(prefix, true, BlobListingDetails.All, 1000, continuationToken, null, null);
+                            resultSegment.Results.Union(temp.Results);
+                        }
+                    }
+                       
                     Console.WriteLine();
 
                     //Get the continuation token.
@@ -105,6 +113,14 @@ namespace AIHubMobile
                 try
                 {
                     text = await blobItem.DownloadTextAsync();
+
+                    //The azure stream analytics job that creates the JSON array does not add a ']' at the end until the day is completed
+                    //This is an undesirable feature as it caused any data we downlod from today to break the JArray parser, add a ']'
+                    if (!text.EndsWith("]"))
+                    {
+                        text.Append(']');
+                    }
+
                     JArray allDataSets = JArray.Parse(text);
                     Type weatherSetClass = typeof(WeatherSet);
 
@@ -154,13 +170,58 @@ namespace AIHubMobile
                         Items[currStationIndex].AddWeatherSet(newSet);
                     }
                 }
-                catch(Exception ex)
-                {
+                //This can happen when there is an empty blob object 
+                catch (Exception ex)
+                {   
+                    
                     Console.WriteLine("Failure getting a blob: " + ex.Message);
                 }
             }
 
             return await Task.FromResult(true);
+        }
+
+        //Generates all the prefixes needed for the specific range
+        private List<string> GeneratePrefixStrings(WeatherSet.WeatherSetDateRanges range)
+        {
+            List<string> prefixes = new List<string>();
+            //Blobs are stroed under utc time
+            DateTime currentUtcDay = DateTime.UtcNow;
+            string sLogPrefix = @"logs/";
+            switch (range)
+            {
+                case WeatherSet.WeatherSetDateRanges.Today:    
+                    prefixes.Append(sLogPrefix + currentUtcDay.Year + "//" + currentUtcDay.Month + "//" + currentUtcDay.Date);
+                    return prefixes;
+
+                case WeatherSet.WeatherSetDateRanges.PastThreeDays:
+                    for( int i = 0; i < 3; i++)
+                    {
+                        prefixes.Append(sLogPrefix + currentUtcDay.Year + "//" + currentUtcDay.Month + "//" + currentUtcDay.Date);
+                        currentUtcDay.AddDays(-1);
+                    }
+                    return prefixes;
+              
+                case WeatherSet.WeatherSetDateRanges.PastWeek:
+                    for (int i = 0; i < 7; i++)
+                    {
+                        prefixes.Append(sLogPrefix + currentUtcDay.Year + "//" + currentUtcDay.Month + "//" + currentUtcDay.Date);
+                        currentUtcDay.AddDays(-1);
+                    }
+                    return prefixes;
+
+                case WeatherSet.WeatherSetDateRanges.ThisMonth:
+                    prefixes.Append(sLogPrefix + currentUtcDay.Year + "//" + currentUtcDay.Month);
+                    return prefixes;
+
+                case WeatherSet.WeatherSetDateRanges.ThisYear:
+                    prefixes.Append(sLogPrefix + currentUtcDay.Year);
+                    return prefixes;
+
+                default:
+                    prefixes.Add("");
+                    return prefixes;
+            }
         }
     }
 }

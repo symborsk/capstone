@@ -8,11 +8,12 @@
 
 using System;
 using System.Collections.Generic;
-
+using Xamarin.Forms.Xaml;
 using Xamarin.Forms;
 
 namespace AIHubMobile
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ChangeOptionsPage : ContentPage
     {
         public AppOptions options { get; set; }
@@ -34,9 +35,10 @@ namespace AIHubMobile
             await Navigation.PopToRootAsync();
         }
 
-        private void UpdateOptions_Clicked(object sender, EventArgs e)
+         private void UpdateOptions_Clicked(object sender, EventArgs e)
         {
-            //TODO: Update Options functionality
+
         }
+       
     }
 }

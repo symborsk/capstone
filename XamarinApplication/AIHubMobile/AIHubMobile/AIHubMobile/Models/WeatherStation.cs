@@ -28,8 +28,7 @@ namespace AIHubMobile
         }
 
         public WeatherStation(StationOptions givenStatOptions, long id, List<WeatherSet> sets)
-        {
-            
+        {    
             statOptions = givenStatOptions;
             rgWeatherSets = sets;
         }
@@ -37,7 +36,7 @@ namespace AIHubMobile
         public void OrderListByDate()
         {
             //Sort by the Recorded time
-            rgWeatherSets.Sort((x, y) => x.RecordedTime.CompareTo(y.RecordedTime));
+            rgWeatherSets.Sort((x, y) => y.RecordedTime.CompareTo(x.RecordedTime));
         }
 
         public void AddWeatherSet(WeatherSet set)
