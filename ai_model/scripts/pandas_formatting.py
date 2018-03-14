@@ -193,3 +193,19 @@ def split_data(dataframe, split_fraction=0.8, seed=None):
 
 	# Return the datsets
 	return train, test
+
+""" Function used to return the dataframe & specified label
+
+	Inputs
+		dataframe: Pandas dataframe
+		label_col: String for the desired label to keep
+
+	Outputs
+		result: 2D List[row][column] of input data with selected label
+	"""
+def select(dataframe, label_col):
+	# Drop the undesired labels
+	filtered_dataframe = dataframe.drop([x for x in forecast_cols if x != label_col], axis=col_axis)
+
+	# Return the 2D List
+	return filtered_dataframe.values.tolist()

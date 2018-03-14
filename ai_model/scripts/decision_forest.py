@@ -14,8 +14,8 @@ ideal_weight = 0.5
 acceptable_margin = 5
 
 # Variable which controls the maximum possible standard deviation or minimum change in standard deviation for a leaf node
-std_dev_threshold = 1.5
-delta_threshold = 0.5
+std_dev_threshold = 1.25
+delta_threshold = 0.25
 
 # # # # # #
 # Classes #
@@ -41,7 +41,7 @@ class DecisionForest():
 	def results_to_str(self): 
 		results = 'Decision Tree Attributes:\nLabel #: {0} Batch Size: {1} Tree Count: {2}\nAvg Std Deviation: {3}'.format(self.n_labels, self.batch_size, self.n_trees, self.avg_std_dev)
 		for i in range(len(self.trees)):
-			results += '\nTree #: {0}\tDepth: {1}\tMean Std Dev: {2}'.format(i, self.trees[i].depth, self.trees[i].leaf_mean)
+			results += '\nTree #: {0}\tDepth: {1}\tMean Std Dev: {2}\n\t\tFeatures: {3}'.format(i, self.trees[i].depth, self.trees[i].leaf_mean, self.trees[i].features)
 		return results
 
 	# Method to get the mean expected value from the forest

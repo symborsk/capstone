@@ -5,16 +5,24 @@ import numpy as np
 import decision_forest as df
 import time
 import sys
+import urllib.request
+import urllib.error
 import json
+
+# API Key & Default REST request URL for Weather Underground API
+api_key = 'ebad910686508a95'
+api_url = 'http://api.wunderground.com/api'
+default_query = 'hourly/q'
+default_location = 'Canada/Edmonton'
+response_format = '.json'
+response_map = {'wind_speed':'wspd', 'relative_humidity':'humidity', 'temperature': 'temp'}
+desired_unit = 'metric'
 
 # Lists for the two types of columns
 categorical_keys = ['month', 'day', 'hour']
 categorical_cols = dict()
 numeric_keys = pf.data_cols[2:] + [x + y for x in pf.data_cols[2:] for y in pf.suffixes]
 numeric_cols = dict()
-
-# Mapping of boundaries to be used for the categorical data
-categorical_boundaries = {'month':[x for x in range(2, 13)], 'day':[x for x in range(2, 32)], 'hour':[x for x in range(0, 23, 4)]}
 
 # Runtime of the program & folder creation
 runtime = round(time.time())
@@ -32,6 +40,10 @@ os.makedirs('../models/{0}/'.format(runtime))
 class weather_model():
 	# Number of label columns
 	n_labels = 3
+
+	# The columns that will be forecasted using the model
+	forecast_cols = ['wind_speed', 'relative_humidity', 'temperature']
+	seasons = ['winter' , 'w_buf', 'sprall', 's_buf', 'summer']
 
 	# Define dictionaries based on correlated weather
 	winter = [12, 1, 2]
@@ -59,6 +71,11 @@ class weather_model():
 			self.forests, eval_input = self.build(weather_data)
 			self.MAE = 	self.evaluate(eval_input.values.tolist(), log_output=log_output)
 
+			# Initialize the default forecast weight
+			self.forecast_weight = [0.5, 0.5, 0.5]
+			self.run_predictions = dict()
+			self.run_totals = 0
+
 		elif model_file!=None:
 			self.load(model_file)
 
@@ -82,20 +99,22 @@ class weather_model():
 		# Prepare the datasets
 		weather = pf.build_dataset(dataframes, self.offset)
 		train, test = pf.split_data(weather, split_fraction=split_fraction)
-		w_dat, wb_dat, sf_dat, sb_dat, s_dat = self.split_weather(train)
+		data = self.split_weather(train)
 		
-		# Build the forests
-		model = dict()
-		model['winter'] = df.DecisionForest(w_dat.values.tolist(), n_labels=weather_model.n_labels)
-		model['w_buf'] = df.DecisionForest(wb_dat.values.tolist(), n_labels=weather_model.n_labels)
-		model['sprall'] = df.DecisionForest(sf_dat.values.tolist(), n_labels=weather_model.n_labels)
-		model['s_buf'] = df.DecisionFores(sb_dat.values.tolist(), n_labels=weather_model.n_labels)
-		model['summer'] = df.DecisionForest(s_dat.values.tolist(), n_labels=weather_model.n_labels)
+		# Initialize the 2D forest dictionary
+		model = dict([(x, dict([(y, None) for y in weather_model.forecast_cols])) for x in weather_model.seasons])
+		
+		# Loop over all forests to build
+		for s in weather_model.seasons:
+			for c in weather_model.forecast_cols:
+				model[s][c] = df.DecisionForest(pf.select(data[s], c))
 
 		# Write the results to the file
 		with open('{0}train/{1}h_build.log'.format(self.log_dir, self.offset), 'x+') as file:
-			for key in model.keys():
-				file.write('Model: {0}\n{1}\n'.format(key, model[key].results_to_str()))
+			# Loop again to write all models
+			for s in weather_model.seasons:
+				for c in weather_model.forecast_cols:
+					file.write('Model: {0} {1}\n{2}\n'.format(c, s, model[s][c].results_to_str()))
 
 		return model, test
 
@@ -140,7 +159,7 @@ class weather_model():
 
 	   	# Calculate mean absolute error & log it
 		MAE = [np.mean([E[i] for E in AE]) for i in range(weather_model.n_labels)]
-		output_str = 'Weather Model {0}h:\nNumber of Forests: {4}\nSize of Evaluation Set: {3} Rows\nMAE:\tWind Speed: {0}\tRelative Humidity: {1}\t Temperature: {2}'.format(self.offset, MAE[0], MAE[1], MAE[2], len(rows), len(self.forests))
+		output_str = 'Weather Model {0}h:\nNumber of Forests: {5}\nSize of Evaluation Set: {4} Rows\nMAE:\tWind Speed: {1}\tRelative Humidity: {2}\t Temperature: {3}'.format(self.offset, MAE[0], MAE[1], MAE[2], len(rows), len(self.forests))
 		if log_output:
 			with open('{0}/eval/{1}h_forest.log'.format(self.log_dir, self.offset), 'x') as file:
 				file.write(output_str)
@@ -156,7 +175,7 @@ class weather_model():
 	def save(self): 
 		# Write to model_dir file
 		with open('{0}{1}h_model.json'.format(self.model_dir, self.offset), 'x+') as f:
-			f.write(json.dumps(self, default=serialize))
+			f.write(json.dumps(self, default=serialize, indent=2))
 
 	def load(self, model_file):
 		with open(model_file) as f:
@@ -174,31 +193,65 @@ class weather_model():
 
 	""" Function to compute the labels for a row of input features
 
+		UPDATE: Now updated to use the weather underground API
+
 		Inputs:
 			input_row: List of input features
+			forecast: Boolean indicating whether or not to include forecast
+			loc: Weather Underground HTTP request URI - must be JSON format
 			log: Where the output should be written to
 
 		Outputs:
 			expected: List of label values
 		"""
-	def run(self, input_row, log = print):
+	def run(self, input_row, use_forecast=False, request_url='{0}/{1}/{2}/{3}{4}'.format(api_url, api_key, default_query, default_location, response_format), log=print):
+
 		# Get the month to determine which forest to use
 		month = int(input_row[1])
 
-		# Move the row down the appropriate forest
-		if month in weather_model.winter:
-			expected = self.forests['winter'].get_expected(input_row)
-		elif month in weather_model.winter_buf:
-			expected = self.forests['w_buf'].get_expected(input_row)
-		elif month in weather_model.sprall:
-			expected = self.forests['sprall'].get_expected(input_row)
-		elif month in weather_model.summer_buf:
-			expected = self.forests['s_buf'].get_expected(input_row)
-		elif month in weather_model.summer:
-			expected = self.forests['summer'].get_expected(input_row)
+		if month not in range(1, 13):
+			log('Error: Month not in proper range\nmonth = {0}\n'.format(month))
+			return [None]
 		else:
-			log('Error: Month not within season range - month = {0}\n'.format(month))
-			expected = [None]
+			# Move the row down the appropriate forest
+			if month in weather_model.winter:
+				expected = [self.forests['winter']['wind_speed'].get_expected(input_row),
+							self.forests['winter']['relative_humidity'].get_expected(input_row),
+							self.forests['winter']['temperature'].get_expected(input_row)]
+			elif month in weather_model.winter_buf:
+				expected = [self.forests['w_buf']['wind_speed'].get_expected(input_row),
+							self.forests['w_buf']['relative_humidity'].get_expected(input_row),
+							self.forests['w_buf']['temperature'].get_expected(input_row)]
+			elif month in weather_model.sprall:
+				expected = [self.forests['sprall']['wind_speed'].get_expected(input_row),
+							self.forests['sprall']['relative_humidity'].get_expected(input_row),
+							self.forests['sprall']['temperature'].get_expected(input_row)]
+			elif month in weather_model.summer_buf:
+				expected = [self.forests['s_buf']['wind_speed'].get_expected(input_row),
+							self.forests['s_buf']['relative_humidity'].get_expected(input_row),
+							self.forests['s_buf']['temperature'].get_expected(input_row)]
+			elif month in weather_model.summer:
+				expected = [self.forests['summer']['wind_speed'].get_expected(input_row),
+							self.forests['summer']['relative_humidity'].get_expected(input_row),
+							self.forests['summer']['temperature'].get_expected(input_row)]
+
+
+		# If prompted use weighted 
+		if (use_forecast):
+			# Send the request & parse the response
+			with urllib.request.urlopen(request_url) as response:
+				parsed_response = json.loads(response.read())
+
+			# Get the hourly forecast for the desired offset
+			forecast = parsed_response['hourly_forecast'][self.offset]
+			forecast_temp = forecast[response_map['temperature']][desired_unit]
+			forecast_humidity = forecast[response_map['relative_humidity']]
+			forecast_windspeed = forecast[response_map['wind_speed']][desired_unit]
+
+			# Update the expected array with new forecasts
+			expected[0] = (self.weight[0] * forecast_windspeed) + ((1 - self.weight[0]) * expected[0])
+			expected[1] = (self.weight[1] * forecast_humidity) + ((1 - self.weight[1]) * expected[1])
+			expected[2] = (self.weight[2] * forecast_temp) + ((1 - self.weight[2]) * expected[2])
 
 		return expected
 
@@ -216,7 +269,7 @@ class weather_model():
 		sbuf_data = data.loc[data['month'].isin(weather_model.summer_buf)]
 		summer_data = data.loc[data['month'].isin(weather_model.summer)]
 
-		return winter_data, wbuf_data, sprall_data, sbuf_data, summer_data
+		return {'winter':winter_data, 'w_buf':wbuf_data, 'sprall':sprall_data, 's_buf':sbuf_data, 'summer':summer_data}
 
 # Function used to serialize the model
 def serialize(x):
@@ -234,14 +287,12 @@ if __name__=='__main__':
 
 	# Build the models
 	model_1h = weather_model(weather_data=data, offset=1, log_output=True)
-	model_4h = weather_model(weather_data=data, offset=4, log_output=True)
-	model_8h = weather_model(weather_data=data, offset=8, log_output=True)
-	model_12h = weather_model(weather_data=data, offset=12, log_output=True)
-	model_24h = weather_model(weather_data=data, offset=24, log_output=True)
-
-	# Save the models
 	model_1h.save()
+	model_4h = weather_model(weather_data=data, offset=4, log_output=True)
 	model_4h.save()
+	model_8h = weather_model(weather_data=data, offset=8, log_output=True)
 	model_8h.save()
+	model_12h = weather_model(weather_data=data, offset=12, log_output=True)
 	model_12h.save()
+	model_24h = weather_model(weather_data=data, offset=24, log_output=True)
 	model_24h.save()
