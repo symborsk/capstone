@@ -1,10 +1,24 @@
 ﻿
 function initialize(weatherList) {
-    var mapOptions = {
-        center: new google.maps.LatLng(53.544, -113.0909),
-        zoom: 10,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
+    var mapOptions;
+
+    //Default location is edmonton otherwise center it on the 1st object in the list
+    if (weatherList.length > 0) {
+        var latlng = weatherList[0].latlng;
+        mapOptions = {
+            center: new google.maps.LatLng(latlng.Lat, latlng.Lng),
+            zoom: 10,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+    }
+    else {
+        mapOptions = {
+            center: new google.maps.LatLng(53.544, -113.0909),
+            zoom: 10,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+    }
+
     map = new google.maps.Map(document.getElementById("map_canvas"),
         mapOptions);
 
