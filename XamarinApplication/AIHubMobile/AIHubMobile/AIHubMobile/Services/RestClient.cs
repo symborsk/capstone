@@ -141,8 +141,11 @@ namespace AIHubMobile
 
                         //Set the recorded time of this in local time, as it is stored in UTC time on server
                         WeatherSet newSet = new WeatherSet();
-                        DateTime utcTime = DateTime.Parse(root["EventProcessedUtcTime"].ToString());
-                        newSet.RecordedTime = utcTime.ToLocalTime();
+
+                        // Unix timestamp is what we store so convert it to local tie
+                        double unixTimeStamp = double.Parse(root["timestamp"].ToString());
+                        DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                        newSet.RecordedTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
 
                         //Sensors are another array that we need to dive into
                         JArray sensorArray = JArray.Parse(root["sensors"].ToString());
