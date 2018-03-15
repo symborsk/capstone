@@ -107,7 +107,7 @@ class weather_model():
 		# Loop over all forests to build
 		for s in weather_model.seasons:
 			for c in weather_model.forecast_cols:
-				model[s][c] = df.DecisionForest(pf.select(data[s], c))
+				model[s][c] = df.DecisionForest(rows=pf.select(data[s], c))
 
 		# Write the results to the file
 		with open('{0}train/{1}h_build.log'.format(self.log_dir, self.offset), 'x+') as file:
@@ -187,9 +187,17 @@ class weather_model():
 		self.log_dir = model_dict['log_dir']
 		self.model_dir = model_dict['model_dir']
 
-		self.forests = dict()
-		for season, forest in model_dict['forests'].items():
-			self.forests[season] = None # TODO: Load DecisionForest object
+		# Initialize the default forecast weight
+		self.forecast_weight = model_dict['forecast_weight']
+		self.run_predictions = model_dict['run_predictions']
+		self.run_totals = model_dict['run_totals']
+
+		# Initialize the 2D dictionary & parse all the forests
+		self.forests = dict([(x, dict([(y, None) for y in weather_model.forecast_cols])) for x in weather_model.seasons])
+		for s in weather_model.seasons:
+			for c in weather_model.forecast_cols:
+				self.forests[s][c] = DecisionForest(obj_dict=model_dict['forests'][s][c])
+		
 
 	""" Function to compute the labels for a row of input features
 

@@ -30,12 +30,19 @@ delta_threshold = 0.25
 		avg_std_dev: Average standard deviation for each label in a forest
 	"""
 class DecisionForest(): 
-	def __init__(self, rows, n_labels = 1, n_trees = 128, batch_size = 1536):
-		self.n_labels = n_labels
-		self.n_trees = n_trees
-		self.batch_size = batch_size
-		self.trees = build_forest(rows, n_labels, n_trees, batch_size)
-		self.avg_std_dev = [np.mean([tree.leaf_mean[label] for tree in self.trees]) for label in range(n_labels)]
+	def __init__(self, rows = None, n_labels = 1, n_trees = 128, batch_size = 1536, obj_dict = None):
+		if obj_dict!=None:
+			self.n_labels = obj_dict['n_labels']
+			self.n_trees = obj_dict['n_trees']
+			self.batch_size = obj_dict['batch_size']
+			self.trees = [DecisionTree(obj_dict=x) for x in obj_dict['trees']]
+			self.avg_std_dev = obj_dict['avg_std_dev']
+		else:
+			self.n_labels = n_labels
+			self.n_trees = n_trees
+			self.batch_size = batch_size
+			self.trees = build_forest(rows, n_labels, n_trees, batch_size)
+			self.avg_std_dev = [np.mean([tree.leaf_mean[label] for tree in self.trees]) for label in range(n_labels)]
 
 	# Method to get string of results
 	def results_to_str(self): 
@@ -65,15 +72,25 @@ class DecisionForest():
 		leaf_mean: Mean standard deviation for labels in this tree
 
 	"""
-class DecisionTree(): 
-	def __init__(self, rows, features, n_labels):
-		# Initial recursive call to build the tree
-		self.root, self.leaf_dev = build_tree(rows, n_labels=n_labels)
+class DecisionTree():
+	# Initialization function
+	# obj_dict!=None: Load tree from dictionary
+	# Else: Build new decision tree
+	def __init__(self, rows=None, features=None, n_labels=None, obj_dict=None):
+		if obj_dict!=None:
+			self.root = Node(obj_dict['root'])
+			self.leaf_dev = obj_dict['leaf_dev']
+			self.depth = obj_dict['depth']
+			self.features = obj_dict['features']
+			self.leaf_mean = obj_dict['leaf_mean']
+		else:
+			# Initial recursive call to build the tree
+			self.root, self.leaf_dev = build_tree(rows, n_labels=n_labels)
 
-		# Assign tree attributes
-		self.depth = self.root.depth
-		self.features = features
-		self.leaf_mean = [np.mean([leaf[i] for leaf in self.leaf_dev]) for i in range(n_labels)]
+			# Assign tree attributes
+			self.depth = self.root.depth
+			self.features = features
+			self.leaf_mean = [np.mean([leaf[i] for leaf in self.leaf_dev]) for i in range(n_labels)]
 
 	# Function to find the expected mean label values given the full list of features
 	def find_mean(self, features):
@@ -123,25 +140,52 @@ class DecisionTree():
 		left_branch: Node or LeafNode object
 		right_branch: Node or LeafNode object
 	"""
-class Node(): 
-	def __init__(self, i = -1, v = None):
-		# Values used to split the node
-		self.index = i
-		self.value = v
+class Node():
+	# Initialization function
+	# obj_dict != None: Load node from json object
+	# Else: Create new node
 
-		# Values resulting from the split
-		self.std_dev = None
-		self.delta = None
-		self.avg_delta = None
-		self.weight = None
+	def __init__(self, i = -1, v = None, obj_dict=None):
+		if obj_dict!=None:
+			# Assign the primitive types
+			self.index = obj_dict['index']
+			self.value = obj_dict['value']
+			self.std_dev = obj_dict['std_dev']
+			self.delta = obj_dict['delta']
+			self.avg_delta = obj_dict['avg_delta']
+			self.weight = obj_dict['weight']
+			self.isLeaf = obj_dict['isLeaf']
+			self.depth = obj_dict['depth']
 
-		# Values relevant for the tree
-		self.isLeaf = False
-		self.depth = None
+			# Assign the left & right branches accordingly
+			if obj_dict['left_branch']['isLeaf']:
+				self.left_branch = Leaf(obj_dict=obj_dict['left_branch'])
+			else:
+				self.left_branch = Node(obj_dict=obj_dict['left_branch'])
+			
+			if obj_dict['right_branch']['isLeaf']:
+				self.right_branch = Leaf(obj_dict=obj_dict['right_branch'])
+			else:
+				self.right_branch = Node(obj_dict=obj_dict['right_branch'])
 
-		# Define the two branches of the node
-		self.left_branch = None
-		self.right_branch = None
+		else:
+			# Values used to split the node
+			self.index = i
+			self.value = v
+
+			# Values resulting from the split
+			self.std_dev = None
+			self.delta = None
+			self.avg_delta = None
+			self.weight = None
+
+			# Values relevant for the tree
+			self.isLeaf = False
+			self.depth = None
+
+			# Define the two branches of the node
+			self.left_branch = None
+			self.right_branch = None
 
 
 	# Function used to split the input for this node
@@ -172,18 +216,30 @@ class Node():
 		isLeaf: Boolean indicator
 		depth: Value of 0 used to begin incrementing the recursive function
 	"""
-class Leaf(): 
-	def __init__(self, labels):
-		# 2 dimensional list of labels: 1 - label type, 2 - label row
-		self.labels = [[row[i] for row in labels] for i in range(len(labels[0]))]
+class Leaf():
+	# Function to initialize the LeafNode:
+	# Labels != None: Creating a new leaf node
+	# obj_dict != None: Parsing a node from a json object
+	def __init__(self, labels=None, obj_dict=None):
+		# Creation
+		if labels!=None:
+			# 2 dimensional list of labels: 1 - label type, 2 - label row
+			self.labels = [[row[i] for row in labels] for i in range(len(labels[0]))]
 
-		# Mean & standard deviation for labels of this node
-		self.mean = [np.round(np.mean(label), precision) for label in self.labels]
-		self.std_dev = [np.round(np.std(label), precision) for label in self.labels]
+			# Mean & standard deviation for labels of this node
+			self.mean = [np.round(np.mean(label), precision) for label in self.labels]
+			self.std_dev = [np.round(np.std(label), precision) for label in self.labels]
 
-		# Leaf node values
-		self.isLeaf = True
-		self.depth = 0
+			# Leaf node values
+			self.isLeaf = True
+			self.depth = 0
+		# Loading
+		elif obj_dict!=None:
+			self.labels = obj_dict['labels']
+			self.mean = obj_dict['mean']
+			self.std_dev = obj_dict['std_dev']
+			self.isLeaf = obj_dict['isLeaf']
+			self.depth = obj_dict['depth']
 
 # # # # # # #
 # Functions #
@@ -218,7 +274,7 @@ def build_forest(rows, n_labels, n_trees, batch_size):
 		curr_batch = [[rows[x][y] for y in curr_features] + rows[x][-n_labels:] for x in curr_rows]
 
 		# Build the tree & add it to the forest
-		forest[i] = DecisionTree(curr_batch, curr_features, n_labels)
+		forest[i] = DecisionTree(rows=curr_batch, features=curr_features, n_labels=n_labels)
 		print('Tree Built: #{0}'.format(i))
 
 	return forest
@@ -239,7 +295,7 @@ def build_tree(rows, n_labels = 1):
 	
 	# If the change is below threshold value create leaf node
 	if np.mean(node.std_dev)<=std_dev_threshold or np.mean(node.avg_delta)<=delta_threshold:
-		return Leaf([row[-n_labels:] for row in rows]), [node.std_dev]
+		return Leaf(labels=[row[-n_labels:] for row in rows]), [node.std_dev]
 
 	# Otherwise build out the left & right branches of the node
 	l, r = node.split(rows)
@@ -280,7 +336,7 @@ def find_best_split(node, n_labels):
 		values = np.unique([row[col] for row in node])
 		for val in values:
 			# Build the current potential split
-			curr_node = Node(col, val)
+			curr_node = Node(i = col, v = val)
 
 			# Build the left & right branches by splitting input
 			curr_left, curr_right = curr_node.split(node)
