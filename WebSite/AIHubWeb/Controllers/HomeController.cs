@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Threading.Tasks;
 
 namespace AIHubWeb.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        WeatherSetsController restController = new WeatherSetsController();
+        public async Task<ActionResult> Index()
         {
+            await restController.RefreshWeatherSets(WeatherSet.WeatherSetDateRanges.AllTime);
+            ViewBag.WeatherStations =  await restController.GetCurrentWeatherSets();
             return View();
         }
 
@@ -23,7 +27,7 @@ namespace AIHubWeb.Controllers
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
+            
             return View();
         }
     }

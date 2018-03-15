@@ -6,6 +6,9 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+    <script type="text/javascript" src="@Url.Content("/Scripts/jquery-1.6.2.min.js")"></script>
+    @RenderSection("JavaScript", required: false)
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -41,26 +44,3 @@
 </body>
 </html>
 
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVeBsTfPuZmDbxiBsCQrFoktNl_PzQiV4&sensor=false"></script> 
-<script type="text/javascript">
-
-   $(document).ready(function () {
-     initialize();
-   });
-   function initialize() {
-     var mapOptions = {
-       center: new google.maps.LatLng(53.544, -113.0909),
-       zoom: 10,
-       mapTypeId: google.maps.MapTypeId.ROADMAP
-     };
-     var map = new google.maps.Map(document.getElementById("map_canvas"),
-       mapOptions);
-     // create a marker
-     var latlng = new google.maps.LatLng(53.5335, -113.5066);
-     var marker = new google.maps.Marker({
-       position: latlng,
-       map: map,
-       title: 'Sensor Station 1 - Legislature Center'
-     });
-   }
-</script>  

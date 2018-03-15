@@ -1,11 +1,18 @@
-﻿
- @*Index.cshtml
- By: John Symborski
- Capstone Group 2
- Main Index page for web portal*@
+﻿@*Index.cshtml
+    By: John Symborski
+    Capstone Group 2
+    Main Index page for web portal*@
 
 @{
     ViewBag.Title = "Home Page";
+}
+
+@section JavaScript
+{
+    <script type="text/javascript" src="@Url.Content("/Scripts/maps.js")"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVeBsTfPuZmDbxiBsCQrFoktNl_PzQiV4&sensor=false"></script>
+    <script type="text/javascript" src="@Url.Content("/Scripts/jquery-1.10.2.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("/Scripts/bootstrap.min.js")"></script>
 }
 
 <div class="container">
@@ -19,4 +26,20 @@
     <div id="map_canvas" style="width: 80%; height: 480px;">
     </div>
 </div>
+
+
+<script type="text/javascript">
+
+    var weatherList =@Html.Raw(Json.Encode(ViewBag.WeatherStations));
+    $(document).ready(function () {
+        initialize(weatherList);
+    });
+
+
+
+
+
+
+</script>
+
 

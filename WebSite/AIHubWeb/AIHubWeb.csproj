@@ -153,6 +153,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AppOptions.cs" />
+    <Compile Include="Models\EditableStationOptions.cs" />
+    <Compile Include="Models\ReadOnlyStationOptions.cs" />
+    <Compile Include="Models\StationOptions.cs" />
     <Compile Include="Models\WeatherSet.cs" />
     <Compile Include="Models\WeatherStation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -178,6 +182,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\maps.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />

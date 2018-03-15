@@ -17,12 +17,19 @@ namespace AIHubWeb
 public class WeatherSetsController : Controller
 {
         CloudStorageAccount storageAccount;
+        List<WeatherStation> weatherStations; 
 
         public WeatherSetsController()
         {
             //TODO: look at using shared accounts
             //storageAccount = CloudStorageAccount.Parse("SharedAccessSignature=?st=2017-02-28T14%3A17%3A00Z&se=2018-03-03T14%3A17%3A00Z&sp=rl&sv=2017-04-17&sr=c&sig=nxoO5iSP8rZjiQilNQsOBa89W6LqtRyTEOpqnwnqXXE%3D;BlobEndpoint=https://pcldevbgwilkinson01.blob.core.windows.net/sensor-hub?st=2017-02-28T14%3A17%3A00Z&se=2018-03-03T14%3A17%3A00Z&sp=rl&sv=2017-04-17&sr=c&sig=nxoO5iSP8rZjiQilNQsOBa89W6LqtRyTEOpqnwnqXXE%3D");
             storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=pcldevbgwilkinson01;AccountKey=NPkk2BjPvlG1Am78JrSi4ylEQNB3F6tacE/G8P3x8zLOe/BqZwvYMCXP+ni9KMwmx+px/f+J+n9QJq+v9eVSGg==;BlobEndpoint=https://pcldevbgwilkinson01.blob.core.windows.net/;QueueEndpoint=https://pcldevbgwilkinson01.queue.core.windows.net/;TableEndpoint=https://pcldevbgwilkinson01.table.core.windows.net/;FileEndpoint=https://pcldevbgwilkinson01.file.core.windows.net/");
+            weatherStations = new List<WeatherStation>();
+        }
+
+        public async Task<List<WeatherStation>> GetCurrentWeatherSets()
+        {
+            return await Task.FromResult(weatherStations);
         }
 
         public async Task<bool> RefreshWeatherSets(WeatherSet.WeatherSetDateRanges range)
@@ -41,11 +48,6 @@ public class WeatherSetsController : Controller
             // Retrieve reference to a blob named "myblob".
 
             return await Task.FromResult(true);
-        }
-
-        public async Task<IEnumerable<WeatherStation>> GetAllWeatherSets(bool forceRefresh = false, WeatherSet.WeatherSetDateRanges range = WeatherSet.WeatherSetDateRanges.Today)
-        {
-            return await Task.FromResult(Items);
         }
 
         public async Task<BlobResultSegment> ListBlobsAsync(CloudBlobContainer con, WeatherSet.WeatherSetDateRanges range)
@@ -106,7 +108,7 @@ public class WeatherSetsController : Controller
                     //This is an undesirable feature as it caused any data we downlod from today to break the JArray parser, add a ']'
                     if (!text.EndsWith("]"))
                     {
-                        text.Append(']');
+                        text += "]";
                     }
 
                     JArray allDataSets = JArray.Parse(text);
@@ -118,13 +120,13 @@ public class WeatherSetsController : Controller
                         double lat = Convert.ToDouble(root["location"]["lat"].ToString());
                         double lon = Convert.ToDouble(root["location"]["lon"].ToString());
 
-                        int currStationIndex = Items.FindIndex(x => x.StationName == devName);
+                        int currStationIndex = weatherStations.FindIndex(x => x.StationName == devName);
 
                         //If a station of that type does not exist add it now and set current index as that
                         if (currStationIndex == -1)
                         {
-                            Items.Add(new WeatherStation(devName, lat, lon));
-                            currStationIndex = Items.Count - 1;
+                            weatherStations.Add(new WeatherStation(devName, lat, lon));
+                            currStationIndex = weatherStations.Count - 1;
                         }
 
                         //Set the recorded time of this in local time, as it is stored in UTC time on server
@@ -155,7 +157,7 @@ public class WeatherSetsController : Controller
                         }
 
                         //Add the set once this is done
-                        Items[currStationIndex].AddWeatherSet(newSet);
+                        weatherStations[currStationIndex].AddWeatherSet(newSet);
                     }
                 }
                 //This can happen when there is an empty blob object 
@@ -179,13 +181,13 @@ public class WeatherSetsController : Controller
             switch (range)
             {
                 case WeatherSet.WeatherSetDateRanges.Today:
-                    prefixes.Append(sLogPrefix + currentUtcDay.Year + "//" + currentUtcDay.Month + "//" + currentUtcDay.Date);
+                    prefixes.Add(sLogPrefix + currentUtcDay.Year + "//" + currentUtcDay.Month + "//" + currentUtcDay.Date);
                     return prefixes;
 
                 case WeatherSet.WeatherSetDateRanges.PastThreeDays:
                     for (int i = 0; i < 3; i++)
                     {
-                        prefixes.Append(sLogPrefix + currentUtcDay.Year + "//" + currentUtcDay.Month + "//" + currentUtcDay.Date);
+                        prefixes.Add(sLogPrefix + currentUtcDay.Year + "//" + currentUtcDay.Month + "//" + currentUtcDay.Date);
                         currentUtcDay.AddDays(-1);
                     }
                     return prefixes;
@@ -193,17 +195,17 @@ public class WeatherSetsController : Controller
                 case WeatherSet.WeatherSetDateRanges.PastWeek:
                     for (int i = 0; i < 7; i++)
                     {
-                        prefixes.Append(sLogPrefix + currentUtcDay.Year + "//" + currentUtcDay.Month + "//" + currentUtcDay.Date);
+                        prefixes.Add(sLogPrefix + currentUtcDay.Year + "//" + currentUtcDay.Month + "//" + currentUtcDay.Date);
                         currentUtcDay.AddDays(-1);
                     }
                     return prefixes;
 
                 case WeatherSet.WeatherSetDateRanges.ThisMonth:
-                    prefixes.Append(sLogPrefix + currentUtcDay.Year + "//" + currentUtcDay.Month);
+                    prefixes.Add(sLogPrefix + currentUtcDay.Year + "//" + currentUtcDay.Month);
                     return prefixes;
 
                 case WeatherSet.WeatherSetDateRanges.ThisYear:
-                    prefixes.Append(sLogPrefix + currentUtcDay.Year);
+                    prefixes.Add(sLogPrefix + currentUtcDay.Year);
                     return prefixes;
 
                 default:
