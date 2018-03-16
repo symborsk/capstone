@@ -24,11 +24,7 @@ categorical_cols = dict()
 numeric_keys = pf.data_cols[2:] + [x + y for x in pf.data_cols[2:] for y in pf.suffixes]
 numeric_cols = dict()
 
-# Runtime of the program & folder creation
-runtime = round(time.time())
-os.makedirs('../logs/{0}/train/'.format(runtime))
-os.makedirs('../logs/{0}/eval/'.format(runtime))
-os.makedirs('../models/{0}/'.format(runtime))
+name = round(time.time())
 
 
 """ Function that encompasses the weather model.
@@ -63,8 +59,8 @@ class weather_model():
 	def __init__(self, model_file = None, weather_data = None, offset=None, log_output=False):
 		if (weather_data!=None) & (offset!=None):
 			# Folder to be used to store the models & logs
-			self.log_dir = '../logs/{0}/'.format(runtime)
-			self.model_dir = '../models/{0}/'.format(runtime)
+			self.log_dir = '../logs/{0}/'.format(name)
+			self.model_dir = '../models/{0}/'.format(name)
 
 			# Build & evaluate the model
 			self.offset = offset
@@ -107,6 +103,7 @@ class weather_model():
 		# Loop over all forests to build
 		for s in weather_model.seasons:
 			for c in weather_model.forecast_cols:
+				print("Building {0} {1} forest...".format(s, c))
 				model[s][c] = df.DecisionForest(rows=pf.select(data[s], c))
 
 		# Write the results to the file
@@ -177,6 +174,11 @@ class weather_model():
 		with open('{0}{1}h_model.json'.format(self.model_dir, self.offset), 'x+') as f:
 			f.write(json.dumps(self, default=serialize, indent=2))
 
+	""" Function to load the model object from a JSON model file
+
+		Inputs
+			model_file: absolute or relative path to a .json file containing the model
+		"""
 	def load(self, model_file):
 		with open(model_file) as f:
 			model_dict = json.loads(f.read())
@@ -198,7 +200,6 @@ class weather_model():
 			for c in weather_model.forecast_cols:
 				self.forests[s][c] = DecisionForest(obj_dict=model_dict['forests'][s][c])
 		
-
 	""" Function to compute the labels for a row of input features
 
 		UPDATE: Now updated to use the weather underground API
@@ -289,11 +290,17 @@ def serialize(x):
 		except AttributeError:
 			return x
 
-if __name__=='__main__': 
-	# Build dataframes
+# Function to generate and save the AI models
+def generate():
+	# Load the data
 	data = pf.load_data()
 
-	# Build the models
+	# Build the model directories
+	os.makedirs('../logs/{0}/train/'.format(name))
+	os.makedirs('../logs/{0}/eval/'.format(name))
+	os.makedirs('../models/{0}/'.format(name))
+
+	# Generate & save the 5 models
 	model_1h = weather_model(weather_data=data, offset=1, log_output=True)
 	model_1h.save()
 	model_4h = weather_model(weather_data=data, offset=4, log_output=True)
@@ -304,3 +311,30 @@ if __name__=='__main__':
 	model_12h.save()
 	model_24h = weather_model(weather_data=data, offset=24, log_output=True)
 	model_24h.save()
+
+if __name__=='__main__':
+
+	# UNCOMMENT THIS SECTION TO BUILD AND SAVE NEW MODELS
+	"""# Build dataframes
+				
+			
+				"""
+
+
+	# UNCOMMENT THIS SECTION TO LOAD A MODEL
+	
+
+	# Continuous loop until model is loaded
+	while True:
+		# Prompt user for a selection
+		print('\nHere are the current models stored:')
+		for x in range(1, len(models)+1):
+			print('{0}. {1}'.format(x, models[x]))
+		# Parse user response
+		try:
+			sel = int(input('\nPlease make a selection ({0} - {1})\n>>> '.format(1, len(models))))
+			# If its outside the choice range 
+			if sel < 1 or sel > len(models):
+
+		except ValueError:
+			print("Please enter a valid response")
