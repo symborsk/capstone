@@ -30,5 +30,14 @@ namespace AIHubWeb.Controllers
             
             return View();
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetStationListForName(string statName)
+        {
+            await restController.RefreshWeatherSets(WeatherSet.WeatherSetDateRanges.AllTime);
+            List<WeatherSet> sets = await restController.GetStationListForName(statName);
+
+            return Json(sets, JsonRequestBehavior.AllowGet); // return some thing
+        }
     }
 }
