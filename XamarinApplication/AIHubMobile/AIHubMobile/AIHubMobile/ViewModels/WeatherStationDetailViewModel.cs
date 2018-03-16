@@ -29,11 +29,7 @@ namespace AIHubMobile
 
             RgSets = new RangeObservableCollection<WeatherSet>();
             _rgSets = new ObservableCollection<WeatherSet>();
-            RefreshWeatherSets = new Command(async () => await LoadObservableCollection());
-
-            //This function updates the date range after a user changes it
-            //MessagingCenter.Subscribe<WeatherStationDetailPage, WeatherSet.WeatherSetDateRanges>(this, "UpdateWeatherSetRange", LoadObservableCollection);
-                
+            RefreshWeatherSets = new Command(async () => await LoadObservableCollection());          
         }
 
         public async Task LoadObservableCollection()

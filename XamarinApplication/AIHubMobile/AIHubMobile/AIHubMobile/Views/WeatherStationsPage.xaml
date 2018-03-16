@@ -10,11 +10,7 @@
              x:Class="AIHubMobile.WeatherStationsPage"
               Title="{Binding Title}"
              x:Name="ViewWeatherPage">
-    
-    <ContentPage.ToolbarItems>
-        <ToolbarItem AutomationId="ChangeOptions" Text="Options" Clicked="AddItem_Clicked" />
-    </ContentPage.ToolbarItems>
-
+   
     <ContentPage.Content>
         <ContentView>
             <StackLayout>

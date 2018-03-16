@@ -15,6 +15,7 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Table;
 using System.Reflection;
 
 [assembly:Xamarin.Forms.Dependency(typeof(AIHubMobile.RestClient))]
@@ -42,16 +43,18 @@ namespace AIHubMobile
 
             // Create the blob client.
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            // Create the table client.
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
 
             // Retrieve reference to a previously created container.
             CloudBlobContainer container = blobClient.GetContainerReference("sensor-hub");
+            CloudTable table = tableClient.GetTableReference("DeviceConfigSettings");
 
             BlobResultSegment seg = await ListBlobsAsync(container, range);
             
-            bool succ = await CreateWeatherStationsFromBlob(seg);
+            bool succ = await CreateWeatherStationsFromBlob(seg, table);
 
             // Retrieve reference to a blob named "myblob".
-
             return await Task.FromResult(true);
         }
 
@@ -60,7 +63,12 @@ namespace AIHubMobile
             return await Task.FromResult(Items);
         }
 
-        public async Task<BlobResultSegment> ListBlobsAsync(CloudBlobContainer con, WeatherSet.WeatherSetDateRanges range)
+        public async Task<bool> UpdateStationOptions(StationOptions station)
+        {
+            return await UpdateDeviceConfigSettings(station.editOptions);
+        }
+
+        private async Task<BlobResultSegment> ListBlobsAsync(CloudBlobContainer con, WeatherSet.WeatherSetDateRanges range)
         {
 
             BlobContinuationToken continuationToken = null;
@@ -104,7 +112,7 @@ namespace AIHubMobile
             return resultSegment;
         }
 
-        private async Task<bool> CreateWeatherStationsFromBlob(BlobResultSegment seg)
+        private async Task<bool> CreateWeatherStationsFromBlob(BlobResultSegment seg, CloudTable tab)
         {
             Items.Clear();
             foreach (CloudBlockBlob blobItem in seg.Results)
@@ -126,16 +134,34 @@ namespace AIHubMobile
 
                     foreach (JObject root in allDataSets)
                     {
+                        //Device is the same as station
                         string devName = root["device_name"].ToString();
                         double lat = Convert.ToDouble(root["location"]["lat"].ToString());
                         double lon = Convert.ToDouble(root["location"]["lon"].ToString());
-
+                       
                         int currStationIndex = Items.FindIndex(x => x.StationName == devName);
                         
                         //If a station of that type does not exist add it now and set current index as that
                         if (currStationIndex == -1)
                         {
-                            Items.Add(new WeatherStation(devName, lat, lon));
+                            //Get the station options or create them this may change later if we want to do this at the device
+                            TableOperation op = TableOperation.Retrieve<EditableStationOptions>("EditableStationOptions", devName);
+                            TableResult retrievedResult = await tab.ExecuteAsync(op);
+
+                            EditableStationOptions option;
+                            if(retrievedResult.Result == null)
+                            {
+                                option =  CreateDefaultEditableStationOption(tab, devName);
+                            }
+                            else
+                            {
+                                option = (EditableStationOptions)retrievedResult.Result;
+                            }
+
+
+                            WeatherStation stat = new WeatherStation(devName, lat, lon);
+                            stat.statOptions = new StationOptions(option, null);
+                            Items.Add(stat);
                             currStationIndex = Items.Count - 1;
                         }
 
@@ -225,6 +251,34 @@ namespace AIHubMobile
                     prefixes.Add("");
                     return prefixes;
             }
+        }
+
+        private EditableStationOptions CreateDefaultEditableStationOption(CloudTable tab, String name)
+        {
+            EditableStationOptions option = new EditableStationOptions(name);
+
+            TableOperation insertOp = TableOperation.InsertOrReplace(option);
+
+            //We do not need to await this 
+            tab.ExecuteAsync(insertOp);
+
+            return option;
+        }
+
+        private async Task<bool> UpdateDeviceConfigSettings(EditableStationOptions option)
+        {
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            CloudTable table = tableClient.GetTableReference("DeviceConfigSettings");
+
+            TableOperation insertOrRepOp = TableOperation.InsertOrReplace(option);
+
+            TableResult res = await table.ExecuteAsync(insertOrRepOp);
+            if( res.HttpStatusCode != 204)
+            {
+                Console.WriteLine("Failure updating station options");
+            }
+
+            return true;
         }
     }
 }

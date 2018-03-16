@@ -39,11 +39,6 @@ namespace AIHubMobile
             ItemsListView.SelectedItem = null;
         }
 
-        async void AddItem_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new ChangeOptionsPage());
-        }
-
         protected override void OnAppearing()
         {
             base.OnAppearing();

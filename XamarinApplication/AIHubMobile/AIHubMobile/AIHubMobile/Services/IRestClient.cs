@@ -17,5 +17,6 @@ namespace AIHubMobile
     {
         Task<bool> RefreshWeatherSets(WeatherSet.WeatherSetDateRanges range);
         Task<IEnumerable<WeatherStation>> GetAllWeatherSets(bool forceRefresh = false, WeatherSet.WeatherSetDateRanges range = WeatherSet.WeatherSetDateRanges.Today);
+        Task<bool> UpdateStationOptions(StationOptions options);
     }
 }

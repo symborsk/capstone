@@ -38,10 +38,10 @@ namespace AIHubMobile
 
         async void Config_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new ChangeOptionsPage());
+            await Navigation.PushAsync(new DeviceConfigPage(viewModel.Item.statOptions));
         }
 
-        private async void Picker_SelectedIndexChanged(object sender, EventArgs e)
+        private void Picker_SelectedIndexChanged(object sender, EventArgs e)
         {
             //TODO: Update Options functionality
             Picker pick = (Picker)sender;
