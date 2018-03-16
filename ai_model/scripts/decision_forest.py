@@ -5,7 +5,7 @@ import json
 # Constants #
 # # # # # # #
 # Precision for rounding decimals
-precision = 5
+precision = 6
 
 # Value of a weight providing a perfect 50/50 split
 ideal_weight = 0.5
@@ -14,7 +14,7 @@ ideal_weight = 0.5
 acceptable_margin = 5
 
 # Variable which controls the maximum possible standard deviation or minimum change in standard deviation for a leaf node
-std_dev_threshold = 1.25
+std_dev_threshold = 2
 delta_threshold = 0.25
 
 # # # # # #
@@ -29,8 +29,11 @@ delta_threshold = 0.25
 		trees: List of DecisionTree objects
 		avg_std_dev: Average standard deviation for each label in a forest
 	"""
-class DecisionForest(): 
-	def __init__(self, rows = None, n_labels = 1, n_trees = 128, batch_size = 1536, obj_dict = None):
+class DecisionForest():
+	n_trees = 128
+	batch_size = 1536
+
+	def __init__(self, rows = None, n_labels = 1, n_trees = DecisionForest.n_trees, batch_size = DecisionForest.batch_size, obj_dict = None):
 		if obj_dict!=None:
 			self.n_labels = obj_dict['n_labels']
 			self.n_trees = obj_dict['n_trees']
@@ -60,7 +63,9 @@ class DecisionForest():
 
 		# Average values for all labels
 		expected = [np.mean([label[i] for label in tree_labels]) for i in range(self.n_labels)]
-		return expected
+
+		# Only returning 0th element now to manually get 1 label
+		return expected[0]
 
 """ Decision Tree Class 
 
@@ -275,7 +280,6 @@ def build_forest(rows, n_labels, n_trees, batch_size):
 
 		# Build the tree & add it to the forest
 		forest[i] = DecisionTree(rows=curr_batch, features=curr_features, n_labels=n_labels)
-		print('Tree Built: #{0}'.format(i))
 
 	return forest
 
