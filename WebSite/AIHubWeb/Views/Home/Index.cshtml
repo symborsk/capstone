@@ -9,10 +9,10 @@
 
 @section JavaScript
 {
-    <script type="text/javascript" src="@Url.Content("/Scripts/maps.js")"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVeBsTfPuZmDbxiBsCQrFoktNl_PzQiV4&sensor=false"></script>
     <script type="text/javascript" src="@Url.Content("/Scripts/jquery-1.10.2.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("/Scripts/bootstrap.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("/Scripts/maps.js")"></script>
 }
 
 <div class="container">
@@ -23,7 +23,14 @@
 </div>
 
 <div class="container" style="align-content:center">
-    <div id="map_canvas" style="width: 80%; height: 480px;">
+    <div id="map_canvas" style="width: 90%; height: 650px;">
+    </div>
+</div>
+
+<hr />
+
+<div class="container" style="align-content:center; margin: 10px">
+    <div id="map_list" style="width: 100%;">
     </div>
 </div>
 
@@ -34,11 +41,6 @@
     $(document).ready(function () {
         initialize(weatherList);
     });
-
-
-
-
-
 
 </script>
 

@@ -32,6 +32,21 @@ public class WeatherSetsController : Controller
             return await Task.FromResult(weatherStations);
         }
 
+        public async Task<List<WeatherSet>> GetStationListForName(string stationName)
+        {
+            await RefreshWeatherSets(WeatherSet.WeatherSetDateRanges.AllTime);
+
+            foreach(WeatherStation stat in weatherStations)
+            {
+                if(stat.StationName == stationName)
+                {
+                    return stat.rgWeatherSets;
+                }
+            }
+
+            return null;  
+        }
+
         public async Task<bool> RefreshWeatherSets(WeatherSet.WeatherSetDateRanges range)
         {
 
@@ -96,7 +111,9 @@ public class WeatherSetsController : Controller
 
         private async Task<bool> CreateWeatherStationsFromBlob(BlobResultSegment seg)
         {
-            
+
+            weatherStations.Clear();
+
             foreach (CloudBlockBlob blobItem in seg.Results)
             {
                 string text;
