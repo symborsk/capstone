@@ -26,7 +26,10 @@ function initialize(weatherList) {
     for (var i = 0; i < weatherList.length; i++) {
         var currStation = weatherList[i];
         AddPinForStation(currStation);
+        CreateStationList(currStation.latlng.Lat, currStation.latlng.Lng, currStation.StationName);
     }
+
+
 }
 
 function AddPinForStation(weatherStation) {
@@ -187,3 +190,43 @@ function DisplayWeatherSetsForTable(data, status) {
 function errorFunc(err) {
     alert("Error Getting data for stations" + err.toString());
 }
+
+
+var Rogers = {lat: 53.5470, lng: -113.4978}
+
+
+//Given a clicked on weather station, center the map there
+function CenterMapOnStation(lat,lng) {
+    
+    var stationLatLng = new google.maps.LatLng(lat, lng);
+    
+    map.panTo(stationLatLng);
+
+}
+//Populate the list of stations next to the map
+function CreateStationList(lat, lng, stationName) {
+    var content = "";
+    //Need to update this so it only adds a single list item
+    content += "<p><button style=\"text-align: center; height: 40px; width: 100px;\" type=\"button\" class=\"bbtn btn-primary btn-lg btn-block\" onclick=\"CenterMapOnStation('" + lat+"','"+ lng + "')\">" + stationName + "</button></p>";
+
+    // Generate the html content
+    document.getElementById("station_list").innerHTML = content;
+
+
+}
+//Not being used as of yet...
+function GetStationNamesForStationList(stationName) {
+    var serviceURL = '/Home/GetStationListForName';
+
+    //Get all the info for that table
+    $.ajax({
+        type: "Get",
+        url: serviceURL,
+        data: { statName: stationName },
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: DisplayWeatherSetsForTable,
+        error: errorFunc
+    });
+}
+
