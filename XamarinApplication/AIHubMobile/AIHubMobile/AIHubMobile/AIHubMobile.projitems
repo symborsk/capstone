@@ -19,7 +19,7 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\WeatherStationDetailPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\ChangeOptions.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\DeviceConfigPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -45,8 +45,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\WeatherStationDetailPage.xaml.cs">
       <DependentUpon>WeatherStationDetailPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\ChangeOptions.xaml.cs">
-      <DependentUpon>ChangeOptions.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DeviceConfigPage.xaml.cs">
+      <DependentUpon>DeviceConfigPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\MainPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AboutViewModel.cs" />

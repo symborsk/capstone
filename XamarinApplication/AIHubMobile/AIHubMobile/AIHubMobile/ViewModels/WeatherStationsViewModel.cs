@@ -29,15 +29,10 @@ namespace AIHubMobile
             AppOptions options = new AppOptions();
 
             //Create an inline function of what to do when recieving this message
-            MessagingCenter.Subscribe<ChangeOptionsPage, AppOptions>(this, "UpdateOptions", async (obj, option) =>
+            MessagingCenter.Subscribe<DeviceConfigPage, StationOptions>(this, "UpdateOptions", async (obj, option) =>
             {
-                var _item = option as AppOptions;
-                options = _item;
-                await WeatherStationDependency.RefreshWeatherSets(WeatherSet.WeatherSetDateRanges.AllTime);
-                await WeatherStationDependency.GetAllWeatherSets();
+                await WeatherStationDependency.UpdateStationOptions(option);
             });
-
-
         }
 
         //Async load of the items
