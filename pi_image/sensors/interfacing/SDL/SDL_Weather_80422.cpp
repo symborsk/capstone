@@ -17,6 +17,17 @@
     Version 1.6 - Support for ADS1015 in WeatherPiArduino Board February 7, 2015
 */
 
+// global var for sig handler 
+int printRequested = 0;
+
+void printSignalHandler(int signo) 
+{
+  if (signo == SIGUSR1)
+  {
+    printRequested = 1;
+  }
+}
+
 
 #include <time.h>
 #include <stdio.h>
@@ -168,10 +179,20 @@ float SDL_Weather_80422::getSampingWindSpeed()
     return _currentWindSpeed;
 }
 
- int main() {
+ int main() 
+ {
   wiringPiSetupGpio();
   SDL_Weather_80422 *station =  new SDL_Weather_80422(16, 20);
- 
-  printf("Speed: %f Rain: %f Gust: %f", station->getCurrentWindSpeed(), station->getCurrentRainTotal(), station->getWindGust());
-  
+
+  if (signal(SIGUSR1, printSignalHandler) == SIG_ERR) {
+    printf("Error occurred setting up SIGUSR1 signal handler\n");
+  }
+
+  while (1) 
+  {
+    if (printRequested) {
+      printf("Speed: %f Rain: %f Gust: %f", station->getCurrentWindSpeed(), station->getCurrentRainTotal(), station->getWindGust());
+      printRequested = 0;
+    }
+  }
 }
