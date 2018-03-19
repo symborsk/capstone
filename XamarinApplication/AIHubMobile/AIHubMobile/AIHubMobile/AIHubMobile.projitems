@@ -27,15 +27,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Models\AppOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RangeObservableCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\EditableStationOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ReadOnlyStationOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\StationOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\WeatherSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\WeatherStation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\IRestClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\RestClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IRestAzureStorage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\RestAzureStorage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
