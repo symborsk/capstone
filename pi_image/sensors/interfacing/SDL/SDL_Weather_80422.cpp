@@ -20,9 +20,9 @@
 // global var for sig handler 
 int printRequested = 0;
 
-void printSignalHandler(int signo) 
+void printSignalHandler(int signal) 
 {
-  if (signo == SIGUSR1)
+  if (signal == SIGUSR1)
   {
     printRequested = 1;
   }
