@@ -13,7 +13,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace AIHubMobile
 {
-    public interface IRestClient<T>
+    public interface IRestAzureStorage<T>
     {
         Task<bool> RefreshWeatherSets(WeatherSet.WeatherSetDateRanges range);
         Task<IEnumerable<WeatherStation>> GetAllWeatherSets(bool forceRefresh = false, WeatherSet.WeatherSetDateRanges range = WeatherSet.WeatherSetDateRanges.Today);
