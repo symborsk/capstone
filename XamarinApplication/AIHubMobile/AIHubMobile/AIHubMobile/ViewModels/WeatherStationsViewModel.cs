@@ -26,9 +26,8 @@ namespace AIHubMobile
             Title = "View Weather";
             WeatherStations = new ObservableCollection<WeatherStation>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-            AppOptions options = new AppOptions();
 
-            //Create an inline function of what to do when recieving this message
+            //WHen update the config options calls the service
             MessagingCenter.Subscribe<DeviceConfigPage, StationOptions>(this, "UpdateOptions", async (obj, option) =>
             {
                 await WeatherStationDependency.UpdateStationOptions(option);

@@ -18,16 +18,16 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
 using System.Reflection;
 
-[assembly:Xamarin.Forms.Dependency(typeof(AIHubMobile.RestClient))]
+[assembly:Xamarin.Forms.Dependency(typeof(AIHubMobile.RestAzureStorage))]
 namespace AIHubMobile
 {
-    public class RestClient : IRestClient<WeatherStation>
+    public class RestAzureStorage : IRestAzureStorage<WeatherStation>
     {
         List<WeatherStation> Items;
         HttpClient client;
         CloudStorageAccount storageAccount;
 
-        public RestClient()
+        public RestAzureStorage()
         {
             client = new HttpClient();
             client.MaxResponseContentBufferSize = 256000;
