@@ -16,4 +16,4 @@ sudo sh -c 'echo 0 > /sys/class/leds/led0/brightness'
 # Disable USB and Ethernet
 echo '1-1' |sudo tee /sys/bus/usb/drivers/usb/unbind
 
-sudo shutdown -r now
+# sudo shutdown -r now
