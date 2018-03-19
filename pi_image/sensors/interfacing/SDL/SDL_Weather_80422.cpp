@@ -28,6 +28,7 @@ void printSignalHandler(int signo)
   }
 }
 
+#include <signal.h>
 
 #include <time.h>
 #include <stdio.h>
