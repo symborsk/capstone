@@ -192,8 +192,10 @@ float SDL_Weather_80422::getSampingWindSpeed()
   while (1) 
   {
     if (printRequested) {
-      printf("Speed: %f Rain: %f Gust: %f", station->getCurrentWindSpeed(), station->getCurrentRainTotal(), station->getWindGust());
+      FILE * output = open(file_path, "a+");
+      fprintf(output, "Speed: %f Rain: %f Gust: %f", station->getCurrentWindSpeed(), station->getCurrentRainTotal(), station->getWindGust());
       printRequested = 0;
+      fclose(output);
     }
   }
 }

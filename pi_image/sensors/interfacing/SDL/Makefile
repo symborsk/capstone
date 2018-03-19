@@ -12,7 +12,7 @@ CC = g++
 
 CFLAGS = -g -Wall -std=gnu++11
 
-TARGET = Station
+TARGET = station
 
 all: $(TARGET)
 
