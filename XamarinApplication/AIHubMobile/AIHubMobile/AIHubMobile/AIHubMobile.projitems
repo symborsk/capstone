@@ -33,6 +33,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\StationOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\WeatherSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\WeatherStation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IIotHubMessenger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IotHubMessenger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IRestAzureStorage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\RestAzureStorage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\AboutPage.xaml.cs">

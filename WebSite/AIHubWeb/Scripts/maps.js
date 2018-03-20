@@ -48,7 +48,7 @@ function AddPinForStation(weatherStation) {
         content: infoWindowString
     });
 
-    marker.addListener('mouseover', function () {
+    marker.addListener('click', function () {
         infowindow.open(map, marker);
     });
 
@@ -109,8 +109,8 @@ function GenerateInfoString(name, latestRecordedTime, weatherSets) {
 
     tableHeaderContent += "</tr></thead>";
     content += tableHeaderContent + tableDetailContent + "</table></div>";
-    content += "<p style=\"float: left;\"><button type=\"button\" class=\"bbtn btn-primary btn-lg btn-block\" onclick=\"GetWeatherSetsForTable('" + name + "')\">View Details</button></p>";
-    content += "<p style=\"float: right;\"><button type=\"button\" id=\"dialogButton\" class=\"bbtn btn-primary btn-lg btn-block\" onclick=\"DisplayConfigurationDialog('" + name + "')\">Configure Station</button></p>";
+    content += "<div class=\"container\"><button type=\"button\" class=\"btn btn-primary btn-lg btn-block\" onclick=\"GetWeatherSetsForTable('" + name + "')\">View Details</button>";
+    content += "<button type=\"button\" id=\"dialogButton\" class=\"btn btn-secondary btn-lg btn-block\" onclick=\"DisplayConfigurationDialog('" + name + "')\">Configure Station</button></div>";
     
 
     return content;
@@ -194,8 +194,6 @@ function DisplayWeatherSetsForTable(data, status) {
 function errorFunc(err) {
     alert("Error Getting data for stations" + err.toString());
 }
-
-
 
 //Given a clicked on weather station, center the map there
 function CenterMapOnStation(lat,lng) {

@@ -47,6 +47,7 @@ namespace AIHubMobile
             }
 
             rgWeatherSets.Add(set);
+            OrderListByDate();
         }
 
         public DateTime GetLatestDate()

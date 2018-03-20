@@ -38,7 +38,7 @@ namespace AIHubMobile
 
         async void Config_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new DeviceConfigPage(viewModel.Item.statOptions));
+            await Navigation.PushAsync(new DeviceConfigPage(viewModel.Item.statOptions, viewModel.Item.StationName));
         }
 
         private void Picker_SelectedIndexChanged(object sender, EventArgs e)

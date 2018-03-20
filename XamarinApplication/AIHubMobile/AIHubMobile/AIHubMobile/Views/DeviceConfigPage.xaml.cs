@@ -17,8 +17,9 @@ namespace AIHubMobile
     public partial class DeviceConfigPage : ContentPage
     {
         public StationOptions stationOption { get; set; }
+        public string deviceName { get; set; }
 
-        public DeviceConfigPage(StationOptions options)
+        public DeviceConfigPage(StationOptions options, string deviceName)
         {
             stationOption = options;
             BindingContext = this;
@@ -27,7 +28,7 @@ namespace AIHubMobile
 
          private async void UpdateOptions_Clicked(object sender, EventArgs e)
         {
-            MessagingCenter.Send(this, "UpdateOptions", stationOption);
+            MessagingCenter.Send(this, "UpdateOptions", new Tuple<string, StationOptions>(deviceName, stationOption));
             
             await Navigation.PopAsync(); ;
         }

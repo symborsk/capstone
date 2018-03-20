@@ -19,6 +19,7 @@ namespace AIHubMobile
     {
         //Define the factory dependeny service for getting the weather sets
         public IRestAzureStorage<WeatherStation> WeatherStationDependency => DependencyService.Get<IRestAzureStorage<WeatherStation>>() ?? new RestAzureStorage();
+        public IIotHubMessenger MessengerDependency => DependencyService.Get<IIotHubMessenger>() ?? new IotHubMessenger();
 
         bool isBusy = false;
         public bool IsBusy

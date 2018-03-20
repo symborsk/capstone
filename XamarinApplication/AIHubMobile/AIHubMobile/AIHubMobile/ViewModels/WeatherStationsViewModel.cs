@@ -28,9 +28,10 @@ namespace AIHubMobile
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
             //WHen update the config options calls the service
-            MessagingCenter.Subscribe<DeviceConfigPage, StationOptions>(this, "UpdateOptions", async (obj, option) =>
+            MessagingCenter.Subscribe<DeviceConfigPage, Tuple<string, StationOptions>>(this, "UpdateOptions", async (obj, tup) =>
             {
-                await WeatherStationDependency.UpdateStationOptions(option);
+                await WeatherStationDependency.UpdateStationOptions(tup.Item2);
+                await MessengerDependency.UpdateDeviceOptions(tup.Item1, tup.Item2);
             });
         }
 
