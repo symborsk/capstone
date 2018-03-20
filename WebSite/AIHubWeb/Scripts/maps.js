@@ -23,6 +23,8 @@ function initialize(weatherList) {
     map = new google.maps.Map(document.getElementById("map_canvas"),
         mapOptions);
 
+    SetupModalDialog();
+
     for (var i = 0; i < weatherList.length; i++) {
         var currStation = weatherList[i];
         AddPinForStation(currStation);
@@ -107,7 +109,9 @@ function GenerateInfoString(name, latestRecordedTime, weatherSets) {
 
     tableHeaderContent += "</tr></thead>";
     content += tableHeaderContent + tableDetailContent + "</table></div>";
-    content += "<p><button type=\"button\" class=\"bbtn btn-primary btn-lg btn-block\" onclick=\"GetWeatherSetsForTable('" + name + "')\">View Details</button></p>";
+    content += "<p style=\"float: left;\"><button type=\"button\" class=\"bbtn btn-primary btn-lg btn-block\" onclick=\"GetWeatherSetsForTable('" + name + "')\">View Details</button></p>";
+    content += "<p style=\"float: right;\"><button type=\"button\" id=\"dialogButton\" class=\"bbtn btn-primary btn-lg btn-block\" onclick=\"DisplayConfigurationDialog('" + name + "')\">Configure Station</button></p>";
+    
 
     return content;
 }
@@ -192,41 +196,64 @@ function errorFunc(err) {
 }
 
 
-var Rogers = {lat: 53.5470, lng: -113.4978}
-
 
 //Given a clicked on weather station, center the map there
 function CenterMapOnStation(lat,lng) {
-    
+
     var stationLatLng = new google.maps.LatLng(lat, lng);
-    
+
     map.panTo(stationLatLng);
 
 }
 //Populate the list of stations next to the map
 function CreateStationList(lat, lng, stationName) {
     var content = "";
-    //Need to update this so it only adds a single list item
-    content += "<p><button style=\"text-align: center; height: 40px; width: 100px;\" type=\"button\" class=\"bbtn btn-primary btn-lg btn-block\" onclick=\"CenterMapOnStation('" + lat+"','"+ lng + "')\">" + stationName + "</button></p>";
+
+    content += "<h4>Station List</h4>";
+    //Grabs only the lat, lng, and station name to create new button
+    content += "<p><button style=\"height: 40px; width: 100px;\" type=\"button\" class=\"bbtn btn-primary btn-lg btn-block\" onclick=\"CenterMapOnStation('" + lat + "','" + lng + "')\">" + stationName + "</button></p>";
 
     // Generate the html content
     document.getElementById("station_list").innerHTML = content;
 
 
 }
-//Not being used as of yet...
-function GetStationNamesForStationList(stationName) {
-    var serviceURL = '/Home/GetStationListForName';
 
-    //Get all the info for that table
-    $.ajax({
-        type: "Get",
-        url: serviceURL,
-        data: { statName: stationName },
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: DisplayWeatherSetsForTable,
-        error: errorFunc
-    });
+function DisplayConfigurationDialog(stationName) {
+
+    // Get the modal
+    var modal = document.getElementById('myModal');
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("dialogButton");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on the button, open the modal 
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+    
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 }
+
+function SetupModalDialog() {
+    var content = "<div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><h4>Station Name</h4><span class=\"close\">&times;" +
+        "</span ></div > <div class=\"modal-body\"><p>Some text in the Modal..</p></div><div class=\"modal-footer\"></div></div></div>";
+
+    document.getElementById("myModal").innerHTML = content;
+}
+
+
 
