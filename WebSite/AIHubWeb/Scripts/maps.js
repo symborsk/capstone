@@ -30,6 +30,8 @@ function initialize(weatherList) {
     for (var i = 0; i < weatherList.length; i++) {
         var currStation = weatherList[i];
         AddPinForStation(currStation);
+        //Reset the station before adding all them back
+        document.getElementById("station_list").innerHTML = "";
         CreateStationList(currStation.latlng.Lat, currStation.latlng.Lng, currStation.StationName);
     }
 }
@@ -216,6 +218,9 @@ function DisplayWeatherSetsForTable(data, status) {
     $('html, body').animate({
         'scrollTop': $("#map_list").position().top
     });
+
+    //Display the tab for viewing different data sets
+    document.getElementById("TableSwitching").style.display = "block";
 }
 
 function errorFunc(err) {
@@ -234,12 +239,11 @@ function CenterMapOnStation(lat,lng) {
 function CreateStationList(lat, lng, stationName) {
     var content = "";
 
-    content += "<h2>Station List</h2>";
     //Grabs only the lat, lng, and station name to create new button
-    content += "<p><button style=\"height: 40px; width: 100px;\" type=\"button\" class=\"bbtn btn-primary btn-lg btn-block\" onclick=\"CenterMapOnStation('" + lat + "','" + lng + "')\">" + stationName + "</button></p>";
+    content += "<a href=\"#\" style=\"margin:5px;\" class=\"list-group-item list-group-item-action flex-column align-items-start\" onclick=\"CenterMapOnStation('" + lat + "','" + lng + "')\"><h5>" + stationName + "</h5></a > ";
 
     // Generate the html content
-    document.getElementById("station_list").innerHTML = content;
+    document.getElementById("station_list").innerHTML += content;
 }
 
 function DisplayConfigurationDialog(stationName) {
@@ -282,7 +286,6 @@ function InitializeDatePicker() {
 
     document.getElementById("resultrange").style.display = "block";
 
-
     $('#resultrange').daterangepicker({
         startDate: start,
         endDate: end,
@@ -315,6 +318,26 @@ function DateRangeChange(start, end, init) {
     }
 }
 
+function DisplayWeatherContent() {
+
+    //Set the right tab to show
+    document.getElementById("ai_info_list").style.display = "none";
+    document.getElementById("map_list").style.display = "block";
+
+    //Update the active tabs
+    document.getElementById("WeatherResultsTab").className = "active";
+    document.getElementById("AIResultsTab").className = "";
+}
+
+function DisplayAITable() {
+    //Set the right tab to show
+    document.getElementById("ai_info_list").style.display = "block";
+    document.getElementById("map_list").style.display = "none";
+
+    //Update the active tabs
+    document.getElementById("WeatherResultsTab").className = "";
+    document.getElementById("AIResultsTab").className = "active";
+}
 
 
 

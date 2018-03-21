@@ -29,10 +29,14 @@
     </div>
 </div>
 
-<div class="container" style="align-content:center; width: 100%">
-    <div id="map_canvas" style="width: 80%; height: 650px; float:left;">
+<div class="container" style="align-content:center; width:100%">
+    <div id="map_canvas" style="width: 75%; height: 650px; float:left;">
     </div>
-    <div id="station_list" style="width: 20%; height: 650px; float: left; padding-left: 100px;"></div>
+    <div style="width:20%;float:right;margin:5px;text-align:center;border:1px solid #ccc">
+        <h2> Navigate To: </h2>
+        <div class="list-group" id="station_list">
+        </div>
+    </div>
 </div>
 
 <div id="myModal" class="modal">
@@ -40,12 +44,46 @@
 
 <hr />
 
-<div class="container" style="align-content:center; margin: 10px">
-    <div id="resultrange" class="pull-right" style="display:none; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 30%; margin: 5px;">
+<ul id="TableSwitching" class="nav nav-tabs" style="display:none">
+    <li class="active" id="WeatherResultsTab" onclick="DisplayWeatherContent()"><a href="#/">Weather Results</a></li>
+    <li id="AIResultsTab" onclick="DisplayAITable()"><a href="#/">AI Predictions</a></li>
+</ul>
+
+<div class="container" style="align-content:center; margin:10px">
+    <div id="resultrange" class="pull-right" style="display:none;background:#fff;cursor:pointer;padding:5px 10px; border:1px solid #ccc;width:30%;margin:5px;">
         <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
         <span class="right"></span> <b class="caret"></b>
     </div>
     <div id="map_list" style="width: 100%;">
+    </div>
+    <div id="ai_info_list" style="display:none">
+        @*PlaceHolder for now*@
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>John</td>
+                    <td>Doe</td>
+                    <td>john@example.com</td>
+                </tr>
+                <tr>
+                    <td>Mary</td>
+                    <td>Moe</td>
+                    <td>mary@example.com</td>
+                </tr>
+                <tr>
+                    <td>July</td>
+                    <td>Dooley</td>
+                    <td>july@example.com</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
