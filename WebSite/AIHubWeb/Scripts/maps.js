@@ -2,6 +2,7 @@
 
 function initialize(weatherList) {
     var mapOptions;
+    var currentStation;
 
     //Default location is edmonton otherwise center it on the 1st object in the list
     if (weatherList.length > 0) {
@@ -24,14 +25,13 @@ function initialize(weatherList) {
         mapOptions);
 
     SetupModalDialog();
+    InitializeDatePicker();
 
     for (var i = 0; i < weatherList.length; i++) {
         var currStation = weatherList[i];
         AddPinForStation(currStation);
         CreateStationList(currStation.latlng.Lat, currStation.latlng.Lng, currStation.StationName);
     }
-
-
 }
 
 function AddPinForStation(weatherStation) {
@@ -63,7 +63,7 @@ function GenerateInfoString(name, latestRecordedTime, weatherSets) {
     var content;
     var tableHeaderContent = "";
     var tableDetailContent = "";
-    content = "<div><table class=\"table table-condensed table-striped table-bordered table-hover\">";
+    content = "<div><table id=\"currentTable\" class=\"table table-condensed table-striped table-bordered table-hover\">";
     content += "<h1>" + name + "</h1>";
     tableHeaderContent = "<thead><tr><th> Recorded Time </th>";
 
@@ -112,18 +112,39 @@ function GenerateInfoString(name, latestRecordedTime, weatherSets) {
     content += "<div class=\"container\"><button type=\"button\" class=\"btn btn-primary btn-lg btn-block\" onclick=\"GetWeatherSetsForTable('" + name + "')\">View Details</button>";
     content += "<button type=\"button\" id=\"dialogButton\" class=\"btn btn-secondary btn-lg btn-block\" onclick=\"DisplayConfigurationDialog('" + name + "')\">Configure Station</button></div>";
     
-
     return content;
 }
 
 function GetWeatherSetsForTable(stationName) {
-    var serviceURL = '/Home/GetStationListForName';
+    currentStation = stationName;
+    var serviceURL = '/Home/GetWeatherSetsForNameAndRange';
+    var drp = $('#resultrange').data('daterangepicker');
+    var start = drp.startDate.format('YYYY-MM-DD');
+    var end = drp.endDate.format('YYYY-MM-DD');
 
     //Get all the info for that table
     $.ajax({
         type: "Get",
         url: serviceURL,
-        data: { statName: stationName},
+        data: {statName: stationName, startDate: start, endDate: end},
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: DisplayWeatherSetsForTable,
+        error: errorFunc
+    });
+}
+
+function GetWeatherSetsForNewRange() {
+    var serviceURL = '/Home/GetWeatherSetsForNameAndRange';
+    var drp = $('#resultrange').data('daterangepicker');
+    var start = drp.startDate.format('YYYY-MM-DD');
+    var end = drp.endDate.format('YYYY-MM-DD');
+
+    //Get all the info for that table
+    $.ajax({
+        type: "Get",
+        url: serviceURL,
+        data: { statName: currentStation, startDate: start, endDate: end },
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: DisplayWeatherSetsForTable,
@@ -140,48 +161,54 @@ function DisplayWeatherSetsForTable(data, status) {
     //Our chosen date format
     var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
 
-    //Table will be built in parts so that we can keep the table building complety dynamic
-    var content;
-    var tableHeaderContent = "";
-    var tableDetailContent = "";
-    content = "<div><table class=\"table table-striped table-bordered table-hover\">";
-    tableHeaderContent = "<thead><tr><th> Recorded Time </th>";
-    for (var i = 0; i < data.length; i++) {
-        var set = data[i];
 
-        //Parse the date and sip;ay it in the first column always
-        var date = new Date(parseInt(set.RecordedTime.substr(6)));     
-        var dateString = date.toLocaleString("en-US", options);
- 
-        tableDetailContent += "<tr><td>" + dateString + "</td >";
-        for (var propName in set) {
-
-            if (propName.localeCompare("RecordedTime") == 0) {
-                continue;
-            }
-
-            //Since we use camel case put spaces between the capital then capitalize first letter
-            var propNameDisplay = propName.replace(/([A-Z])/g, ' $1').trim();
-            propNameDisplay = propNameDisplay.charAt(0).toUpperCase() + propNameDisplay.slice(1);
-
-            //We only have to build the table header only once
-            if (i == 0) {
-                tableHeaderContent += "<th>" + propNameDisplay + "</th>";
-            }
-            
-            if (set[propName] == null) {
-                tableDetailContent += "<td>---</td>";
-            }
-            else{
-                tableDetailContent += "<td>" + set[propName] + "</td>";
-            }
-            
-        }
-        tableDetailContent += "</tr>";
+    var content = "";
+    if (data.length == 0) {
+        content = "<div style=\"margin-top:200px;margin-bottom:200px;\"><h2>No Content For Selected Date Range and Station: " + currentStation + "</h2></div>";
     }
+    else {
+        //Table will be built in parts so that we can keep the table building complety dynamic
+        var tableHeaderContent = "";
+        var tableDetailContent = "";
+        content += "<h2>" + currentStation +  "</h2><div><table class=\"table table-striped table-bordered table-hover\">";
+        tableHeaderContent = "<thead><tr><th> Recorded Time </th>";
+        for (var i = 0; i < data.length; i++) {
+            var set = data[i];
 
-    tableHeaderContent += "</tr></thead>";
-    content += tableHeaderContent + tableDetailContent + "</table></div>";
+            //Parse the date and sip;ay it in the first column always
+            var date = new Date(parseInt(set.RecordedTime.substr(6)));
+            var dateString = date.toLocaleString("en-US", options);
+
+            tableDetailContent += "<tr><td>" + dateString + "</td >";
+            for (var propName in set) {
+
+                if (propName.localeCompare("RecordedTime") == 0) {
+                    continue;
+                }
+
+                //Since we use camel case put spaces between the capital then capitalize first letter
+                var propNameDisplay = propName.replace(/([A-Z])/g, ' $1').trim();
+                propNameDisplay = propNameDisplay.charAt(0).toUpperCase() + propNameDisplay.slice(1);
+
+                //We only have to build the table header only once
+                if (i == 0) {
+                    tableHeaderContent += "<th>" + propNameDisplay + "</th>";
+                }
+
+                if (set[propName] == null) {
+                    tableDetailContent += "<td>---</td>";
+                }
+                else {
+                    tableDetailContent += "<td>" + set[propName] + "</td>";
+                }
+
+            }
+            tableDetailContent += "</tr>";
+        }
+
+        tableHeaderContent += "</tr></thead>";
+        content += tableHeaderContent + tableDetailContent + "</table></div>";
+    }
 
     document.getElementById("map_list").innerHTML = content;
 
@@ -192,7 +219,7 @@ function DisplayWeatherSetsForTable(data, status) {
 }
 
 function errorFunc(err) {
-    alert("Error Getting data for stations" + err.toString());
+    alert("Error Getting data for stations - Error Code: " + err.status.toString());
 }
 
 //Given a clicked on weather station, center the map there
@@ -207,14 +234,12 @@ function CenterMapOnStation(lat,lng) {
 function CreateStationList(lat, lng, stationName) {
     var content = "";
 
-    content += "<h4>Station List</h4>";
+    content += "<h2>Station List</h2>";
     //Grabs only the lat, lng, and station name to create new button
     content += "<p><button style=\"height: 40px; width: 100px;\" type=\"button\" class=\"bbtn btn-primary btn-lg btn-block\" onclick=\"CenterMapOnStation('" + lat + "','" + lng + "')\">" + stationName + "</button></p>";
 
     // Generate the html content
     document.getElementById("station_list").innerHTML = content;
-
-
 }
 
 function DisplayConfigurationDialog(stationName) {
@@ -231,19 +256,19 @@ function DisplayConfigurationDialog(stationName) {
     // When the user clicks on the button, open the modal 
     btn.onclick = function () {
         modal.style.display = "block";
-    }
+    };
     
     // When the user clicks on <span> (x), close the modal
     span.onclick = function () {
         modal.style.display = "none";
-    }
+    };
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
         }
-    }
+    };
 }
 
 function SetupModalDialog() {
@@ -252,6 +277,45 @@ function SetupModalDialog() {
 
     document.getElementById("myModal").innerHTML = content;
 }
+
+function InitializeDatePicker() {
+
+    document.getElementById("resultrange").style.display = "block";
+
+
+    $('#resultrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+            'Today': [moment(), moment()],
+            'Last 3 Days': [moment().subtract(3, 'days'), moment()],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'This Year': [moment().startOf('year'), moment().endOf('year')],
+            'All Time': [moment(new Date(1995, 1, 4)), moment()]
+        }
+    }, DateRangeChange);
+
+
+    var start = moment().subtract(6, 'days');
+    var end = moment();
+    DateRangeChange(start, end, true);
+}
+
+function DateRangeChange(start, end, init) {
+    //Change the range on the display
+    $('#resultrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+
+    var drp = $('#resultrange').data('daterangepicker');
+    drp.setStartDate(start);
+    drp.setEndDate(end);
+
+    if (init != true) {
+        GetWeatherSetsForNewRange();
+    }
+}
+
+
 
 
 

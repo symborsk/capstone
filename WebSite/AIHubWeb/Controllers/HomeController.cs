@@ -10,6 +10,7 @@ namespace AIHubWeb.Controllers
     public class HomeController : Controller
     {
         WeatherSetsController restController = new WeatherSetsController();
+
         public async Task<ActionResult> Index()
         {
             await restController.RefreshWeatherSets(WeatherSet.WeatherSetDateRanges.AllTime);
@@ -32,12 +33,14 @@ namespace AIHubWeb.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetStationListForName(string statName)
+        public async Task<ActionResult> GetWeatherSetsForNameAndRange(string statName, string startDate, string endDate)
         {
             await restController.RefreshWeatherSets(WeatherSet.WeatherSetDateRanges.AllTime);
-            List<WeatherSet> sets = await restController.GetStationListForName(statName);
 
-            return Json(sets, JsonRequestBehavior.AllowGet); // return some thing
+            DateTime start = DateTime.Parse(startDate);
+            DateTime end = DateTime.Parse(endDate);
+            List<WeatherSet> sets = await restController.GetStationListForName(statName, start, end);
+            return Json(sets, JsonRequestBehavior.AllowGet); 
         }
     }
 }

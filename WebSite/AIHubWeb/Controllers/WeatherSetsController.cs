@@ -32,19 +32,23 @@ public class WeatherSetsController : Controller
             return await Task.FromResult(weatherStations);
         }
 
-        public async Task<List<WeatherSet>> GetStationListForName(string stationName)
+        public async Task<List<WeatherSet>> GetStationListForName(string stationName, DateTime start, DateTime end)
         {
             await RefreshWeatherSets(WeatherSet.WeatherSetDateRanges.AllTime);
-
+            List<WeatherSet> rgSet = new List<WeatherSet>();
             foreach(WeatherStation stat in weatherStations)
             {
                 if(stat.StationName == stationName)
                 {
-                    return stat.rgWeatherSets;
+                    rgSet = stat.rgWeatherSets;
+                    break;
                 }
             }
 
-            return null;  
+            //Remove all that are not withing the start and end date
+            rgSet.RemoveAll(set => set.RecordedTime < start || set.RecordedTime > end);
+
+            return rgSet;  
         }
 
         public async Task<bool> RefreshWeatherSets(WeatherSet.WeatherSetDateRanges range)

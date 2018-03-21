@@ -10,9 +10,16 @@
 @section JavaScript
 {
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVeBsTfPuZmDbxiBsCQrFoktNl_PzQiV4&sensor=false"></script>
-    <script type="text/javascript" src="@Url.Content("/Scripts/jquery-1.10.2.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("/Scripts/bootstrap.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("/Scripts/maps.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery-3.3.1.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/moment.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/daterangepicker.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/maps.js")"></script>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/Content/bootstrap.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/daterangepicker.css")" rel="stylesheet" type="text/css" />
 }
 
 <div class="container">
@@ -28,25 +35,25 @@
     <div id="station_list" style="width: 20%; height: 650px; float: left; padding-left: 100px;"></div>
 </div>
 
-<div id="myModal" class="modal"> 
-</div>;
+<div id="myModal" class="modal">
+</div>
 
 <hr />
 
 <div class="container" style="align-content:center; margin: 10px">
+    <div id="resultrange" class="pull-right" style="display:none; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 30%; margin: 5px;">
+        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+        <span class="right"></span> <b class="caret"></b>
+    </div>
     <div id="map_list" style="width: 100%;">
     </div>
 </div>
 
-
-
 <script type="text/javascript">
-
     var weatherList =@Html.Raw(Json.Encode(ViewBag.WeatherStations));
     $(document).ready(function () {
         initialize(weatherList);
     });
-
 </script>
 
 
