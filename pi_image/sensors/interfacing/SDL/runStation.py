@@ -16,7 +16,7 @@ if __name__ == '__main__':
   # https://stackoverflow.com/questions/13045593/using-sudo-with-python-script
   sudoPassword = str(base64.b64decode('czNuczBy'))
   # Creating the raw sensor data file that will go to the blob in Azure
-  command = "pkill -SIGUSR1 station"
+  command = "sudo pkill -SIGUSR1 station"
   command = custom_dir + '/Station ' + ' > ' + custom_dir + '/.data/station.dat'
   #p = os.system('echo %s|sudo -S %s' % (sudoPassword, command))
   os.popen("sudo -S %s"%(command), 'w').write(sudoPassword)
