@@ -1,6 +1,8 @@
 '''
     iot_hub_transfer.py
     By: Brett Wilkinson and Dallin Toth
+
+    Parsing & sensor hub settings capabilities added by Joey-Michael Fallone
     
     This python script generates the JSON objects of our sensor data 
     and transmits them up to the Azure server. 
@@ -17,6 +19,8 @@ import time
 import sys
 import json
 import os
+
+from collections import namedtuple
 
 # File variables
 output_path = "/home/thor/capstone/pi_image/sensors/.out/"
@@ -112,7 +116,7 @@ class IoTHub:
 		files: List of JSON filenames to be loaded
 	Outputs
 		JSON string for the sensor hub message
-	"""
+"""
 def get_output(path=output_path, output=output_file, count=sensor_count):
 	# Load all of the JSON objects then truncate the file
 	sensors = []
@@ -140,6 +144,37 @@ def get_output(path=output_path, output=output_file, count=sensor_count):
 	return json.dumps(output, default=lambda o: o.__dict__, 
             sort_keys=True, indent=4)
 
+""" Function that takes received JSON data (for sensor hub settings) and 
+    takes appropriate action based on them
+
+    Inputs
+        message: The JSON string received by the client
+    Outputs
+        x: The obj created by interpreting the JSON string (message)
+
+    Partially based on:
+    https://stackoverflow.com/questions/6578986/how-to-convert-json-data-into-a-python-object?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+"""
+def parse_message(message):
+    x = json.loads(message, 
+            object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+    return x
+
+""" Function that takes received obj and parses out changes to settings
+
+    Inputs
+        settings: The object containing new settings
+"""
+def update_settings(settings):
+    # https://stackoverflow.com/questions/1398022/looping-over-all-member-variables-of-a-class-in-python?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+    for setting in [attr for attr in dir(settings) if not callable(getattr(example, attr)) and not attr.startswith("__")]:
+        if (setting eq "PollingFrequency"):
+            # is there concern about a CS here?
+            seconds = int(settings.setting) * 60
+            with open("/home/thor/.interval", "w+") as file:
+                file.write(seconds)
+
+
 if __name__=='__main__':
 	# Initialize the connection
 	IoTHubConn = IoTHub(connectionString)
@@ -149,6 +184,7 @@ if __name__=='__main__':
 		response = IoTHubConn.receiveC2DMsg(deviceId)
 
 		# TODO: Handle messages from IoT Hub
+        update_settings(parse_message(response))
 
 		# Send data to the IoT Hub
 		body = get_output()
