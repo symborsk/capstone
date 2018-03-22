@@ -5,7 +5,7 @@ import os
 
 while True:
 	file = open("/home/thor/.interval", "r")
-	interval = f.readlines()[0]
+	interval = file.readlines()[0]
 	interval = interval.strip()
 	interval = int(interval)
 	close(file)
