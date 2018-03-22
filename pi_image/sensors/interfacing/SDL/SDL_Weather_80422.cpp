@@ -16,6 +16,7 @@
     Version 1.1 - updated constants to suppport 3.3V
     Version 1.6 - Support for ADS1015 in WeatherPiArduino Board February 7, 2015
 */
+#include <signal.h>
 
 // global var for sig handler 
 int printRequested = 0;
@@ -27,8 +28,6 @@ void printSignalHandler(int signal)
     printRequested = 1;
   }
 }
-
-#include <signal.h>
 
 #include <time.h>
 #include <stdio.h>
@@ -192,7 +191,7 @@ float SDL_Weather_80422::getSampingWindSpeed()
   while (1) 
   {
     if (printRequested) {
-      FILE * output = open(file_path, "a+");
+      FILE * output = fopen(file_path, "a+");
       fprintf(output, "Speed: %f Rain: %f Gust: %f", station->getCurrentWindSpeed(), station->getCurrentRainTotal(), station->getWindGust());
       printRequested = 0;
       fclose(output);
