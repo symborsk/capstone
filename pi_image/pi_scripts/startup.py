@@ -4,7 +4,7 @@ import os
 # chmodding, we'll see what happens
 
 while True:
-	file = open("/home/thor/.interval", r)
+	file = open("/home/thor/.interval", "r")
 	interval = f.readlines()[0]
 	interval = interval.strip()
 	interval = int(interval)
