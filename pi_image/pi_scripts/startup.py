@@ -8,7 +8,7 @@ while True:
 	interval = file.readlines()[0]
 	interval = interval.strip()
 	interval = int(interval)
-	close(file)
+	file.close()
 	# the following is done to preverse energy, but can be changed
 	# to constantly look at recheck interval file
 	# That would provide faster updates to changed settings but more
