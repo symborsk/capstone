@@ -182,9 +182,9 @@ if __name__=='__main__':
 	try:
 		# Receive any messages from the IoT Hub
 		response = IoTHubConn.receiveC2DMsg(deviceId)
-
-		# TODO: Handle messages from IoT Hub
-        update_settings(parse_message(response))
+  
+    print(response)
+    update_settings(parse_message(response))
 
 		# Send data to the IoT Hub
 		body = get_output()

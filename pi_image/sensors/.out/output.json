@@ -4,3 +4,7 @@
 {"data": {"direction": "West"}, "sensor": "WindVane"}
 {"data": {"gust": "0.000279", "windSpeed": "0.000000", "rain": "0.000000"}, "sensor": "Station"}
 {"data": {"visibility": 0.9848310315537276}, "sensor": "Camera"}
+{"data": {"temperature": 23.4, "humidity": 20.0}, "sensor": "DHT22 External"}
+{"data": {"temperature": 23.1, "humidity": 21.2}, "sensor": "DHT22 Battery"}
+{"data": {"direction": "West"}, "sensor": "WindVane"}
+{"data": {"visibility": 0.06442501850125582}, "sensor": "Camera"}
