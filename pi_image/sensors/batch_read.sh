@@ -23,4 +23,4 @@ python /home/thor/capstone/pi_image/sensors/interfacing/Barometer/run_barometer.
 python /home/thor/capstone/pi_image/image_recognition/image_rec.py
 
 # IoT Hub Message
-python /home/thor/capstone/pi_image/sensors/iot_hub_transfer.py
+#python /home/thor/capstone/pi_image/sensors/iot_hub_transfer.py
