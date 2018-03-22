@@ -2,6 +2,10 @@ import os
 
 # for now run as sudo?
 # chmodding, we'll see what happens
+# start sdl process
+os.command("~/capstone/pi_image/sensors/interfacing/SDL/station");
+# initial run 
+os.command("sh ~/pi_image/sensors/batch_read.sh")
 
 while True:
 	file = open("/home/thor/.interval", "r")
