@@ -156,9 +156,10 @@ def get_output(path=output_path, output=output_file, count=sensor_count):
     https://stackoverflow.com/questions/6578986/how-to-convert-json-data-into-a-python-object?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 """
 def parse_message(message):
-    x = json.loads(message, 
+	message = message[0]
+	x = json.loads(message, 
             object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
-    return x
+	return x
 
 """ Function that takes received obj and parses out changes to settings
 
@@ -166,26 +167,25 @@ def parse_message(message):
         settings: The object containing new settings
 """
 def update_settings(settings):
-    # https://stackoverflow.com/questions/1398022/looping-over-all-member-variables-of-a-class-in-python?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-    for setting in [attr for attr in dir(settings) if not callable(getattr(example, attr)) and not attr.startswith("__")]:
-        if (setting eq "PollingFrequency"):
-            # is there concern about a CS here?
-            seconds = int(settings.setting) * 60
-            with open("/home/thor/.interval", "w+") as file:
-                file.write(seconds)
-
+	print(dir(settings))
+	try:
+		# currently only PollingFrequency is considered
+		seconds = int(settings.PollingFrequency)
+		with open("/home/thor/.interval", "w+") as file:
+			file.write(str(seconds))
+	except:
+		print("no polling freq?")
 
 if __name__=='__main__':
 	# Initialize the connection
 	IoTHubConn = IoTHub(connectionString)
 
+
 	try:
 		# Receive any messages from the IoT Hub
 		response = IoTHubConn.receiveC2DMsg(deviceId)
-  
-    print(response)
-    update_settings(parse_message(response))
-
+		print(str(response))
+		update_settings(parse_message(response))
 		# Send data to the IoT Hub
 		body = get_output()
 		response = IoTHubConn.sendD2CMsg(deviceId, body)

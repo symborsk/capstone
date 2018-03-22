@@ -7,6 +7,7 @@
 '''
 import os
 import base64
+import time
 
 custom_dir = "/home/thor/capstone/pi_image/sensors/interfacing/SDL"
 
@@ -17,7 +18,7 @@ if __name__ == '__main__':
   sudoPassword = str(base64.b64decode('czNuczBy'))
   # Creating the raw sensor data file that will go to the blob in Azure
   command = "sudo pkill -SIGUSR1 station"
-  sleep(10)
+  time.sleep(20)
   command = custom_dir + '/Station ' + ' > ' + custom_dir + '/.data/station.dat'
   #p = os.system('echo %s|sudo -S %s' % (sudoPassword, command))
   os.popen("sudo -S %s"%(command), 'w').write(sudoPassword)
