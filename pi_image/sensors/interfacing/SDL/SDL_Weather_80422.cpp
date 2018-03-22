@@ -18,6 +18,8 @@
 */
 #include <signal.h>
 
+#include <stdio.h>
+#include <signal.h>
 // global var for sig handler 
 int printRequested = 0;
 
@@ -30,7 +32,6 @@ void printSignalHandler(int signal)
 }
 
 #include <time.h>
-#include <stdio.h>
 #include "SDL_Weather_80422.h"
 #include <wiringPi.h>
 
