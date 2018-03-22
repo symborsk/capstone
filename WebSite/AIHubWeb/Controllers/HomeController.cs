@@ -4,17 +4,20 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Threading.Tasks;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace AIHubWeb.Controllers
 {
     public class HomeController : Controller
     {
-        WeatherSetsController restController = new WeatherSetsController();
+        AzureStorageController restController = new AzureStorageController();
+        AzureIotHubController messageController = new AzureIotHubController();
 
         public async Task<ActionResult> Index()
         {
             await restController.RefreshWeatherSets(WeatherSet.WeatherSetDateRanges.AllTime);
-            ViewBag.WeatherStations =  await restController.GetCurrentWeatherSets();
+            ViewBag.WeatherStations = await restController.GetCurrentWeatherSets();
             return View();
         }
 
@@ -28,7 +31,7 @@ namespace AIHubWeb.Controllers
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-            
+
             return View();
         }
 
@@ -38,9 +41,25 @@ namespace AIHubWeb.Controllers
             await restController.RefreshWeatherSets(WeatherSet.WeatherSetDateRanges.AllTime);
 
             DateTime start = DateTime.Parse(startDate);
-            DateTime end = DateTime.Parse(endDate);
+            //We want the end of the day
+            DateTime end = DateTime.Parse(endDate).Date.AddHours(23).AddMinutes(59).AddSeconds(59); ;
+
             List<WeatherSet> sets = await restController.GetStationListForName(statName, start, end);
-            return Json(sets, JsonRequestBehavior.AllowGet); 
+            return Json(sets, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetConfigSetForStation(String statName)
+        {
+           EditableStationOptions opt =  await restController.GetConfigSetting(statName);
+           return Json(opt, JsonRequestBehavior.AllowGet);
+        }
+
+        //[HttpPost]
+        //public async Task<ActionResult> UpdateConfigSetting(EditableStationOptions opt)
+        //{
+        //    if()
+        //}
+      
     }
 }

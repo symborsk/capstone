@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace AIHubWeb
-
 {
     public class WeatherSet
     {

@@ -4,7 +4,6 @@ using System.Text;
 using System.Linq;
 
 namespace AIHubWeb
-
 {
     public class WeatherStation
     {
@@ -37,7 +36,7 @@ namespace AIHubWeb
         public void OrderListByDate()
         {
             //Sort by the Recorded time
-           rgWeatherSets.Sort((x, y) => y.RecordedTime.CompareTo(x.RecordedTime));
+            rgWeatherSets.Sort((x, y) => y.RecordedTime.CompareTo(x.RecordedTime));
         }
 
         public void AddWeatherSet(WeatherSet set)
@@ -58,7 +57,6 @@ namespace AIHubWeb
                 return new DateTime(1995, 1, 1);
             }
 
-            
             return rgWeatherSets[0].RecordedTime;
         }
 

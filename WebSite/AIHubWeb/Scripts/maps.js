@@ -24,9 +24,8 @@ function initialize(weatherList) {
     map = new google.maps.Map(document.getElementById("map_canvas"),
         mapOptions);
 
-    SetupModalDialog();
     InitializeDatePicker();
-
+   
     for (var i = 0; i < weatherList.length; i++) {
         var currStation = weatherList[i];
         AddPinForStation(currStation);
@@ -51,6 +50,7 @@ function AddPinForStation(weatherStation) {
     });
 
     marker.addListener('click', function () {
+        GetConfigSetDisplayDialog(weatherStation.StationName);
         infowindow.open(map, marker);
     });
 
@@ -112,7 +112,7 @@ function GenerateInfoString(name, latestRecordedTime, weatherSets) {
     tableHeaderContent += "</tr></thead>";
     content += tableHeaderContent + tableDetailContent + "</table></div>";
     content += "<div class=\"container\"><button type=\"button\" class=\"btn btn-primary btn-lg btn-block\" onclick=\"GetWeatherSetsForTable('" + name + "')\">View Details</button>";
-    content += "<button type=\"button\" id=\"dialogButton\" class=\"btn btn-secondary btn-lg btn-block\" onclick=\"DisplayConfigurationDialog('" + name + "')\">Configure Station</button></div>";
+    content += "<button type=\"button\" id=\"dialogButton\" class=\"btn btn-secondary btn-lg btn-block\" data-toggle=\"modal\" data-target=\"#modalConfigSettings\">Configure Station</button></div>";
     
     return content;
 }
@@ -153,6 +153,22 @@ function GetWeatherSetsForNewRange() {
         error: errorFunc
     });
 }
+
+function GetConfigSetDisplayDialog(stationName) {
+    var serviceURL = '/Home/GetConfigSetForStation';
+
+    //Get all the info for that table
+    $.ajax({
+        type: "Get",
+        url: serviceURL,
+        data: {statName: stationName},
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: SetConfigModalInformation,
+        error: errorFunc
+    });
+}
+
 
 function DisplayWeatherSetsForTable(data, status) {
 
@@ -275,11 +291,71 @@ function DisplayConfigurationDialog(stationName) {
     };
 }
 
-function SetupModalDialog() {
-    var content = "<div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><h4>Station Name</h4><span class=\"close\">&times;" +
-        "</span ></div > <div class=\"modal-body\"><p>Some text in the Modal..</p></div><div class=\"modal-footer\"></div></div></div>";
+function SetConfigModalInformation(data, status)
+{
+    var content = "<form>";
+    var contentBool = "";
 
-    document.getElementById("myModal").innerHTML = content;
+    if (data == null) {
+        alert("No data available for this station");
+    }
+
+    //Set the title of the dialog
+    document.getElementById('modalConfigSettingsTitle').innerHTML = data.RowKey + " - Configuration Settings";
+
+    for (var name in data) {
+        if (name == 'PartitionKey' || name == 'RowKey' || name == "ETag") {
+            continue;
+        }
+
+        var value = data[name];
+
+        //Since we use camel case put spaces between the capital then capitalize first letter
+        var propNameDisplay = "";
+        if (name == "Use3G") {
+            propNameDisplay = "Use 3G";
+        }
+        else {
+            propNameDisplay = name.replace(/([A-Z])/g, ' $1').trim();
+            propNameDisplay = propNameDisplay.charAt(0).toUpperCase() + propNameDisplay.slice(1);
+        }
+ 
+        if (typeof value === 'boolean') {
+            contentBool += "<div class=\"form-check\">";
+            contentBool += "<input type=\"checkbox\" checked=\""+ value + "\" class=\"form-check-input\" id=\"" + name + "\">";
+            contentBool += "<label style=\"margin-left:5px;\"class=\"form-check-label\" for=\"" + name + "\">     " + propNameDisplay + "</label>";
+            contentBool += "</div>";
+        }
+        else if (typeof value === 'number') {
+            content += "<div class=\"form-group\">";
+            content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
+            content += "<input type=\"number\" class=\"form-control\" id=\"" + name + "\" value=\"" + value + "\">";
+            content += "</div>";
+        }
+        //This checks if it is a time
+        else if ((new Date(parseInt(value.substr(6)))).getTime() > 0) {
+
+            var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+            var date = new Date(parseInt(value.substr(6)));
+            var dateString = date.toLocaleString("en-US", options);
+
+            content += "<div class=\"form-group\">";
+            content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
+            content += "<input type=\"text\" readonly class=\"form-control\" id=\"" + name + "\" value=\"" + dateString + "\">";
+            content += "</div>";
+        }
+
+        else {
+            content += "<div class=\"form-group\">";
+            content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
+            content += "<input type=\"number\" class=\"form-control\" id=\"" + name + "\" value=\"" + value + "\">";
+            content += "</div>";
+        }
+    }
+
+    //Boolean often are at the bottom of forms
+    content += contentBool + "<div class=\"modal-footer\"> <button type=\"submit\" class=\"btn btn-primary\">Update Config</button></div></form>";
+    document.getElementById("modalConfigSettingsBody").innerHTML = content;   
 }
 
 function InitializeDatePicker() {
