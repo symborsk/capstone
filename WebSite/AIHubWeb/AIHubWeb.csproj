@@ -199,6 +199,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Images\pcl_white_center.jpg" />
+    <Content Include="Images\pcl_dark_top.jpg" />
+    <Content Include="Images\pcl_center_dark.jpg" />
+    <Content Include="Images\pcl_white_top.jpg" />
     <Content Include="Images\pcl.png" />
     <Content Include="Images\pcl_building.png" />
     <Content Include="Scripts\ajax-data.js" />

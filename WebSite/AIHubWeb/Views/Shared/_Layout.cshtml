@@ -13,7 +13,6 @@
 <body>
 
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -22,16 +21,23 @@
                 </button>
 
                 <a href="#" class="pull-left" style="margin:6px;"><img src="@Url.Content("~/Images/pcl.png")"></a>
-                @Html.ActionLink("AI Hub Web", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })       
+                @Html.ActionLink("AI Hub Web", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">  
+            <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                 </ul>
             </div>
         </div>
+
+    <div class="page-header">
+        <div class="jumbotron bgimg">
+            <h2 class="bgimg-text">PCL AI Hub Web</h2>
+            <p class="lead bgimg-text">Interact with any of the AI Weather Sensor Hubs</p>
+        </div>
     </div>
+
     <div class="container body-content">
         @RenderBody()
         <hr />

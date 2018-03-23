@@ -24,8 +24,13 @@ textarea {
 
 }
 
-
 .bgimg {
-    background-image: url('../Images/pcl_building.png');
+    background-image: url('../Images/pcl_center_dark.jpg');
     background-repeat: no-repeat;
+    height:250px;
+}
+
+.bgimg-text {
+    text-shadow: black;
+    color: white;
 }
