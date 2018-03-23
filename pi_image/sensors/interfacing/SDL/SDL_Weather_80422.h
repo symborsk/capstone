@@ -20,15 +20,17 @@
 #ifndef SDL_Weather_80422_h
 #define SDL_Weather_80422_h
 
+
 // constant file path for data storage
-char * file_path = 
-  "/home/thor/capstone/pi_image/sensors/interfacing/SDL/.data/station.dat"
+const char * file_path = 
+  "/home/thor/capstone/pi_image/sensors/interfacing/SDL/.data/station.dat";
 
 
 void serviceInterruptAnem();
 void serviceInterruptRain();
 
 class SDL_Weather_80422
+
 {
   public:
     SDL_Weather_80422(int pinAnem, int pinRain);

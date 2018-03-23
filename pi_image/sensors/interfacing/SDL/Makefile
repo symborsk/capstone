@@ -16,8 +16,8 @@ TARGET = station
 
 all: $(TARGET)
 
-$(TARGET): $(TARGET).cpp
-	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).cpp -lwiringPi -lwiringPiDev
+$(TARGET): SDL_Weather_80422.cpp
+	$(CC) $(CFLAGS) -o $(TARGET) SDL_Weather_80422.cpp -lwiringPi -lwiringPiDev
 
 clean:
 	$(RM) $(TARGET)
