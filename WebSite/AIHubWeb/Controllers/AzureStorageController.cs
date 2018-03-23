@@ -250,7 +250,7 @@ namespace AIHubWeb
             return option;
         }
 
-        private async Task<bool> UpdateDeviceConfigSettings(EditableStationOptions option)
+        public async Task<bool> UpdateDeviceConfigSettings(EditableStationOptions option)
         {
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("DeviceConfigSettings");

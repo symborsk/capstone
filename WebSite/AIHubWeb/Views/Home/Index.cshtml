@@ -15,6 +15,7 @@
     <script type="text/javascript" src="@Url.Content("~/Scripts/moment.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/daterangepicker.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/maps.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/ajax-data.js")"></script>
 }
 
 @section Styles {
@@ -39,20 +40,19 @@
     </div>
 </div>
 
+<div id="modalContainer" class="container">
 <div id="modalConfigSettings" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4  id="modalConfigSettingsTitle" class="modal-title">Modal Header</h4>
+                <h4 id="modalConfigSettingsTitle" class="modal-title">Modal Header</h4>
             </div>
             <div id="modalConfigSettingsBody" class="modal-body">
             </div>
         </div>
-
     </div>
+</div>
 </div>
 
 <hr />

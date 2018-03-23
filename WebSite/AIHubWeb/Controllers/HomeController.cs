@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Net;
 using System.Web.Mvc;
 using System.Threading.Tasks;
 using System.Text;
@@ -55,11 +56,28 @@ namespace AIHubWeb.Controllers
            return Json(opt, JsonRequestBehavior.AllowGet);
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult> UpdateConfigSetting(EditableStationOptions opt)
-        //{
-        //    if()
-        //}
-      
+        [HttpPost]
+        public async Task<ActionResult> UpdateConfigSetting(EditableStationOptions opt)
+        {
+            if (opt == null)
+            {
+                return Json(new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Not a valid option"));
+            }
+            else
+            {
+                bool succ  = await restController.UpdateDeviceConfigSettings(opt);
+                bool succIot = await messageController.UpdateDeviceOptions(opt);
+
+                if (succ)
+                {
+                    return Json(new HttpStatusCodeResult(HttpStatusCode.Accepted, "Success Updating"));
+                }
+                else
+                {
+                    return Json(new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Failure to contact server"));
+                }
+            }
+        }
+
     }
 }

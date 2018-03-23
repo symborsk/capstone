@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Microsoft.Azure.Devices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace AIHubWeb.Controllers
 {
@@ -19,12 +20,13 @@ namespace AIHubWeb.Controllers
             client = ServiceClient.CreateFromConnectionString(conn);
         }
 
-        public async Task<bool> UpdateDeviceOptions(string DeviceName, StationOptions opt)
+        public async Task<bool> UpdateDeviceOptions(EditableStationOptions opt)
         {
             try
             {
-                var commandMessage = new Message(Encoding.ASCII.GetBytes(Json(opt.editOptions).ToString()));
-                await client.SendAsync(DeviceName, commandMessage);
+                var json = new JavaScriptSerializer().Serialize(opt);
+                var commandMessage = new Message(Encoding.ASCII.GetBytes(json));
+                await client.SendAsync("sensor_hub", commandMessage);
             }
             catch (Exception e)
             {
