@@ -276,15 +276,24 @@ function SetConfigModalInformation()
         //boolean check for some reason does not evaluate strings as 'true' 'false' as boolean
         if (typeof value === 'boolean' || value === "true" || value === "false") {
             contentBool += "<div class=\"form-check\">";
-            contentBool += "<input type=\"checkbox\" checked=\""+ value  +"\" value=\"" + value + "\" class=\"form-check-input\" name=\"" + name + "\" id=\"" + name + "\">";
-            contentBool += "<label style=\"margin-left:5px;\"class=\"form-check-label\" for=\"" + name + "\">     " + propNameDisplay + "</label>";
-            contentBool += "</div>";
+            //contentBool += "<input type=\"checkbox\" checked=\""+ value  +"\" value=\"" + value + "\" class=\"form-check-input\" name=\"" + name + "\" id=\"" + name + "\">";
+            contentBool += "<label for=\"" + name + "\">     " + propNameDisplay + "</label>";
+            contentBool += "<select class=\"form-control\" id=\"" +name +"\" name=\"" + name + "\">";
+
+            if (value === true || value == "true") {
+                contentBool += "<option value=\"false\">No</option>";
+                contentBool += "<option value=\"true\" selected>Yes</option></select></div>";
+            }
+            else {
+                contentBool += "<option value=\"false\" selected>No</option>";
+                contentBool += "<option value=\"true\">Yes</option></select></div>";
+            }
 
             //This is a strange workaround as chaning the checkbox does not change the value in checkbox
-            //We need the value to be changed for the serialize form function to pick up change
-            $(document).on('change', '[type=checkbox]', function () {
-                this.value = this.checked;
-            });
+            ////We need the value to be changed for the serialize form function to pick up change
+            //$(document).on('change', '[type=checkbox]', function () {
+            //    this.value = this.checked;
+            //});
         }
         //number
         else if (typeof value === 'number' && name != "Timestamp") {
