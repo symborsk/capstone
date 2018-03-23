@@ -21,5 +21,11 @@ input,
 select,
 textarea {
     max-width: 280px;
+
 }
 
+
+.bgimg {
+    background-image: url('../Images/pcl_building.png');
+    background-repeat: no-repeat;
+}

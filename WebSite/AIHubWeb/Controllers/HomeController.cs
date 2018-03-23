@@ -29,13 +29,6 @@ namespace AIHubWeb.Controllers
             return View();
         }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
         [HttpGet]
         public async Task<ActionResult> GetWeatherSetsForNameAndRange(string statName, string startDate, string endDate)
         {

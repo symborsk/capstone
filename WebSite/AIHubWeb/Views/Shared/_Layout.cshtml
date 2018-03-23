@@ -11,6 +11,7 @@
     @RenderSection("Styles", required: false)
 </head>
 <body>
+
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -19,13 +20,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("AI Hub Web", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+
+                <a href="#" class="pull-left" style="margin:6px;"><img src="@Url.Content("~/Images/pcl.png")"></a>
+                @Html.ActionLink("AI Hub Web", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })       
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapse">  
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
             </div>
         </div>
@@ -34,7 +36,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - PCL AI Weather Station Site</p>
         </footer>
     </div>
 
