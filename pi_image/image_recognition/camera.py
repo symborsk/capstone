@@ -24,7 +24,7 @@ class Camera:
 	def take_photo(self, path=None):
 		if not path:
 			path = (Camera.img_path + "img_" + 
-			  str("{:%b_%d_%Y-%H:%M:%S}".format(datetime.datetime.now())) + ".jpg")
+			  str("{:%b_%d_%Y_%H_%M_%S}".format(datetime.datetime.now())) + ".jpg")
 
 		self.camera.start_preview()
 		sleep(1)
