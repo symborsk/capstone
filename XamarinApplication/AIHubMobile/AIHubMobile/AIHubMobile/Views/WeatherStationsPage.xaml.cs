@@ -33,7 +33,14 @@ namespace AIHubMobile
                 return;
 
             //Async loading of the deail page
-            await Navigation.PushAsync(new WeatherStationDetailPage(new WeatherStationDetailViewModel(item)));
+            try
+            {
+                await Navigation.PushAsync(new DetailTabbedPage(new WeatherStationDetailViewModel(item)));
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Error rendering the detail page: " + e.Message);
+            }
 
             // Manually deselect item
             ItemsListView.SelectedItem = null;
