@@ -40,6 +40,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DetailsTabbedPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\WeatherStationsPage.xaml.cs">
       <DependentUpon>WeatherStationsPage.xaml</DependentUpon>
     </Compile>
