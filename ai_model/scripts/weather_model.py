@@ -104,7 +104,8 @@ class weather_model():
 		for s in weather_model.seasons:
 			for c in weather_model.forecast_cols:
 				print("Building {0} {1} forest...".format(s, c))
-				model[s][c] = df.DecisionForest(rows=pf.select(data[s], c))
+				drop_cols = ['{0}_{1}h'.format(col, self.offset) for col in weather_model.forecast_cols if col !=c]
+				model[s][c] = df.DecisionForest(rows=pf.select(data[s], drop_cols))
 
 		# Write the results to the file
 		with open('{0}train/{1}h_build.log'.format(self.log_dir, self.offset), 'x+') as file:
@@ -311,30 +312,3 @@ def generate():
 	model_12h.save()
 	model_24h = weather_model(weather_data=data, offset=24, log_output=True)
 	model_24h.save()
-
-if __name__=='__main__':
-
-	# UNCOMMENT THIS SECTION TO BUILD AND SAVE NEW MODELS
-	"""# Build dataframes
-				
-			
-				"""
-
-
-	# UNCOMMENT THIS SECTION TO LOAD A MODEL
-	
-
-	# Continuous loop until model is loaded
-	while True:
-		# Prompt user for a selection
-		print('\nHere are the current models stored:')
-		for x in range(1, len(models)+1):
-			print('{0}. {1}'.format(x, models[x]))
-		# Parse user response
-		try:
-			sel = int(input('\nPlease make a selection ({0} - {1})\n>>> '.format(1, len(models))))
-			# If its outside the choice range 
-			if sel < 1 or sel > len(models):
-
-		except ValueError:
-			print("Please enter a valid response")
