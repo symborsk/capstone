@@ -40,8 +40,12 @@ lat, lon = 53.5273, -113.5295
 
 # IoT Hub Connection Variables
 # TODO: Look into somehow providing this dynamically
+# original
 #connectionString = 'HostName=pcl-dev-bgwilkinson-ioth.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=+3mmzTBcle0MEROiQX6myvrSlCeM7GrUA4xdNeD7NVs='
-connectionString = 'HostName=pcl-dev-bgwilkinson-ioth.azure-devices.net;SharedAccessKeyName=device;SharedAccessKey=+2js7mRuUIJnGowjujF8X3Mm76NLq5OttGlefC4BxDA='
+# shared
+#connectionString = 'HostName=pcl-dev-bgwilkinson-ioth.azure-devices.net;SharedAccessKeyName=device;SharedAccessKey=+2js7mRuUIJnGowjujF8X3Mm76NLq5OttGlefC4BxDA='
+
+connectionString = 'HostName=pcl-dev-bgwilkinson-ioth.azure-devices.net;DeviceId=sensor_hub;SharedAccessKey=6t45Ha2yrNXKs3wE9twIfe4RK6lriH1hlJFwYic78Kk='
 deviceId = 'sensor_hub'
 
 """ Class taken from https:\\github.com\khilscher\IoTHubPiHackathon\SenseHat_IoTHub_Lab_Key.py on Feb 20, 2018 """
