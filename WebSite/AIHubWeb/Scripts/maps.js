@@ -1,9 +1,9 @@
-﻿
+﻿var currentStation;
+var currentConfigOptions; //We want to push this object back through a post so change field
 
 function initialize(weatherList) {
     var mapOptions;
-    var currentStation;
-
+  
     //Default location is edmonton otherwise center it on the 1st object in the list
     if (weatherList.length > 0) {
         var latlng = weatherList[0].latlng;
@@ -24,9 +24,8 @@ function initialize(weatherList) {
     map = new google.maps.Map(document.getElementById("map_canvas"),
         mapOptions);
 
-    SetupModalDialog();
     InitializeDatePicker();
-
+   
     for (var i = 0; i < weatherList.length; i++) {
         var currStation = weatherList[i];
         AddPinForStation(currStation);
@@ -51,6 +50,7 @@ function AddPinForStation(weatherStation) {
     });
 
     marker.addListener('click', function () {
+        GetConfigSetForStation(weatherStation.StationName);
         infowindow.open(map, marker);
     });
 
@@ -111,47 +111,10 @@ function GenerateInfoString(name, latestRecordedTime, weatherSets) {
 
     tableHeaderContent += "</tr></thead>";
     content += tableHeaderContent + tableDetailContent + "</table></div>";
-    content += "<div class=\"container\"><button type=\"button\" class=\"btn btn-primary btn-lg btn-block\" onclick=\"GetWeatherSetsForTable('" + name + "')\">View Details</button>";
-    content += "<button type=\"button\" id=\"dialogButton\" class=\"btn btn-secondary btn-lg btn-block\" onclick=\"DisplayConfigurationDialog('" + name + "')\">Configure Station</button></div>";
+    content += "<div class=\"container\"><button type=\"button\" class=\"btn btn-primary btn-lg btn-block\" onclick=\"DisplayStationDataTable('" + name + "')\">View Details</button>";
+    content += "<button type=\"button\" id=\"dialogButton\" class=\"btn btn-secondary btn-lg btn-block\" onclick=\"SetConfigModalInformation()\" data-toggle=\"modal\" data-target=\"#modalConfigSettings\">Configure Station</button></div>";
     
     return content;
-}
-
-function GetWeatherSetsForTable(stationName) {
-    currentStation = stationName;
-    var serviceURL = '/Home/GetWeatherSetsForNameAndRange';
-    var drp = $('#resultrange').data('daterangepicker');
-    var start = drp.startDate.format('YYYY-MM-DD');
-    var end = drp.endDate.format('YYYY-MM-DD');
-
-    //Get all the info for that table
-    $.ajax({
-        type: "Get",
-        url: serviceURL,
-        data: {statName: stationName, startDate: start, endDate: end},
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: DisplayWeatherSetsForTable,
-        error: errorFunc
-    });
-}
-
-function GetWeatherSetsForNewRange() {
-    var serviceURL = '/Home/GetWeatherSetsForNameAndRange';
-    var drp = $('#resultrange').data('daterangepicker');
-    var start = drp.startDate.format('YYYY-MM-DD');
-    var end = drp.endDate.format('YYYY-MM-DD');
-
-    //Get all the info for that table
-    $.ajax({
-        type: "Get",
-        url: serviceURL,
-        data: { statName: currentStation, startDate: start, endDate: end },
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: DisplayWeatherSetsForTable,
-        error: errorFunc
-    });
 }
 
 function DisplayWeatherSetsForTable(data, status) {
@@ -223,9 +186,7 @@ function DisplayWeatherSetsForTable(data, status) {
     document.getElementById("TableSwitching").style.display = "block";
 }
 
-function errorFunc(err) {
-    alert("Error Getting data for stations - Error Code: " + err.status.toString());
-}
+
 
 //Given a clicked on weather station, center the map there
 function CenterMapOnStation(lat,lng) {
@@ -274,12 +235,97 @@ function DisplayConfigurationDialog(stationName) {
         }
     };
 }
+function SetCurrentConfig(data, status) {
 
-function SetupModalDialog() {
-    var content = "<div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><h4>Station Name</h4><span class=\"close\">&times;" +
-        "</span ></div > <div class=\"modal-body\"><p>Some text in the Modal..</p></div><div class=\"modal-footer\"></div></div></div>";
+    if (status == 'success') {
+        currentConfigOptions = data;
+        currentConfigOptions["Timestamp"] = parseInt(currentConfigOptions["Timestamp"].substr(6))
+    }       
+}
 
-    document.getElementById("myModal").innerHTML = content;
+function SetConfigModalInformation()
+{
+    var content = "<form id=\"configForm\" action=\"\" method=\"post\" onsubmit=\"UpdateConfigInformation()\">";
+    var contentBool = "";
+
+    if (currentConfigOptions == null) {
+        alert("No data available for this station, try again shortly.");
+        return;
+    }
+
+    //Set the title of the dialog
+    document.getElementById('modalConfigSettingsTitle').innerHTML = currentConfigOptions.RowKey + " - Configuration Settings";
+
+    for (var name in currentConfigOptions) {
+        if (name == 'PartitionKey' || name == 'RowKey' || name == "ETag") {
+            continue;
+        }
+
+        var value = currentConfigOptions[name];
+
+        //Since we use camel case put spaces between the capital then capitalize first letter
+        var propNameDisplay = "";
+        if (name == "Use3G") {
+            propNameDisplay = "Use 3G";
+        }
+        else {
+            propNameDisplay = name.replace(/([A-Z])/g, ' $1').trim();
+            propNameDisplay = propNameDisplay.charAt(0).toUpperCase() + propNameDisplay.slice(1);
+        }
+ 
+        //boolean check for some reason does not evaluate strings as 'true' 'false' as boolean
+        if (typeof value === 'boolean' || value === "true" || value === "false") {
+            contentBool += "<div class=\"form-check\">";
+            //contentBool += "<input type=\"checkbox\" checked=\""+ value  +"\" value=\"" + value + "\" class=\"form-check-input\" name=\"" + name + "\" id=\"" + name + "\">";
+            contentBool += "<label for=\"" + name + "\">     " + propNameDisplay + "</label>";
+            contentBool += "<select class=\"form-control\" id=\"" +name +"\" name=\"" + name + "\">";
+
+            if (value === true || value == "true") {
+                contentBool += "<option value=\"false\">No</option>";
+                contentBool += "<option value=\"true\" selected>Yes</option></select></div>";
+            }
+            else {
+                contentBool += "<option value=\"false\" selected>No</option>";
+                contentBool += "<option value=\"true\">Yes</option></select></div>";
+            }
+
+            //This is a strange workaround as chaning the checkbox does not change the value in checkbox
+            ////We need the value to be changed for the serialize form function to pick up change
+            //$(document).on('change', '[type=checkbox]', function () {
+            //    this.value = this.checked;
+            //});
+        }
+        //number
+        else if (typeof value === 'number' && name != "Timestamp") {
+            content += "<div class=\"form-group\">";
+            content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
+            content += "<input type=\"number\" class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
+            content += "</div>";
+        }
+        //Timestamp is a special case
+        else if (name == "Timestamp") {
+
+            var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+            var date = new Date(parseInt(value));
+            var dateString = date.toLocaleString("en-US", options);
+
+            content += "<div class=\"form-group\">";
+            content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
+            content += "<input type=\"text\" readonly class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + dateString + "\">";
+            content += "</div>";
+        }
+        //string
+        else {
+            content += "<div class=\"form-group\">";
+            content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
+            content += "<input type=\"number\" class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
+            content += "</div>";
+        }
+    }
+
+    //Boolean often are at the bottom of forms
+    content += contentBool + "<div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button> <button type=\"button\" onclick=\"UpdateConfigInformation()\" data-dismiss=\"modal\" class=\"btn btn-primary\">Update Config</button></div></form>";
+    document.getElementById("modalConfigSettingsBody").innerHTML = content;   
 }
 
 function InitializeDatePicker() {
@@ -314,7 +360,7 @@ function DateRangeChange(start, end, init) {
     drp.setEndDate(end);
 
     if (init != true) {
-        GetWeatherSetsForNewRange();
+        GetWeatherSetsForNewRange(currentStation, start.format('MM/DD/YYYY'), end.format('MM/DD/YYYY'));
     }
 }
 
@@ -337,6 +383,36 @@ function DisplayAITable() {
     //Update the active tabs
     document.getElementById("WeatherResultsTab").className = "";
     document.getElementById("AIResultsTab").className = "active";
+}
+
+
+function DisplayStationDataTable(statName) {
+    //Keep track of current station that we are displaying data for
+    currentStation = statName;
+
+    var drp = $('#resultrange').data('daterangepicker');
+    GetWeatherSetsForNewRange(statName, drp.startDate.format('MM/DD/YYYY'), drp.endDate.format('MM/DD/YYYY'));
+}
+
+function UpdateConfigInformation() {
+
+    var formData = $("#configForm").serializeArray();
+
+    $(formData).each(function (i, field) {
+        //Timestamp needs special attention
+        if (field.name == "Timestamp") {
+            //We want to keep the date stored in a consitent matter, .net serializes the dates when we send them and they come out like this
+            currentConfigOptions["Timestamp"] = (moment().unix()) * 1000;
+        }
+        else {
+            //Otherwise just dynamically define it
+            currentConfigOptions[field.name] = field.value;
+        }
+
+        
+    });
+
+    PostConfigInformation(currentConfigOptions);
 }
 
 

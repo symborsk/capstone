@@ -16,6 +16,7 @@
     Version 1.1 - updated constants to suppport 3.3V
     Version 1.6 - Support for ADS1015 in WeatherPiArduino Board February 7, 2015
 */
+#include <signal.h>
 
 #include <stdio.h>
 #include <signal.h>
@@ -29,7 +30,6 @@ void printSignalHandler(int signal)
     printRequested = 1;
   }
 }
-
 
 #include <time.h>
 #include "SDL_Weather_80422.h"

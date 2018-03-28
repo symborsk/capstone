@@ -21,5 +21,16 @@ input,
 select,
 textarea {
     max-width: 280px;
+
 }
 
+.bgimg {
+    background-image: url('../Images/pcl_center_dark.jpg');
+    background-repeat: no-repeat;
+    height:250px;
+}
+
+.bgimg-text {
+    text-shadow: black;
+    color: white;
+}

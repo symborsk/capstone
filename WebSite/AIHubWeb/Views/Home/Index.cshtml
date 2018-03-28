@@ -15,6 +15,7 @@
     <script type="text/javascript" src="@Url.Content("~/Scripts/moment.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/daterangepicker.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/maps.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/ajax-data.js")"></script>
 }
 
 @section Styles {
@@ -22,12 +23,7 @@
     <link href="@Url.Content("~/Content/daterangepicker.css")" rel="stylesheet" type="text/css" />
 }
 
-<div class="container">
-    <div class="jumbotron">
-        <h2>PCL AI Hub Web</h2>
-        <p class="lead">A website to allow user to interact with any of the AI Sensor Hubs.</p>
-    </div>
-</div>
+
 
 <div class="container" style="align-content:center; width:100%">
     <div id="map_canvas" style="width: 75%; height: 650px; float:left;">
@@ -39,7 +35,19 @@
     </div>
 </div>
 
-<div id="myModal" class="modal">
+<div id="modalContainer" class="container">
+    <div id="modalConfigSettings" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="modalConfigSettingsTitle" class="modal-title">Modal Header</h4>
+                </div>
+                <div id="modalConfigSettingsBody" class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <hr />

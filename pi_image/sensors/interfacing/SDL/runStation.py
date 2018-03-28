@@ -20,7 +20,6 @@ if __name__ == '__main__':
   delete = "rm -rf " + custom_dir + "/.data/station.dat"
   os.system(delete)
   command = "sudo pkill -SIGUSR1 station"
-    
   #p = os.system('echo %s|sudo -S %s' % (sudoPassword, command))
   os.popen("sudo -S %s"%(command), 'w').write(sudoPassword)
 

@@ -8,18 +8,19 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Table;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
 namespace AIHubWeb
 {
-public class WeatherSetsController : Controller
-{
+    public class AzureStorageController : Controller
+    {
         CloudStorageAccount storageAccount;
-        List<WeatherStation> weatherStations; 
+        List<WeatherStation> weatherStations;
 
-        public WeatherSetsController()
+        public AzureStorageController()
         {
             //TODO: look at using shared accounts
             //storageAccount = CloudStorageAccount.Parse("SharedAccessSignature=?st=2017-02-28T14%3A17%3A00Z&se=2018-03-03T14%3A17%3A00Z&sp=rl&sv=2017-04-17&sr=c&sig=nxoO5iSP8rZjiQilNQsOBa89W6LqtRyTEOpqnwnqXXE%3D;BlobEndpoint=https://pcldevbgwilkinson01.blob.core.windows.net/sensor-hub?st=2017-02-28T14%3A17%3A00Z&se=2018-03-03T14%3A17%3A00Z&sp=rl&sv=2017-04-17&sr=c&sig=nxoO5iSP8rZjiQilNQsOBa89W6LqtRyTEOpqnwnqXXE%3D");
@@ -36,9 +37,9 @@ public class WeatherSetsController : Controller
         {
             await RefreshWeatherSets(WeatherSet.WeatherSetDateRanges.AllTime);
             List<WeatherSet> rgSet = new List<WeatherSet>();
-            foreach(WeatherStation stat in weatherStations)
+            foreach (WeatherStation stat in weatherStations)
             {
-                if(stat.StationName == stationName)
+                if (stat.StationName == stationName)
                 {
                     rgSet = stat.rgWeatherSets;
                     break;
@@ -48,7 +49,7 @@ public class WeatherSetsController : Controller
             //Remove all that are not withing the start and end date
             rgSet.RemoveAll(set => set.RecordedTime < start || set.RecordedTime > end);
 
-            return rgSet;  
+            return rgSet;
         }
 
         public async Task<bool> RefreshWeatherSets(WeatherSet.WeatherSetDateRanges range)
@@ -65,7 +66,6 @@ public class WeatherSetsController : Controller
             bool succ = await CreateWeatherStationsFromBlob(seg);
 
             // Retrieve reference to a blob named "myblob".
-
             return await Task.FromResult(true);
         }
 
@@ -235,8 +235,59 @@ public class WeatherSetsController : Controller
                 default:
                     prefixes.Add("");
                     return prefixes;
-                }
             }
         }
+
+        private EditableStationOptions CreateDefaultEditableStationOption(CloudTable tab, String name)
+        {
+            EditableStationOptions option = new EditableStationOptions(name);
+
+            TableOperation insertOp = TableOperation.InsertOrReplace(option);
+
+            //We do not need to await this 
+            tab.ExecuteAsync(insertOp);
+
+            return option;
+        }
+
+        public async Task<bool> UpdateDeviceConfigSettings(EditableStationOptions option)
+        {
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            CloudTable table = tableClient.GetTableReference("DeviceConfigSettings");
+
+            TableOperation insertOrRepOp = TableOperation.InsertOrReplace(option);
+
+            TableResult res = await table.ExecuteAsync(insertOrRepOp);
+            if (res.HttpStatusCode != 204)
+            {
+                Console.WriteLine("Failure updating station options");
+            }
+
+            return true;
+        }
+
+        public async Task<EditableStationOptions> GetConfigSetting(String deviceName)
+        {
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            CloudTable table = tableClient.GetTableReference("DeviceConfigSettings");
+
+
+            //Get the station options or create them this may change later if we want to do this at the device
+            TableOperation op = TableOperation.Retrieve<EditableStationOptions>("EditableStationOptions", deviceName);
+            TableResult retrievedResult = await table.ExecuteAsync(op);
+
+            EditableStationOptions option;
+            if (retrievedResult.Result == null)
+            {
+                option = CreateDefaultEditableStationOption(table, deviceName);
+            }
+            else
+            {
+                option = (EditableStationOptions)retrievedResult.Result;
+            }
+
+            return option;
+        }
     }
+}
 

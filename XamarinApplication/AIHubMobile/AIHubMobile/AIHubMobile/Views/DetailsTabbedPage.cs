@@ -1,28 +1,20 @@
-﻿/**
- * MainPage.cs
- * By: John Symborski
- * Capstone Group 2
- * This file initializes the main tabbed style pages we want to use for this app
- * it initializes the main displays differently for different Runtime Platforms.
- * */
-
-using System;
+﻿using System;
 
 using Xamarin.Forms;
 
 namespace AIHubMobile
 {
-    public class MainPage : TabbedPage
+    public class DetailTabbedPage : TabbedPage
     {
-        //Initialize the main page with it tabs
-        public MainPage()
+        //We need the viewmodel to establish a page
+        public DetailTabbedPage(WeatherStationDetailViewModel viewModel)
         {
             Page itemsPage, aboutPage = null;
 
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
-                    itemsPage = new NavigationPage(new WeatherStationDetailPage())
+                    itemsPage = new NavigationPage(new WeatherStationDetailPage(viewModel))
                     {
                         Title = "View Weather"
                     };
@@ -32,7 +24,7 @@ namespace AIHubMobile
                         Title = "About"
                     };
                     itemsPage.Icon = "tab_feed.png";
-                    aboutPage.Icon = "tab_about.png";
+                    aboutPage.Icon = "pcl.png";
                     break;
                 default:
                     itemsPage = new WeatherStationsPage()
@@ -59,5 +51,5 @@ namespace AIHubMobile
             base.OnCurrentPageChanged();
             Title = CurrentPage?.Title ?? string.Empty;
         }
-    }
+}
 }
