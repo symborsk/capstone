@@ -166,7 +166,10 @@
     <AndroidResource Include="Resources\drawable\pcl.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\splashscreen.png" />
+    <AndroidResource Include="Resources\drawable\portrait_splashScreen.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\landscape_splashScreen.jpg" />
   </ItemGroup>
   <Import Project="..\AIHubMobile\AIHubMobile.projitems" Label="Shared" Condition="Exists('..\AIHubMobile\AIHubMobile.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

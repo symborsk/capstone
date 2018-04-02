@@ -27,14 +27,14 @@ namespace AIHubMobile
                     aboutPage.Icon = "pcl.png";
                     break;
                 default:
-                    itemsPage = new WeatherStationsPage()
+                    itemsPage = new WeatherStationDetailPage(viewModel)
                     {
-                        Title = "View Weather"
+                        Title = "Weather Info"
                     };
 
                     aboutPage = new AboutPage()
                     {
-                        Title = "About"
+                        Title = "AI Info"
                     };
                     break;
             }

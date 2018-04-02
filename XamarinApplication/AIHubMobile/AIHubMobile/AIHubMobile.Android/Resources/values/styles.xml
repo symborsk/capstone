@@ -27,7 +27,7 @@
   
   <style name="Theme.Splash"  
          parent="android:Theme">  
-    <item name="android:windowBackground">@drawable/splashscreen</item>  
+    <item name="android:windowBackground">@drawable/landscape_splashScreen</item>  
     <item name="android:windowNoTitle">true</item>  
   </style>  
  

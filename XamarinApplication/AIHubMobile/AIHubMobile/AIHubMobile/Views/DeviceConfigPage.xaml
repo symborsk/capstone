@@ -15,8 +15,8 @@
         <StackLayout>
             <TableView Intent="Form" x:Name="Options" RowHeight="50">
                 <TableRoot>
-                    <TableSection Title="Use 3G">
-                        <SwitchCell Text="Option" On="{Binding stationOption.editOptions.Use3G}"/>
+                    <TableSection Title="Connectivity">
+                        <SwitchCell Text="Use 3G" On="{Binding stationOption.editOptions.Use3G}"/>
                     </TableSection>
                     <TableSection Title="Polling Frequency ( minutes)">
                         <EntryCell Text="{Binding stationOption.editOptions.PollingFrequency}" Keyboard="Numeric"/>

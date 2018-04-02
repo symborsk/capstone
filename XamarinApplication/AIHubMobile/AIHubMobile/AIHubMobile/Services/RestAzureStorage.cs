@@ -126,7 +126,7 @@ namespace AIHubMobile
                     //This is an undesirable feature as it caused any data we downlod from today to break the JArray parser, add a ']'
                     if (!text.EndsWith("]"))
                     {
-                        text.Append(']');
+                        text = text + "]";
                     }
 
                     JArray allDataSets = JArray.Parse(text);
