@@ -14,8 +14,8 @@ ideal_weight = 0.5
 acceptable_margin = 5
 
 # Variable which controls the maximum possible standard deviation or minimum change in standard deviation for a leaf node
-std_dev_threshold = 2
-delta_threshold = 0.25
+std_dev_threshold = {'wind_speed': 1, 'relative_humidity': 1, 'temperature': 1.2}
+delta_threshold = {'wind_speed': 0.05. 'relative_humidity': 0.05, 'temperature':0.08}
 
 # # # # # #
 # Classes #
@@ -33,7 +33,7 @@ class DecisionForest():
 	n_trees = 128
 	batch_size = 1536
 
-	def __init__(self, rows = None, n_labels = 1, n_trees = None, batch_size = None, obj_dict = None):
+	def __init__(self, rows = None, n_labels = 1, n_trees = None, batch_size = None, forecast_col = None, obj_dict = None):
 		if obj_dict!=None:
 			self.n_labels = obj_dict['n_labels']
 			self.n_trees = obj_dict['n_trees']
@@ -44,7 +44,7 @@ class DecisionForest():
 			self.n_labels = n_labels
 			self.n_trees = DecisionForest.n_trees if n_trees==None else n_trees
 			self.batch_size = DecisionForest.batch_size if batch_size==None else batch_size
-			self.trees = build_forest(rows, n_labels, self.n_trees, self.batch_size)
+			self.trees = build_forest(rows, n_labels, self.n_trees, self.batch_size, forecast_col=forecast_col)
 			self.avg_std_dev = [np.mean([tree.leaf_mean[label] for tree in self.trees]) for label in range(n_labels)]
 
 	# Method to get string of results
@@ -67,6 +67,15 @@ class DecisionForest():
 		# Only returning 0th element now to manually get 1 label
 		return expected[0]
 
+	# Function to get the dictionary of standard deviations for all trees
+	def get_std_dev(self):
+		ans = []
+		for tree in self.trees:
+			ans += list(tree.get_std_dev().items())
+
+		return dict(ans)
+
+
 """ Decision Tree Class 
 
 	Attributes
@@ -81,7 +90,7 @@ class DecisionTree():
 	# Initialization function
 	# obj_dict!=None: Load tree from dictionary
 	# Else: Build new decision tree
-	def __init__(self, rows=None, features=None, n_labels=None, obj_dict=None):
+	def __init__(self, rows=None, features=None, n_labels=None, forecast_col=None, obj_dict=None):
 		if obj_dict!=None:
 			self.root = Node(obj_dict['root'])
 			self.leaf_dev = obj_dict['leaf_dev']
@@ -90,7 +99,7 @@ class DecisionTree():
 			self.leaf_mean = obj_dict['leaf_mean']
 		else:
 			# Initial recursive call to build the tree
-			self.root, self.leaf_dev = build_tree(rows, n_labels=n_labels)
+			self.root, self.leaf_dev = build_tree(rows, n_labels=n_labels, forecast_col=forecast_col)
 
 			# Assign tree attributes
 			self.depth = self.root.depth
@@ -130,6 +139,32 @@ class DecisionTree():
 
 			# Return the final string
 			return node_str
+
+	# Recursive function to get a dictionary of standard deviations at tree depths
+	def get_std_dev(self, node=None, ans=None):
+		# Handle initial recursive call
+		if node==None or ans==None:
+			node = self.root
+			ans = {}
+		
+		# Add the node to the dictionary
+		if node.depth in ans:
+			ans[node.depth] += [node.std_dev]
+		else:
+			ans[node.depth] = [node.std_dev]
+
+
+		# If the node isn't a leaf add the child nodes
+		if not node.isLeaf:
+			# Add the child nodes to the dictionary & return current node std_dev
+			get_std_dev(node=node.left_branch, ans=ans)
+			get_std_dev(node=node.right_branch, ans=ans)
+
+		# If the initial recursive call is finishing then return the root
+		if node == self.root:
+			return ans
+
+			
 
 """ Class used for tree branch nodes 
 	
@@ -260,7 +295,7 @@ class Leaf():
 	Outpus
 			Array of DecisionTree objects
 	"""
-def build_forest(rows, n_labels, n_trees, batch_size): 
+def build_forest(rows, n_labels, n_trees, batch_size, forecast_col): 
 	# Seed the RNG & initialize the tree list
 	np.random.seed()
 	forest = [None for i in range(n_trees)]
@@ -272,14 +307,15 @@ def build_forest(rows, n_labels, n_trees, batch_size):
 	tree_size = int(np.floor(n_features/3))
 	for i in range(n_trees):
 		# Get a random subset of feature indices & row indices
-		curr_features = np.random.choice([x for x in range(n_features)], size=tree_size, replace=False)
+		cut_features = np.random.choice([x for x in range(4, n_features-7)], size=tree_size*2, replace=False)
+		curr_features = [x for x in range(n_features) if x not in cut_features]
 		curr_rows = np.random.randint(len(rows), size=batch_size, dtype='int')
 
 		# Get the bootstrap aggregated row set
 		curr_batch = [[rows[x][y] for y in curr_features] + rows[x][-n_labels:] for x in curr_rows]
 
 		# Build the tree & add it to the forest
-		forest[i] = DecisionTree(rows=curr_batch, features=curr_features, n_labels=n_labels)
+		forest[i] = DecisionTree(rows=curr_batch, features=curr_features, n_labels=n_labels, forecast_col=forecast_col)
 
 	return forest
 
@@ -293,18 +329,18 @@ def build_forest(rows, n_labels, n_trees, batch_size):
 		Node or LeafNode object
 		Two dimensional array - 1st = leaves, 2nd = labels
 	"""
-def build_tree(rows, n_labels = 1): 
+def build_tree(rows, n_labels = 1, forecast_col): 
 	# Find the best node split
 	node = find_best_split(rows, n_labels)
 	
 	# If the change is below threshold value create leaf node
-	if np.mean(node.std_dev)<=std_dev_threshold or np.mean(node.avg_delta)<=delta_threshold:
+	if np.mean(node.std_dev)<=std_dev_threshold[forecast_col] or np.mean(node.avg_delta)<=delta_threshold[forecast_col]:
 		return Leaf(labels=[row[-n_labels:] for row in rows]), [node.std_dev]
 
 	# Otherwise build out the left & right branches of the node
 	l, r = node.split(rows)
-	node.left_branch, left_leaf_dev = build_tree(l, n_labels=n_labels)
-	node.right_branch, right_leaf_dev = build_tree(r, n_labels=n_labels)
+	node.left_branch, left_leaf_dev = build_tree(l, n_labels=n_labels, forecast_col=forecast_col)
+	node.right_branch, right_leaf_dev = build_tree(r, n_labels=n_labels, forecast_col=forecast_col)
 
 	# Append the leaf standard deviations to leaf_dev
 	leaf_dev = left_leaf_dev + right_leaf_dev

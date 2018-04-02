@@ -24,6 +24,7 @@ categorical_cols = dict()
 numeric_keys = pf.data_cols[2:] + [x + y for x in pf.data_cols[2:] for y in pf.suffixes]
 numeric_cols = dict()
 
+# Default model name
 name = round(time.time())
 
 
@@ -105,7 +106,7 @@ class weather_model():
 			for c in weather_model.forecast_cols:
 				print("Building {0} {1} forest...".format(s, c))
 				drop_cols = ['{0}_{1}h'.format(col, self.offset) for col in weather_model.forecast_cols if col !=c]
-				model[s][c] = df.DecisionForest(rows=pf.select(data[s], drop_cols))
+				model[s][c] = df.DecisionForest(rows=pf.select(data[s], drop_cols), forecast_col=c)
 
 		# Write the results to the file
 		with open('{0}train/{1}h_build.log'.format(self.log_dir, self.offset), 'x+') as file:
@@ -280,6 +281,19 @@ class weather_model():
 		summer_data = data.loc[data['month'].isin(weather_model.summer)]
 
 		return {'winter':winter_data, 'w_buf':wbuf_data, 'sprall':sprall_data, 's_buf':sbuf_data, 'summer':summer_data}
+
+	""" Function to create a dictionary where keys are tree depths and values are a list of standard deviations at these depths
+
+		Outputs
+			3D Dictionary ans[weather_model.season][weather_model.forecast_col][depth(int)]
+		"""
+	def get_graph_params(self):
+		ans = dict([(x, dict([(y, None) for y in weather_model.forecast_cols])) for x in weather_model.seasons])
+		for s in weather_model.seasons:
+			for c in weather_model.forecast_cols:
+				ans[s][c] = self.forests[s][c].get_std_dev()
+
+		return ans
 
 # Function used to serialize the model
 def serialize(x):

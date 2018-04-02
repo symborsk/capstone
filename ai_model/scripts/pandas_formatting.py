@@ -183,7 +183,7 @@ def join_dataframes(dataframes):
 	Outputs
 		train, test: Two mutually exclusive pandas dataframes
 	"""
-def split_data(dataframe, split_fraction=0.8, seed=None): 
+def split_data(dataframe, split_fraction=0.85, seed=None): 
 	# Generate the random seed
 	np.random.seed(seed)
 
@@ -206,6 +206,5 @@ def split_data(dataframe, split_fraction=0.8, seed=None):
 def select(dataframe, drop_cols):
 	# Drop the undesired labels
 	filtered_dataframe = dataframe.drop(drop_cols, axis=col_axis)
-
 	# Return the 2D List
 	return filtered_dataframe.values.tolist()
