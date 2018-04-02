@@ -203,9 +203,9 @@ def split_data(dataframe, split_fraction=0.8, seed=None):
 	Outputs
 		result: 2D List[row][column] of input data with selected label
 	"""
-def select(dataframe, label_col):
+def select(dataframe, drop_cols):
 	# Drop the undesired labels
-	filtered_dataframe = dataframe.drop([x for x in forecast_cols if x != label_col], axis=col_axis)
+	filtered_dataframe = dataframe.drop(drop_cols, axis=col_axis)
 
 	# Return the 2D List
 	return filtered_dataframe.values.tolist()

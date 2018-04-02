@@ -33,7 +33,7 @@ class DecisionForest():
 	n_trees = 128
 	batch_size = 1536
 
-	def __init__(self, rows = None, n_labels = 1, n_trees = DecisionForest.n_trees, batch_size = DecisionForest.batch_size, obj_dict = None):
+	def __init__(self, rows = None, n_labels = 1, n_trees = None, batch_size = None, obj_dict = None):
 		if obj_dict!=None:
 			self.n_labels = obj_dict['n_labels']
 			self.n_trees = obj_dict['n_trees']
@@ -42,9 +42,9 @@ class DecisionForest():
 			self.avg_std_dev = obj_dict['avg_std_dev']
 		else:
 			self.n_labels = n_labels
-			self.n_trees = n_trees
-			self.batch_size = batch_size
-			self.trees = build_forest(rows, n_labels, n_trees, batch_size)
+			self.n_trees = DecisionForest.n_trees if n_trees==None else n_trees
+			self.batch_size = DecisionForest.batch_size if batch_size==None else batch_size
+			self.trees = build_forest(rows, n_labels, self.n_trees, self.batch_size)
 			self.avg_std_dev = [np.mean([tree.leaf_mean[label] for tree in self.trees]) for label in range(n_labels)]
 
 	# Method to get string of results

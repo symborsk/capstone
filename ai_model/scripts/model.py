@@ -1,5 +1,6 @@
-import weather_model as wm
+import pandas_formatting as pf
 import decision_forest as df
+import weather_model as wm
 import sys
 
 # List of tuples (cmd run flag, menu option string) for corresponding program functions & subconfigurations
@@ -11,16 +12,17 @@ eval_f_options = [('-inplace', 'Add the predictions to the file'), ('-print', 'D
 # Main menu for the AI model CMI interface
 def model_menu(argv):
 	# Check for any input flags
-	if argv[1]=='-build':
-		# TODO: Handle subconfiguration options
-		wm.generate()
-		
-	elif argv[1]=='-eval':
-		# TODO: Build 'eval' cmi mode to make predictions for a file and/or array input
-		print('Work in progress...')
+	if (len(argv)>1):
+		if argv[1]=='-build':
+			# TODO: Handle subconfiguration options
+			wm.generate()
+			
+		elif argv[1]=='-eval':
+			# TODO: Build 'eval' cmi mode to make predictions for a file and/or array input
+			print('Work in progress...')
 	else:
 		# Print the menu options & get a response
-		print('\nECE 492 AI Weather Model Command Line Interface' + '\n'.join(['{0}. {1}'.format(x+1, options[x][1]) for x in range(len(options))]))
+		print('\nECE 492 AI Weather Model Command Line Interface\n\n' + '\n'.join(['{0}. {1}'.format(x+1, options[x][1]) for x in range(len(options))]))
 		sel = menu_input(1, len(options), error_text='Please make a valid selection or press enter to exit')
 
 		# Exit if user pressed return key
@@ -28,9 +30,9 @@ def model_menu(argv):
 			exit()
 
 		# Handle the selection
-		if options[sel-1]=='build': # Generate new model
+		if options[sel-1][0]=='-build': # Generate new model
 			build_menu()
-		elif options[sel-1]=='eval': # Use pre-existing model
+		elif options[sel-1][0]=='-eval': # Use pre-existing model
 			eval_menu()
 
 """ Function to handle user input to the interface 
@@ -45,7 +47,7 @@ def model_menu(argv):
 	Outpus
 		sel: Int indicating users selection, or None if user pressed return_key
 	"""
-def menu_input(lower_bound, upper_bound, prompt_text='Please select an option:', error_text='Please make a valid selection or press enter to go back', return_key=''): 
+def menu_input(lower_bound, upper_bound, prompt_text='\nPlease select an option:', error_text='Please make a valid selection or press enter to go back', return_key=''): 
 	while True:
 		try:
 			# Parse the numeric response - do in 2 steps to provide acces to input in except statement
@@ -71,10 +73,11 @@ def menu_input(lower_bound, upper_bound, prompt_text='Please select an option:',
 	"""
 def build_menu(): 
 	# Display the build menu
+	model_settings = 'Number of Trees: {0}\nBatch Size per Tree: {1}'.format(df.DecisionForest.n_trees, df.DecisionForest.batch_size)
 	options_str = '\n'.join(['{0}. {1}'.format(i+1, build_options[i][1]) for i in range(len(build_options))])
 	extra_options = '{0}. {1}\n{2}. {3}'.format(len(build_options)+1, 'Build the model', len(build_options)+2, 'Return to main menu')
 	while True:
-		print('Model Generation Menu\n{0}\n{1}'.format(options_str, extra_options))
+		print('\nModel Generation Menu\n\nDefault Settings:\n{0}\n\n{1}\n{2}'.format(model_settings, options_str, extra_options))
 
 		# Get user input
 		sel = menu_input(1, len(build_options)+2)
@@ -109,7 +112,7 @@ def eval_menu():
 		main_menu()
 	else:
 		# Loop over all model json files
-		for f in os.listdir('../models/{0}'.format(sel_model)) if f.endswith('h_model.json'):
+		for f in [x for x in os.listdir('../models/{0}'.format(sel_model)) if x.endswith('h_model.json')]:
 			curr_model = json.load(open('../models/{0}/{1}'.format(sel_model, f)))
 			
 
@@ -158,4 +161,4 @@ def set_batchSize():
 
 # Run the main menu if program is ran
 if __name__=='__main__':
-	model_menu()
+	model_menu(sys.argv)
