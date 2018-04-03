@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Configuration;
 using System.Threading.Tasks;
 using System.Text;
 using Newtonsoft.Json;
@@ -201,7 +202,17 @@ namespace AIHubWeb
             List<string> prefixes = new List<string>();
             //Blobs are stroed under utc time
             DateTime currentUtcDay = DateTime.UtcNow;
-            string sLogPrefix = @"logs/";
+            string sLogPrefix;
+            string testmode = ConfigurationManager.AppSettings["TestMode"];
+            if (testmode == "true")
+            {
+                sLogPrefix = @"test/";
+            }
+            else
+            {
+                sLogPrefix = @"logs/";
+            }
+       
             switch (range)
             {
                 case WeatherSet.WeatherSetDateRanges.Today:

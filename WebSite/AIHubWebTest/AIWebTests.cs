@@ -18,7 +18,7 @@ namespace AIHubWebTest
     [TestClass]
     public class AIWebTests
     {
-        private const string websiteLink = "http://localhost:58760/";
+        private const string websiteLink = "http://localhost/";
 
         [TestMethod]
         public void WebLaunch()
