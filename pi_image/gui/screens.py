@@ -26,13 +26,20 @@ class WelcomeScreen(Screen):
         pass
 
 class InputScreen(Screen):
-    input_label_text = "Please enter Server Information"
+    input_label_text = "Please enter Connection String"
 
     def on_back(self):
         pass
 
     def on_next(self):
+        connect_string = self.ids['input_1']
+        f = open(".connection_string.dat", "w+")
+        f.write(str(connect_string))
+        f.close()
+
+    def activate_cellular(self):
         pass
+
 
 class SensorScreen(Screen):
     input_label_text = "Please enter Sensor Information"
