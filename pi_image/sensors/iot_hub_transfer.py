@@ -181,7 +181,7 @@ def update_settings(settings):
 	print(dir(settings))
 	try:
 		# currently only PollingFrequency is considered
-		seconds = int(settings.PollingFrequency)
+		seconds = int(settings.PollingFrequency) * 60
 		with open("/home/thor/.interval.dat", "w+") as file:
 			file.write(str(seconds))
 	except:
