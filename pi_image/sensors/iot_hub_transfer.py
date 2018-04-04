@@ -27,7 +27,7 @@ output_path = "/home/thor/capstone/pi_image/sensors/.out/"
 output_file = "output.json"
 
 # JSON Object Variables
-hub_name = "thor"
+hub_name = "sensor_hub"
 timestamp = int(time.time())
 
 # Number of sensors in the hub
@@ -41,11 +41,17 @@ lat, lon = 53.5273, -113.5295
 # IoT Hub Connection Variables
 # TODO: Look into somehow providing this dynamically
 # original
-#connectionString = 'HostName=pcl-dev-bgwilkinson-ioth.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=+3mmzTBcle0MEROiQX6myvrSlCeM7GrUA4xdNeD7NVs='
+with open('/home/thor/.connection_string.dat') as data_file:
+	connectionString = data_file.readline().strip("\n")
+
+print(connectionString)
+
+
+# connectionString = 'HostName=pcl-dev-bgwilkinson-ioth.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=+3mmzTBcle0MEROiQX6myvrSlCeM7GrUA4xdNeD7NVs='
 # shared
 #connectionString = 'HostName=pcl-dev-bgwilkinson-ioth.azure-devices.net;SharedAccessKeyName=device;SharedAccessKey=+2js7mRuUIJnGowjujF8X3Mm76NLq5OttGlefC4BxDA='
 
-connectionString = 'HostName=pcl-dev-bgwilkinson-ioth.azure-devices.net;DeviceId=sensor_hub;SharedAccessKey=6t45Ha2yrNXKs3wE9twIfe4RK6lriH1hlJFwYic78Kk='
+#connectionString = 'HostName=pcl-dev-bgwilkinson-ioth.azure-devices.net;DeviceId=sensor_hub;SharedAccessKey=6t45Ha2yrNXKs3wE9twIfe4RK6lriH1hlJFwYic78Kk='
 deviceId = 'sensor_hub'
 
 """ Class taken from https:\\github.com\khilscher\IoTHubPiHackathon\SenseHat_IoTHub_Lab_Key.py on Feb 20, 2018 """
@@ -101,7 +107,7 @@ class IoTHub:
         return r.text, r.status_code, r.headers
 
     def ackC2DMsg(self, deviceId, eTag):
-        sasToken = self._buildIoTHubSasToken(deviceId)
+        sasToken = self._buildIoTHubSasToken(dedeviceviceId)
         url = 'https://%s/devices/%s/messages/devicebound/%s?api-version=%s' % (self.iotHost, deviceId, eTag, self.API_VERSION)
         r = requests.delete(url, headers={'Authorization': sasToken})
         return r.text, r.status_code, r.headers

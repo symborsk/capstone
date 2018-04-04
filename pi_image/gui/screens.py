@@ -33,7 +33,7 @@ class InputScreen(Screen):
 
     def on_next(self):
         connect_string = self.ids['input_1']
-        f = open(".connection_string.dat", "w+")
+        f = open("/home/thor/.connection_string.dat", "w+")
         f.write(str(connect_string))
         f.close()
 

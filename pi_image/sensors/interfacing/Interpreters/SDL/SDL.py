@@ -1,3 +1,4 @@
+
 '''
 	SDL.py
 	By: Brett Wilkinson & Dallin Toth
@@ -19,7 +20,6 @@ read_bytes = ""
 # Load the raw bytes
 empty = True
 while empty:
-  print("in loop")
   try:
     empty = False
     with open(data_path + data_file) as file:
