@@ -1,0 +1,18 @@
+# https://kivy.org/docs/api-kivy.uix.dropdown.html
+<CustomDropDown>:
+    Button:
+        text: '1'
+        size_hint_y: None
+        height: 44
+        id: 'single'
+        on_release: root.select('single')
+    Label:
+        text: '2'
+        size_hint_y: None
+        height: 44
+    Button:
+        text: '3'
+        size_hint_y: None
+        height: 44
+        id: 'serial'
+        on_release: root.select('serial')

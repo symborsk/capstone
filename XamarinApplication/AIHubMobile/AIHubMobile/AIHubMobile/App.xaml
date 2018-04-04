@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    App.xaml
+    By: John Symborski
+    Capstone Group 2
+    This defines some primary colors and resources that can be used throughout th app.  
+  -->
+<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AIHubMobile.App">
+  <Application.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Primary">#006330</Color>
+            <Color x:Key="PrimaryLight">#b3ffb3</Color>
+            <Color x:Key="PrimaryDark">#004d25</Color>
+            <Color x:Key="Accent">#FFDF1B</Color>
+            <Color x:Key="AccentLight">#fff5b3</Color>
+            <Color x:Key="LightBackgroundColor">#FAFAFA</Color>
+            <Color x:Key="DarkBackgroundColor">#C0C0C0</Color>
+            <Color x:Key="MediumGrayTextColor">#4d4d4d</Color>
+            <Color x:Key="LightTextColor">#999999</Color>
+
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="BarTextColor" Value="White" />
+            </Style>
+            
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

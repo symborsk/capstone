@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    AboutPage.xaml
+    By: John Symborski
+    Capstone Group 2
+    This is a markup for the display of the Weather Items page. It displays a summary view of all the weather sets. 
+  -->
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AIHubMobile.WeatherStationsPage"
+              Title="{Binding Title}"
+             x:Name="ViewWeatherPage">
+   
+    <ContentPage.Content>
+        <ContentView>
+            <StackLayout>
+                <ListView x:Name="ItemsListView" 
+                ItemsSource="{Binding WeatherStations}"
+                VerticalOptions="FillAndExpand"
+                 HasUnevenRows="true"
+                 RefreshCommand="{Binding LoadItemsCommand}"
+                 IsPullToRefreshEnabled="true"
+                 IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                 CachingStrategy="RecycleElement"
+                 ItemSelected="OnItemSelected">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid Padding="16,16,16,16" >
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"  />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Text="Station ID: "    
+                                   LineBreakMode="NoWrap" 
+                                   Style="{DynamicResource ListItemTextStyle}" 
+                                   FontSize="13" Grid.Row="0" Grid.Column="0"/>
+                                    <Label Text="{Binding StationName}" 
+                                   LineBreakMode="NoWrap"
+                                   Style="{DynamicResource ListItemDetailTextStyle}"
+                                   FontSize="13" Grid.Row="0" Grid.Column="1"/>
+                                    <Label Text="Recorded Time: "    
+                                   LineBreakMode="NoWrap" 
+                                   Style="{DynamicResource ListItemTextStyle}" 
+                                   FontSize="13" Grid.Row="1" Grid.Column="0"/>
+                                    <Label Text="{Binding latestTime}" 
+                                       LineBreakMode="NoWrap"
+                                       Style="{DynamicResource ListItemDetailTextStyle}"
+                                       FontSize="13" Grid.Row="1" Grid.Column="1"/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </ContentView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,308 @@
+#############################################################################
+# Wizard.kv
+#
+# By: Joey-Michael Fallone
+#
+# This is the main kivy config file for the setup wizard on the Raspberry Pi. 
+#
+# This is a GUI wizard which a user can run to interface with all types of 
+# sensors once they have been physically interfaced to the sensor hub. 
+# 
+# The goal of this is to create a completely "generic" sensor driver that 
+# will allow (in conjunction with our hardware converters) interfacing 
+# with virtually any existing server. 
+#
+# This entire module should be compiled to C using Cython to 
+# obscure source code before deploying to customers. 
+#############################################################################
+ScreenManager:
+    WelcomeScreen:
+    InputScreen:
+    ProgressScreen:
+    TextScreen:
+    FinalScreen:
+    SensorScreen:
+
+<WelcomeScreen>:
+	name: 'welcome_screen'
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			id: welcome_title
+			font_size: 45
+			size_hint_y: None
+			height: 100
+			text: 'Wireless Sensor Hub Hardware Setup'
+		Label:
+			id: welcome_label_actions
+			font_size: 35
+			size_hint_y: None 
+			height: 1000
+			text: root.welcome_label_text
+		Widget:
+		BoxLayout:
+			orientation: 'horizontal'
+	        Button:
+	            text: 'Shutdown'
+	            size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press: root.on_exit
+            Button:
+            	text: 'Next'
+				size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press: 
+	            	root.on_next()
+		            root.manager.transition.direction = 'left'
+		            root.manager.current = 'text_screen'
+
+<TextScreen>:
+	name: 'text_screen'
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			id: text_screen_title
+			font_size: 45
+			size_hint_y: None
+			height: 100
+			text: 'Notice'
+		Label:
+			id: input_screen_actions
+			font_size: 21
+			size_hint_y: None 
+			height: 45
+			text: root.text_label_text
+		Widget:
+		BoxLayout:
+			orientation: 'horizontal'
+	        Button:
+	            text: 'Back'
+	            size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_back()
+		            root.manager.transition.direction = 'right'
+		            root.manager.current = 'welcome_screen'
+            Button:
+            	text: 'Next'
+				size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_next()
+		            root.manager.transition.direction = 'left'
+		            root.manager.current = 'input_screen'
+
+<InputScreen>:
+	name: 'input_screen'
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			id: input_screen_title
+			font_size: 45
+			size_hint_y: None
+			height: 100
+			text: 'Input Information'
+		Label:
+			id: input_screen_actions
+			font_size: 21
+			size_hint_y: None 
+			height: 45
+			text: 'Various Parameters'
+		BoxLayout:
+			orientation: 'horizontal'
+			Widget:
+			TextInput:
+				id: input_1
+				font_size: 21
+				size_hint_x: None 
+				width: 300
+				size_hint_y: None 
+				height: 45
+				text: root.input_label_text
+			TextInput:
+				id: input_2
+				font_size: 21
+				size_hint_x: None 
+				width: 300
+				size_hint_y: None 
+				height: 45
+				text: 'scan interval (seconds)'
+			Widget:
+		BoxLayout:
+			orientation: 'horizontal'
+			Widget:
+			Label:
+				text: '3G'
+			CheckBox:
+				on_active: root.activate_cellular
+			Widget:
+		Widget:
+		BoxLayout:
+			orientation: 'horizontal'
+	        Button:
+	            text: 'Back'
+	            size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_back()
+		            root.manager.transition.direction = 'right'
+		            root.manager.current = 'text_screen'
+            Button:
+            	text: 'Next'
+				size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_next()
+		            root.manager.transition.direction = 'left'
+		            root.manager.current = 'final_screen'
+
+<SensorScreen>:
+	name: 'sensor_screen'
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			id: input_screen_title
+			font_size: 45
+			size_hint_y: None
+			height: 100
+			text: 'Add Sensors'
+		Label:
+			id: input_screen_actions
+			font_size: 21
+			size_hint_y: None 
+			height: 45
+			text: root.input_label_text
+		BoxLayout:
+			orientation: 'horizontal'
+			Widget:
+			BoxLayout:
+				orientation: 'vertical'
+				TextInput:
+					id: sensor_name
+					font_size: 21
+					size_hint_y: None 
+					height: 45
+					text: 'Sensor Name'
+				Spinner:
+					id: sensor_bus_spinner
+					text: 'Single Bus Sensor'
+					values: ['Single Bus Sensor', 'Serial Communication Sensor', 'Analog Sensor']
+					font_size: 21
+					size_hint_y: None
+					height: 45
+					text: 'Sensor Bus Type'
+				Button
+					id: sensor_add_button
+					font_size: 21
+					size_hint_y: None 
+					height: 45
+					text: 'Add Sensor'
+					on_press: root.save_sensor()
+			Widget:
+		Widget:
+		BoxLayout:
+			orientation: 'horizontal'
+	        Button:
+	            text: 'Back'
+	            size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_back()
+		            root.manager.transition.direction = 'right'
+		            root.manager.current = 'text_screen'
+            Button:
+            	text: 'Next'
+				size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_next()
+		            root.manager.transition.direction = 'left'
+		            root.manager.current = 'progress_screen'
+
+<ProgressScreen>:
+    name: 'progress_screen'
+    BoxLayout:
+		orientation: 'vertical'
+		Label:
+			id: server_title
+			font_size: 45
+			size_hint_y: None
+			height: 100
+			text: 'Progress'
+		Label:
+			id: server_label_actions
+			font_size: 21
+			size_hint_y: None 
+			height: 45
+			text: 'Here is your progress'
+		BoxLayout:
+			orientation: 'horizontal'
+			Widget:
+			ProgressBar:
+			Widget:
+		Widget:
+		BoxLayout:
+			orientation: 'horizontal'
+	        Button:
+	            text: 'Back'
+	            size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press: 
+	            	root.on_back()
+		            root.manager.transition.direction = 'right'
+		            root.manager.current = 'input_screen'
+            Button:
+            	text: 'Next'
+				size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press: 
+	            	root.on_next()
+	            	root.manager.transition.direction = 'left'
+	            	root.manager.current = 'final_screen'
+
+<FinalScreen>:
+	name: 'final_screen'
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			id: final_screen_title
+			font_size: 45
+			size_hint_y: None
+			height: 100
+			text: 'Finished!'
+		Label:
+			id: input_screen_actions
+			font_size: 21
+			size_hint_y: None 
+			height: 45
+			text: 'Setup Complete'
+		Widget:
+		BoxLayout:
+			orientation: 'horizontal'
+	        Button:
+	            text: 'Back'
+	            size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_back()
+		            root.manager.transition.direction = 'right'
+		            root.manager.current = 'welcome_screen'
+            Button:
+            	text: 'Finish'
+				size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_exit()
+		            exit()

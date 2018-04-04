@@ -1,0 +1,1 @@
+Custom implementations for specific sensors
