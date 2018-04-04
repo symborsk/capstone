@@ -41,8 +41,10 @@ function AddPinForStation(weatherStation) {
     var marker = new google.maps.Marker({
         position: googLatLng,
         map: map,
-        title: weatherStation.StationName
+        title: weatherStation.StationName,
+        optimized: false
     });
+    marker.myId = weatherStation.StationName;
 
     var infoWindowString = GenerateInfoString(weatherStation.StationName, weatherStation.latestTime, weatherStation.rgWeatherSets);
     var infowindow = new google.maps.InfoWindow({
@@ -135,7 +137,7 @@ function DisplayWeatherSetsForTable(data, status) {
         //Table will be built in parts so that we can keep the table building complety dynamic
         var tableHeaderContent = "";
         var tableDetailContent = "";
-        content += "<h2>" + currentStation +  "</h2><div><table class=\"table table-striped table-bordered table-hover\">";
+        content += "<h2>" + currentStation +  "</h2><div><table id=\"resultsTable\" class=\"table table-striped table-bordered table-hover\">";
         tableHeaderContent = "<thead><tr><th> Recorded Time </th>";
         for (var i = 0; i < data.length; i++) {
             var set = data[i];

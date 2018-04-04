@@ -32,10 +32,8 @@ namespace AIHubWeb.Controllers
         [HttpGet]
         public async Task<ActionResult> GetWeatherSetsForNameAndRange(string statName, string startDate, string endDate)
         {
-            await restController.RefreshWeatherSets(WeatherSet.WeatherSetDateRanges.AllTime);
-
             DateTime start = DateTime.Parse(startDate);
-            //We want the end of the day
+            //We want the end of the day so add one second short of full day
             DateTime end = DateTime.Parse(endDate).Date.AddHours(23).AddMinutes(59).AddSeconds(59); ;
 
             List<WeatherSet> sets = await restController.GetStationListForName(statName, start, end);

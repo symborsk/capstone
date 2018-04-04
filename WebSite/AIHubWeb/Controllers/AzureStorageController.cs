@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Configuration;
 using System.Threading.Tasks;
-using System.Text;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Net.Http;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
 using System.Reflection;
-using System.Web;
 using System.Web.Mvc;
 
 namespace AIHubWeb
@@ -244,7 +240,7 @@ namespace AIHubWeb
                     return prefixes;
 
                 default:
-                    prefixes.Add("");
+                    prefixes.Add(sLogPrefix);
                     return prefixes;
             }
         }
