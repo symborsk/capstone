@@ -107,7 +107,7 @@ class IoTHub:
         return r.text, r.status_code, r.headers
 
     def ackC2DMsg(self, deviceId, eTag):
-        sasToken = self._buildIoTHubSasToken(dedeviceviceId)
+        sasToken = self._buildIoTHubSasToken(deviceId)
         url = 'https://%s/devices/%s/messages/devicebound/%s?api-version=%s' % (self.iotHost, deviceId, eTag, self.API_VERSION)
         r = requests.delete(url, headers={'Authorization': sasToken})
         return r.text, r.status_code, r.headers
@@ -198,7 +198,13 @@ if __name__=='__main__':
 		response = IoTHubConn.receiveC2DMsg(deviceId)
 		print(str(response))
 		try:
-			update_settings(parse_message(response))
+			responseObj =  parse_message(response)
+			#sanitize the etag 
+			etag = response[2]['ETag']
+			etag = etag.replace('"', '').strip()		
+			ackRespo = IoTHubConn.ackC2DMsg(deviceId, etag)
+			print(str(ackRespo))
+			update_settings(responseObj)
 		except:
 			pass
 		# Send data to the IoT Hub
