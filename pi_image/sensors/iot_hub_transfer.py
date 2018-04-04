@@ -182,7 +182,7 @@ def update_settings(settings):
 	try:
 		# currently only PollingFrequency is considered
 		seconds = int(settings.PollingFrequency)
-		with open("/home/thor/.interval", "w+") as file:
+		with open("/home/thor/.interval.dat", "w+") as file:
 			file.write(str(seconds))
 	except:
 		print("no polling freq?")

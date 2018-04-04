@@ -32,14 +32,15 @@ class InputScreen(Screen):
         pass
 
     def on_next(self):
-        connect_string = self.ids['input_1']
-		interval_string = self.ids['input_2']
-        f = open("/home/thor/.connection_string.dat", "w+")
+        connect_string = self.ids['input_1'].text
+        interval_string = self.ids['input_2'].text
+        f = open("/home/thor/.connection_string.dat", 'w+')
         f.write(str(connect_string))
         f.close()
-		f = open("home/thor/.interval.dat", "w+")
-		f.write(str(interval_string))	
-		f.close()
+        f = open("/home/thor/.interval.dat", 'w+')
+        print(str(interval_string))
+        f.write(str(interval_string))	
+        f.close()
 
     def activate_cellular(self):
         pass
@@ -85,5 +86,5 @@ class FinalScreen(Screen):
         pass
 
     def on_exit(self):
-        open("/home/thor/.start", "w+")
+        open("/home/thor/.start", 'w+')
 
