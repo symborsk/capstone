@@ -15,7 +15,7 @@ acceptable_margin = 5
 
 # Variable which controls the maximum possible standard deviation or minimum change in standard deviation for a leaf node
 std_dev_threshold = {'wind_speed': 1.05, 'relative_humidity': 1.05, 'temperature': 1.2}
-delta_threshold = {'wind_speed': 0.075. 'relative_humidity': 0.075, 'temperature':0.09}
+delta_threshold = {'wind_speed': 0.075, 'relative_humidity': 0.075, 'temperature':0.09}
 
 # # # # # #
 # Classes #
@@ -329,7 +329,7 @@ def build_forest(rows, n_labels, n_trees, batch_size, forecast_col):
 		Node or LeafNode object
 		Two dimensional array - 1st = leaves, 2nd = labels
 	"""
-def build_tree(rows, n_labels = 1, forecast_col): 
+def build_tree(rows, forecast_col, n_labels = 1): 
 	# Find the best node split
 	node = find_best_split(rows, n_labels)
 	
