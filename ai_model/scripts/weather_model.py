@@ -2,6 +2,7 @@ import os
 import tensorflow as tf
 import pandas_formatting as pf
 import numpy as np
+import pandas as pd
 import decision_forest as df
 import time
 import sys
@@ -12,11 +13,18 @@ import json
 # API Key & Default REST request URL for Weather Underground API
 api_key = 'ebad910686508a95'
 api_url = 'http://api.wunderground.com/api'
-default_query = 'hourly/q'
-default_location = 'Canada/Edmonton'
+hourly_query = 'hourly/q'
+conditions_query = 'conditions/q'
+location = 'Canada/Edmonton'
+surrounding_locations = {'wainwright': '', 'slavelake': '', 'rockymtnhouse': '', 'reddeer': '', 'nordegg': '', 'lloydminster': '', 'laclabiche': '', 'esther': '', 'edson':'', 'barrhead':''}
 response_format = '.json'
-response_map = {'wind_speed':'wspd', 'relative_humidity':'humidity', 'temperature': 'temp'}
+hourly_map = {'wind_speed':'wspd', 'relative_humidity':'humidity', 'temperature': 'temp'}
+conditions_map = {'pressure_station': 'pressure_mb', 'wind_dir_10s': 'wind_degrees', 'wind_speed': 'wind_kph', 'relative_humidity': 'relative_humidity', 'dew_point': 'dewpoint_c', 'temperature': 'temp_c', 'windchill': 'windchill_c'}
 desired_unit = 'metric'
+
+# Lambda function to build queries
+query_builder = lambda query, loc : '{0}/{1}/{2}/{3}{4}'.format(api_url, api_key, query, loc, response_format)
+local_forecast_query = query_builder(hourly_query, location)
 
 # Lists for the two types of columns
 categorical_keys = ['month', 'day', 'hour']
@@ -24,8 +32,11 @@ categorical_cols = dict()
 numeric_keys = pf.data_cols[2:] + [x + y for x in pf.data_cols[2:] for y in pf.suffixes]
 numeric_cols = dict()
 
+# Default model name
 name = round(time.time())
 
+# Path for the model
+model_path = '../models'
 
 """ Function that encompasses the weather model.
 
@@ -34,8 +45,9 @@ name = round(time.time())
 		spring, summer, fall, winter: Lists of months corresponding to those seasons
 	"""
 class weather_model():
-	# Number of label columns
+	# Number of label columns & feature columns
 	n_labels = 3
+	n_features = 84
 
 	# The columns that will be forecasted using the model
 	forecast_cols = ['wind_speed', 'relative_humidity', 'temperature']
@@ -105,7 +117,7 @@ class weather_model():
 			for c in weather_model.forecast_cols:
 				print("Building {0} {1} forest...".format(s, c))
 				drop_cols = ['{0}_{1}h'.format(col, self.offset) for col in weather_model.forecast_cols if col !=c]
-				model[s][c] = df.DecisionForest(rows=pf.select(data[s], drop_cols))
+				model[s][c] = df.DecisionForest(rows=pf.select(data[s], drop_cols), forecast_col=c)
 
 		# Write the results to the file
 		with open('{0}train/{1}h_build.log'.format(self.log_dir, self.offset), 'x+') as file:
@@ -167,9 +179,7 @@ class weather_model():
 		# Return the mean absolute error for each label
 		return MAE
 
-	""" Function to dump the model to the output folder as a JSON object
-	
-		"""
+	""" Function to dump the model to the output folder as a JSON object """
 	def save(self): 
 		# Write to model_dir file
 		with open('{0}{1}h_model.json'.format(self.model_dir, self.offset), 'x+') as f:
@@ -181,7 +191,7 @@ class weather_model():
 			model_file: absolute or relative path to a .json file containing the model
 		"""
 	def load(self, model_file):
-		with open(model_file) as f:
+		with open('{0}/{1}'.format(model_path, model_file)) as f:
 			model_dict = json.loads(f.read())
 
 		self.offset = model_dict['offset']
@@ -199,7 +209,7 @@ class weather_model():
 		self.forests = dict([(x, dict([(y, None) for y in weather_model.forecast_cols])) for x in weather_model.seasons])
 		for s in weather_model.seasons:
 			for c in weather_model.forecast_cols:
-				self.forests[s][c] = DecisionForest(obj_dict=model_dict['forests'][s][c])
+				self.forests[s][c] = df.DecisionForest(obj_dict=model_dict['forests'][s][c])
 		
 	""" Function to compute the labels for a row of input features
 
@@ -214,7 +224,15 @@ class weather_model():
 		Outputs:
 			expected: List of label values
 		"""
-	def run(self, input_row, use_forecast=False, request_url='{0}/{1}/{2}/{3}{4}'.format(api_url, api_key, default_query, default_location, response_format), log=print):
+	def run(self, input_row, use_forecast=False, request_url=local_forecast_query, log=print):
+		print(input_row)
+
+		# Check number if input features & upadte if necessary
+		if len(input_row) < weather_model.n_features & len(input_row)==7:
+			input_row = get_features(input_row)
+		elif len(input_row) != weather_model.n_features:
+			print('Error: Incorrect input row format')
+			exit()
 
 		# Get the month to determine which forest to use
 		month = int(input_row[1])
@@ -254,9 +272,9 @@ class weather_model():
 
 			# Get the hourly forecast for the desired offset
 			forecast = parsed_response['hourly_forecast'][self.offset]
-			forecast_temp = forecast[response_map['temperature']][desired_unit]
-			forecast_humidity = forecast[response_map['relative_humidity']]
-			forecast_windspeed = forecast[response_map['wind_speed']][desired_unit]
+			forecast_temp = forecast[hourly_map['temperature']][desired_unit]
+			forecast_humidity = forecast[hourly_map['relative_humidity']]
+			forecast_windspeed = forecast[hourly_map['wind_speed']][desired_unit]
 
 			# Update the expected array with new forecasts
 			expected[0] = (self.weight[0] * forecast_windspeed) + ((1 - self.weight[0]) * expected[0])
@@ -280,6 +298,19 @@ class weather_model():
 		summer_data = data.loc[data['month'].isin(weather_model.summer)]
 
 		return {'winter':winter_data, 'w_buf':wbuf_data, 'sprall':sprall_data, 's_buf':sbuf_data, 'summer':summer_data}
+
+	""" Function to create a dictionary where keys are tree depths and values are a list of standard deviations at these depths
+
+		Outputs
+			3D Dictionary ans[weather_model.season][weather_model.forecast_col][depth(int)]
+		"""
+	def get_graph_params(self):
+		ans = dict([(x, dict([(y, None) for y in weather_model.forecast_cols])) for x in weather_model.seasons])
+		for s in weather_model.seasons:
+			for c in weather_model.forecast_cols:
+				ans[s][c] = self.forests[s][c].get_std_dev()
+
+		return ans
 
 # Function used to serialize the model
 def serialize(x):
@@ -312,3 +343,31 @@ def generate():
 	model_12h.save()
 	model_24h = weather_model(weather_data=data, offset=24, log_output=True)
 	model_24h.save()
+
+# Function to get the required input features from the Wunderground API
+def get_features(input_row):
+	# Loop over all surrounding locations to get their conditions
+	parsed_response = {}
+	result = {}
+	for loc in surrounding_locations:
+		with urllib.request.urlopen(query_builder(conditions_query, surrounding_locations[loc])) as response:
+			parsed_response[loc] = json.loads(response.read())
+
+	# Parse all responses
+	for i in parsed_response:
+		# Add result entry for all expected features
+		for j in conditions_map:
+			result['{0}_{1}'.format(j, i)] = parsed_response[i][conditions_map[j]]
+
+	# Create the list containing date & time columns & extra features
+	ans = [int(time.strftime('%Y')), int(time.strftime('%m')), int(time.strftime('%d')), int(time.strftime('%H'))]
+
+	# Return the corresponding list of features
+	return ans + list(result.values()) + input_row
+
+# Try & load model
+if __name__=='__main__':
+	model = weather_model(model_file='default/1h_model.json')
+	for s in weather_model.seasons:
+		for c in weather_model.forecast_cols:
+			print('{0} {1}: {2}'.format(s, c, model.forests[s][c].avg_std_dev))

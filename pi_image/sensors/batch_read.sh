@@ -22,6 +22,7 @@ python /home/thor/capstone/pi_image/sensors/interfacing/Interpreters/SDL/SDL.py
 # Barometer
 echo "Barometer"
 python /home/thor/capstone/pi_image/sensors/interfacing/Barometer/run_barometer.py
+python /home/thor/capstone/pi_image/sensors/interfacing/Interpreters/Barometer/Barometer.py
 
 # Visibility
 echo "visibility"

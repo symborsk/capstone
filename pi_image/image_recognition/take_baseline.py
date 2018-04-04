@@ -15,5 +15,7 @@ img_path = '/home/thor/capstone/pi_image/image_recognition/img/'
 camera = Camera()
 camera.take_photo()
 
-os.system("mv '" + camera.get_latest_photo_filename + "' " +
+
+os.system("mv '" + camera.get_latest_photo_filename() + "' '" +
 			img_path + "baseline.jpg'");
+
