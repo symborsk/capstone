@@ -19,9 +19,10 @@ namespace AIHubMobile
         public StationOptions stationOption { get; set; }
         public string deviceName { get; set; }
 
-        public DeviceConfigPage(StationOptions options, string deviceName)
+        public DeviceConfigPage(StationOptions options, string devName)
         {
             stationOption = options;
+            deviceName = devName;
             BindingContext = this;
             InitializeComponent();
         }

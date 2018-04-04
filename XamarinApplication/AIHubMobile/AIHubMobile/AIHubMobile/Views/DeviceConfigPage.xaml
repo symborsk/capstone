@@ -18,7 +18,7 @@
                     <TableSection Title="Connectivity">
                         <SwitchCell Text="Use 3G" On="{Binding stationOption.editOptions.Use3G}"/>
                     </TableSection>
-                    <TableSection Title="Polling Frequency ( minutes)">
+                    <TableSection Title="Polling Frequency (minutes)">
                         <EntryCell Text="{Binding stationOption.editOptions.PollingFrequency}" Keyboard="Numeric"/>
                     </TableSection>
                 </TableRoot>

@@ -24,13 +24,11 @@ function initialize(weatherList) {
     map = new google.maps.Map(document.getElementById("map_canvas"),
         mapOptions);
 
-    InitializeDatePicker();
-   
+    //Reset the station before adding all them back
+    document.getElementById("station_list").innerHTML = "";
     for (var i = 0; i < weatherList.length; i++) {
         var currStation = weatherList[i];
         AddPinForStation(currStation);
-        //Reset the station before adding all them back
-        document.getElementById("station_list").innerHTML = "";
         CreateStationList(currStation.latlng.Lat, currStation.latlng.Lng, currStation.StationName);
     }
 }
@@ -241,7 +239,7 @@ function SetCurrentConfig(data, status) {
 
     if (status == 'success') {
         currentConfigOptions = data;
-        currentConfigOptions["Timestamp"] = parseInt(currentConfigOptions["Timestamp"].substr(6))
+        currentConfigOptions["Timestamp"] = parseInt(currentConfigOptions["Timestamp"].substr(6));
     }       
 }
 
@@ -332,7 +330,7 @@ function SetConfigModalInformation()
 
 function InitializeDatePicker() {
 
-    document.getElementById("resultrange").style.display = "block";
+    document.getElementById("Toolbar").style.display = "block";
 
     $('#resultrange').daterangepicker({
         startDate: start,
@@ -392,6 +390,10 @@ function DisplayStationDataTable(statName) {
     //Keep track of current station that we are displaying data for
     currentStation = statName;
 
+    if (document.getElementById("Toolbar").style.display == "none") {
+        InitializeDatePicker();
+    }
+ 
     var drp = $('#resultrange').data('daterangepicker');
     GetWeatherSetsForNewRange(statName, drp.startDate.format('MM/DD/YYYY'), drp.endDate.format('MM/DD/YYYY'));
 }
@@ -404,17 +406,25 @@ function UpdateConfigInformation() {
         //Timestamp needs special attention
         if (field.name == "Timestamp") {
             //We want to keep the date stored in a consitent matter, .net serializes the dates when we send them and they come out like this
-            currentConfigOptions["Timestamp"] = (moment().unix()) * 1000;
+            currentConfigOptions["Timestamp"] = moment().unix() * 1000;
         }
         else {
             //Otherwise just dynamically define it
             currentConfigOptions[field.name] = field.value;
         }
-
-        
     });
 
     PostConfigInformation(currentConfigOptions);
+}
+
+function UpdateAllTableInfo() {
+
+    document.getElementById("refreshIcon").classList.add("fa-spin");
+    var drp = $('#resultrange').data('daterangepicker');
+   
+    GetWeatherSetsForNewRange(currentStation, drp.startDate.format('MM/DD/YYYY'), drp.endDate.format('MM/DD/YYYY'));
+
+    document.getElementById("refreshIcon").classList.remove("fa-spin");
 }
 
 
