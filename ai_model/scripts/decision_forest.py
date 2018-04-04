@@ -14,8 +14,8 @@ ideal_weight = 0.5
 acceptable_margin = 5
 
 # Variable which controls the maximum possible standard deviation or minimum change in standard deviation for a leaf node
-std_dev_threshold = {'wind_speed': 1, 'relative_humidity': 1, 'temperature': 1.2}
-delta_threshold = {'wind_speed': 0.05. 'relative_humidity': 0.05, 'temperature':0.08}
+std_dev_threshold = {'wind_speed': 1.05, 'relative_humidity': 1.05, 'temperature': 1.2}
+delta_threshold = {'wind_speed': 0.075. 'relative_humidity': 0.075, 'temperature':0.09}
 
 # # # # # #
 # Classes #

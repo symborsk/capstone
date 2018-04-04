@@ -1,6 +1,7 @@
 import pandas_formatting as pf
 import decision_forest as df
 import weather_model as wm
+import time
 import sys
 
 # List of tuples (cmd run flag, menu option string) for corresponding program functions & subconfigurations
@@ -18,6 +19,12 @@ parameter_range = {
 model_name = 'default'
 data_file = '../historical_weather_data/example.csv'
 use_api = False
+
+# Default output parameters
+file_write = False
+file_name = str(round(time.time()))
+output_type = 'json'
+output_path = '../test/output/'
 
 # Variable storing currently loaded model for session
 loaded_model = None
@@ -147,13 +154,33 @@ def eval_menu():
 		elif sel==3: # Load a model
 			load_model()
 
-# Function to handle evaluation using a file
-def file_eval(input_file=None, inplace=False):
-	# Load file if necessary
-	if input_file==None:
+# Function to handle evaluation
+def evaluate(file=None, manual=None):
+	# Get input features either manually or by file input
+	if file:
 		input_features = get_data_file()
+	elif manual:
+		input_features = get_data_manual()
+	else:
+		print('Error: Please use either file or manual data input')
+		exit()
 
+	# Check for loaded model
+	if loaded_model==None:
+		load_model()
 
+	# Set output mode
+	output = set_output()
+
+	# Get predictions using the model
+	expected = []
+	for row in input_features:
+		expected += [(i, loaded_model[i].run(input_features)) for i in pf.forecast_offsets]
+
+	# Output the expected results
+	display_results(expected, output)
+
+# Function to prompt the user to 
 def get_data_file():
 	# Prompt the user to move their test file into the correct directory
 	prompt = 'Please move the desired data file into the \"test_files\" folder now. Press enter to continue...'
@@ -164,6 +191,79 @@ def get_data_file():
 
 	# Print the list of test files
 	file_str = '\n'.join(['{0}. {1}'.format(i+1, files[i]) for i in range(len(files))])
+
+# Set the output mode for the evaluation run
+def set_output():
+	prompt = '\nHow should the results be displayed?\n1. Output to a file\n2. Output to the command line'
+	print(prompt)
+	sel = menu_input(1, 2)
+
+	# Handle return key
+	if sel==None
+		return None
+
+	# If file output is selected set the boolean & prompt for name
+	if sel==1:
+		file_write=True
+
+		# Prompt for new name & assign if necessary
+		new_name = input('The current file name is \'{0}\'. Input a new file name or press ENTER to continue.\n>> ')
+		if new_name!='':
+			file_name = new_name
+			prompt2 = '\nWhat format should be used?\n1. JSON\n2. CSV'
+			sel2 = menu_input(1, 2)
+			if sel2==2:
+				output_type='csv'
+
+		# Return the relative file path
+		return '{0}/{1}.{2}'.format(output_path, file_name, output_type)
+
+	# Return none if CLI output is chosen
+	elif sel==2:
+		return None
+
+# Display the results either by writing to a file or by printing them
+def display_results(expected, output):
+	if output != None:
+		# Build the CSV string if necessary
+		if output_type=='csv':
+			# Initialize CSV header
+			result_str = ','.join(['{0}h_{1}'.format(x, y) for x in pf.forecast_offsets for y in pf.forecast_cols])
+
+			# Loop over all predicted results & append to csv
+			for result in expected:
+				result_str += '\n{0}'.format(','.join([x[1] for x in result]))
+
+		# Otherwise create JSON dump
+		else:
+			# Initialize JSON array
+			result_str = '['
+
+			# Loop and create objects for each element
+			for result in expected:
+				result_str += '\n\t{\n\t\t\"{0}\":{1}'.format(result[0][0], result[0][1])
+				for instance in result[1:]:
+					result_str += ',\n\t\t\"{0}\":{1}'.format(instance[0], instance[1])
+
+				result_str += '\n\t},'
+
+			# Drop the final last extra comma & close the array
+			result_str = result_str[:-1]
+			result_str += '\n]'
+
+		# Write the result string to the file
+		with open(output, 'x+') as f:
+			f.write(result_str)
+			
+	else:
+		# Loop over all input features to display them
+		for result in expected:
+			result_str = '{0}h: {1}'.format(result[0][0], result[0][1])
+			for instance in result[1:]:
+				result_str += '\t{0}h: {1}'.format(instance[0], instance[1])
+
+			print(result_str)
+
 
 # Function to handle loading the model
 def load_model():
