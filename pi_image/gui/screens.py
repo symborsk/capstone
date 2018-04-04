@@ -26,16 +26,20 @@ class WelcomeScreen(Screen):
         pass
 
 class InputScreen(Screen):
-    input_label_text = "Please enter Connection String"
+    input_label_text = "'HostName=pcl-dev-bgwilkinson-ioth.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=+3mmzTBcle0MEROiQX6myvrSlCeM7GrUA4xdNeD7NVs='"
 
     def on_back(self):
         pass
 
     def on_next(self):
         connect_string = self.ids['input_1']
+		interval_string = self.ids['input_2']
         f = open("/home/thor/.connection_string.dat", "w+")
         f.write(str(connect_string))
         f.close()
+		f = open("home/thor/.interval.dat", "w+")
+		f.write(str(interval_string))	
+		f.close()
 
     def activate_cellular(self):
         pass

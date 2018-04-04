@@ -9,7 +9,7 @@ os.command("sudo ~/capstone/pi_image/sensors/interfacing/SDL/station &");
 os.command("sh ~/pi_image/sensors/batch_read.sh")
 
 while True:
-	file = open("/home/thor/.interval", "r")
+	file = open("/home/thor/.interval.dat", "r")
 	interval = file.readlines()[0]
 	interval = interval.strip()
 	interval = int(interval)
