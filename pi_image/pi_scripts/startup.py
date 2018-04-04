@@ -1,13 +1,16 @@
 import os
 import time
 
-os.command("python ~/capstone/pi_image/gui/Wizard.py")
+os.system("python ~/capstone/pi_image/gui/Wizard.py")
+while not os.path.exists("~/.start"):
+	sleep(1)
+
 # for now run as sudo?
 # chmodding, we'll see what happens
 # start sdl process
-os.command("sudo ~/capstone/pi_image/sensors/interfacing/SDL/station &");
+os.system("sudo ~/capstone/pi_image/sensors/interfacing/SDL/station &");
 # initial run 
-os.command("sh ~/pi_image/sensors/batch_read.sh")
+os.system("sh ~/pi_image/sensors/batch_read.sh")
 
 while True:
 	file = open("/home/thor/.interval.dat", "r")
@@ -20,4 +23,4 @@ while True:
 	# That would provide faster updates to changed settings but more
 	# CPU drain and I/O in operation
 	time.sleep(interval)
-	os.command("sh ~/pi_image/sensors/batch_read.sh")
+	os.system("sh ~/pi_image/sensors/batch_read.sh")

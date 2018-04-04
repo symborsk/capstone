@@ -85,5 +85,5 @@ class FinalScreen(Screen):
         pass
 
     def on_exit(self):
-        pass
+        open("/home/thor/.start", "w+")
 
