@@ -1,6 +1,7 @@
 import os
 import time
 
+os.command("python ~/capstone/pi_image/gui/Wizard.py")
 # for now run as sudo?
 # chmodding, we'll see what happens
 # start sdl process
