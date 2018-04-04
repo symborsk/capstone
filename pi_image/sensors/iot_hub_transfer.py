@@ -148,7 +148,7 @@ def get_output(path=output_path, output=output_file, count=sensor_count):
 					"lat": lat,
 					"lon": lon
 				},
-				"sensors": sensors
+				"sensors": sensorsge
 			}
 
 	# Return the output in JSON string format
