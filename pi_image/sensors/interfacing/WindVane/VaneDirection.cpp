@@ -54,21 +54,21 @@ void VaneDirection::printDirection(){
   char * curDirection = "";
   
   switch (direction){
-    case 0: curDirection = "North";
+    case 0: curDirection = "N";
             break;
-    case 1: curDirection = "Northeast";
+    case 1: curDirection = "NE";
             break;
-    case 2: curDirection = "East";
+    case 2: curDirection = "E";
             break;
-    case 3: curDirection = "Southeast";
+    case 3: curDirection = "SE";
             break;
-    case 4: curDirection = "South";
+    case 4: curDirection = "S";
             break;
-    case 5: curDirection = "Southwest";
+    case 5: curDirection = "SW";
             break;
-    case 6: curDirection = "West";
+    case 6: curDirection = "W";
             break;
-    case 7: curDirection = "Northwest";
+    case 7: curDirection = "NW";
              break;
     default: curDirection = "No reading";
   }

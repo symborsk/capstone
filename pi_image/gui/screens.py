@@ -26,13 +26,25 @@ class WelcomeScreen(Screen):
         pass
 
 class InputScreen(Screen):
-    input_label_text = "Please enter Server Information"
+    input_label_text = "'HostName=pcl-dev-bgwilkinson-ioth.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=+3mmzTBcle0MEROiQX6myvrSlCeM7GrUA4xdNeD7NVs='"
 
     def on_back(self):
         pass
 
     def on_next(self):
+        connect_string = self.ids['input_1'].text
+        interval_string = self.ids['input_2'].text
+        f = open("/home/thor/.connection_string.dat", 'w+')
+        f.write(str(connect_string))
+        f.close()
+        f = open("/home/thor/.interval.dat", 'w+')
+        print(str(interval_string))
+        f.write(str(interval_string))	
+        f.close()
+
+    def activate_cellular(self):
         pass
+
 
 class SensorScreen(Screen):
     input_label_text = "Please enter Sensor Information"
@@ -74,5 +86,5 @@ class FinalScreen(Screen):
         pass
 
     def on_exit(self):
-        pass
+        open("/home/thor/.start", 'w+')
 

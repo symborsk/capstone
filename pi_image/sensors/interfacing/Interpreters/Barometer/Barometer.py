@@ -24,8 +24,9 @@ with open(data_path + data_file) as file:
 
 
 
+
 # From the last read line get the pressure
-pressure = read_bytes
+pressure = float(read_bytes[0])
 
 # Build the JSON output object
 output = {
