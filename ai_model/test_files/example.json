@@ -1,0 +1,55 @@
+{
+	"device_name":"thor",
+	"location":	{
+		"lat":53.5273,
+		"lon":-113.5295
+	},
+	"sensors":	[
+		{
+			"data":
+			{
+				"humidity":19.6,
+				"temperature":24.5
+			},
+			"sensor":"DHT22 External"}
+		,
+		{	"data":
+			{
+				"humidity":21.2,
+				"temperature":24.2
+			},
+			"sensor":"DHT22 Battery"
+		},
+		{
+			"data":
+			{
+				"direction":"NW"
+			},
+			"sensor":"WindVane"
+		},
+		{
+			"data":
+			{
+				"gust":0.000279,
+				"rain":0.000000,
+				"windSpeed":0
+			},
+			"sensor":"Station"
+		},
+		{
+			"data":
+			{
+				"visibility":0.68885371282755914
+			},
+			"sensor":"Camera"
+		},
+		{
+			"data":
+			{
+				"pressure": 93.33
+			},
+			"sensor":"Barometer"
+		}
+	],
+	"timestamp":1522273661
+}

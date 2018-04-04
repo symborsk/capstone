@@ -21,6 +21,7 @@
 @section Styles {
     <link href="@Url.Content("~/Content/bootstrap.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/daterangepicker.css")" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 }
 
 
@@ -58,9 +59,12 @@
 </ul>
 
 <div class="container" style="align-content:center; margin:10px">
-    <div id="resultrange" class="pull-right" style="display:none;background:#fff;cursor:pointer;padding:5px 10px; border:1px solid #ccc;width:30%;margin:5px;">
-        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-        <span class="right"></span> <b class="caret"></b>
+    <div id="Toolbar" style="display:none">
+        <i  id="refreshIcon" class="fa fa-refresh" style="font-size:24px" onclick="UpdateAllTableInfo()"></i>
+        <div id="resultrange" class="pull-right" style="background:#fff;cursor:pointer;padding:5px 10px; border:1px solid #ccc;width:30%;margin:5px;">
+            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+            <span class="right"></span> <b class="caret"></b>
+        </div>
     </div>
     <div id="map_list" style="width: 100%;">
     </div>

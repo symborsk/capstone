@@ -47,17 +47,16 @@ secs_per_hour = 3600
 
 # Equation to calculate windchill
 # Taken from https://web.archive.org/web/20130627223738/http://climate.weatheroffice.gc.ca/prods_servs/normals_documentation_e.html on Feb 7, 2018
-windchill_formula = lambda row: 13.12 + (0.6215*row['temperature']) - (11.37*(row['wind_speed']**0.16)) \
-			+ (0.3965*row['temperature']*(row['wind_speed']**0.16)) if row['temperature']<0  else row['temperature']
+windchill_row_formula = lambda row: 13.12 + (0.6215*row['temperature']) - (11.37*(row['wind_speed']**0.16)) + (0.3965*row['temperature']*(row['wind_speed']**0.16)) if row['temperature']<0  else row['temperature']
+windchill_formula = lambda t, w: 13.12 + (0.6215*t) - (11.37*(w**0.16)) + (0.3965*t*(w**0.16)) if row['temperature']<0  else row['temperature']
 
 # Equation to estimate dewpoint
 # Taken from https://www.ajdesigner.com/phphumidity/dewpoint_equation_dewpoint_temperature.php on Feb 7, 2018
-dewpoint_formula = lambda row: ((row['relative_humidity'] / 100) ** 0.125) * (112 + (0.9 * row['temperature'])) \
-			+ (0.1 * row['temperature']) - 112
+dewpoint_row_formula = lambda row: ((row['relative_humidity'] / 100) ** 0.125) * (112 + (0.9 * row['temperature'])) + (0.1 * row['temperature']) - 112
 
 # Equation to estimate humidex
 # Taken from https://web.archive.org/web/20130627223738/http://climate.weatheroffice.gc.ca/prods_servs/normals_documentation_e.htmlon Feb 7, 2018
-humidex_formula = lambda row: 6.11 * float(np.exp(5417.7530 * ((1/273.16)-(1/(row['dew_point'] + 273.16)))))
+humidex_row_formula = lambda row: 6.11 * float(np.exp(5417.7530 * ((1/273.16)-(1/(row['dew_point'] + 273.16)))))
 
 
 """ Function used to load data from csvs 
@@ -76,8 +75,8 @@ def load_data(path=data_path, files=weather_files):
 	# Additional formatting for all the dataframes
 	for data in weather_data:
 		# Fill in calculated winchill values
-		data['windchill'] = data.apply(windchill_formula, axis=col_axis)
-		data['dew_point'] = data.apply(dewpoint_formula, axis=col_axis)
+		data['windchill'] = data.apply(windchill_row_formula, axis=col_axis)
+		data['dew_point'] = data.apply(dewpoint_row_formula, axis=col_axis)
 	
 		# Round temperatures & pressures
 		data.update(data['temperature'].round(0))
@@ -183,7 +182,7 @@ def join_dataframes(dataframes):
 	Outputs
 		train, test: Two mutually exclusive pandas dataframes
 	"""
-def split_data(dataframe, split_fraction=0.8, seed=None): 
+def split_data(dataframe, split_fraction=0.85, seed=None): 
 	# Generate the random seed
 	np.random.seed(seed)
 
@@ -206,6 +205,62 @@ def split_data(dataframe, split_fraction=0.8, seed=None):
 def select(dataframe, drop_cols):
 	# Drop the undesired labels
 	filtered_dataframe = dataframe.drop(drop_cols, axis=col_axis)
-
 	# Return the 2D List
 	return filtered_dataframe.values.tolist()
+
+""" Function used to create the result dataframe with the predictions
+
+	Inputs
+		expected: 2D list of expected results [row][column]
+		input_features: Pandas DataFrame that can optionally be appended to
+
+	Outputs
+		dataframe: Pandas DataFrame
+	"""
+def create_prediciton_dataframe(expected, input_features=None):
+	# Create the parent dataframe
+	df_dict = dict([('{0}_{1}h'.format(x, y), None) for y in forecast_offsets for x in forecast_cols])
+	for row in expected:
+		for i in range(len(forecast_cols)):
+			df_dict['{0}_{1}h'.format(forecast_cols[i], row[0])] = row[1][i]
+
+	if input_features != None:
+		return input_features.join(pd.DataFrame(df_dict))
+	else:
+		return pd.DataFrame(df_dict)
+
+
+""" Function used to round 8 wind direction approximations to a degree
+
+	Inputs:
+		dir_str: string indicating N, NE, E, SE, S, SW, W, NW
+	Outputs:
+		int ranging between 1 & 36 indicating 10's of degrees
+"""
+def convert_wind_direction(dir_str):
+	if dir_str=='N':
+		return 0
+	elif dir_str=='NE':
+		return 45
+	elif dir_str=='E':
+		return 90
+	elif dir_str=='SE':
+		return 135
+	elif dir_str=='S':
+		return 180
+	elif dir_str=='SW':
+		return 225
+	elif dir_str=='W':
+		return 270
+	elif dir_str=='NW':
+		return 315
+	else:
+		print('Error: invalid wind direction provided: {0}'.format(dir_str))
+		exit()
+
+if __name__=='__main__':
+	data = load_data()
+	data = build_dataset(data, 1)
+	print(data.axes[1])
+	print(data[data.axes[1][7]][0])
+	print(select(data, drop_cols=['wind_speed_1h', 'relative_humidity_1h'])[0][7])

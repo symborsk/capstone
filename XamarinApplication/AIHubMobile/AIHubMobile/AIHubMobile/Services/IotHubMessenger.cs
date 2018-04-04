@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Azure.Devices;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace AIHubMobile
 {
@@ -20,10 +21,11 @@ namespace AIHubMobile
         {
             try
             {
-                var commandMessage = new Message(Encoding.ASCII.GetBytes("Cloud to device message."));
+                var json = JsonConvert.SerializeObject(opt.editOptions);
+                var commandMessage = new Message(Encoding.ASCII.GetBytes(json));
                 await client.SendAsync(DeviceName, commandMessage);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return await Task.FromResult(false);
