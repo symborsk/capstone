@@ -16,7 +16,7 @@ TARGET = WindVane
 all: $(TARGET)
 
 $(TARGET): $(TARGET).cpp $(TARGET).h
-	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).cpp
+	$(CC) $(CFLAGS) -o $(TARGET) $VaneDirection.cpp
 
 clean:
 	$(RM) $(TARGET)
