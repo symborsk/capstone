@@ -37,6 +37,21 @@ namespace AIHubMobile
 
             IsBusy = true;
 
+            bool succ = await WeatherStationDependency.RefreshWeatherSets(WeatherSet.WeatherSetDateRanges.AllTime);
+            IEnumerable<WeatherStation> items = await WeatherStationDependency.GetAllWeatherSets(true);
+            _rgSets.Clear();
+            foreach (var item in items)
+            {
+                if(item.StationName == Item.StationName)
+                {
+                    Item.rgWeatherSets.Clear();
+                    foreach(var weatherSet in item.rgWeatherSets)
+                    {
+                        Item.rgWeatherSets.Add(weatherSet);
+                    }
+                }
+            }
+
             await Task.Run(()  =>
             {
                 DateTime upperbound = DateTime.Now;
@@ -44,7 +59,8 @@ namespace AIHubMobile
 
                 try
                 {
-                    
+                   
+
                     switch (dateRange)
                     {
                         case WeatherSet.WeatherSetDateRanges.Today:

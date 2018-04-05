@@ -11,26 +11,38 @@ namespace AIServerConsoleApp
     {
         static async void Main(string[] args)
         {
-            if (args.Length != 2)
+            if (args.Length != 0)
             {
-                Console.WriteLine("Invalid number of arguments: Exepected[0 : filePathToJsonFile | 1 : timeStamp] Got: " + args.Length);
+                Console.WriteLine("Invalid number of arguments: expected 0" + args.Length);
                 return;
             }
 
-            bool succ = await SendJsonToStorage(args[0], args[1]);
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=pcldevbgwilkinson01;AccountKey=NPkk2BjPvlG1Am78JrSi4ylEQNB3F6tacE/G8P3x8zLOe/BqZwvYMCXP+ni9KMwmx+px/f+J+n9QJq+v9eVSGg==;BlobEndpoint=https://pcldevbgwilkinson01.blob.core.windows.net/;QueueEndpoint=https://pcldevbgwilkinson01.queue.core.windows.net/;TableEndpoint=https://pcldevbgwilkinson01.table.core.windows.net/;FileEndpoint=https://pcldevbgwilkinson01.file.core.windows.net/");
+            CloudBlobClient client = storageAccount.CreateCloudBlobClient();
+
+            List<CloudBlockBlob> rgBlobs = await GetAllList(client);
+
+            foreach(CloudBlockBlob blob in rgBlobs)
+            {
+                String sDownloadedBlob = await blob.DownloadTextAsync();
+
+            }
+
+        }
+
+        static async void PushDataUpToAzure(CloudBlobClient cli, String pathToJson, string timestamp)
+        {
+            bool succ = await SendJsonToStorage(cli, pathToJson, timestamp);
 
             if (succ)
                 Console.WriteLine("Success writing JSON file to azure storage");
             else
                 Console.WriteLine("Failure Loading JSON file to azure storage... Goodbye");
-
         }
 
-        static async Task<bool> SendJsonToStorage(string fullFilePath, string timeStamp)
+        static async Task<bool> SendJsonToStorage(CloudBlobClient blobClient, string fullFilePath, string timeStamp)
         {
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=pcldevbgwilkinson01;AccountKey=NPkk2BjPvlG1Am78JrSi4ylEQNB3F6tacE/G8P3x8zLOe/BqZwvYMCXP+ni9KMwmx+px/f+J+n9QJq+v9eVSGg==;BlobEndpoint=https://pcldevbgwilkinson01.blob.core.windows.net/;QueueEndpoint=https://pcldevbgwilkinson01.queue.core.windows.net/;TableEndpoint=https://pcldevbgwilkinson01.table.core.windows.net/;FileEndpoint=https://pcldevbgwilkinson01.file.core.windows.net/");
-            // Create the blob client.
-            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+           
 
             try
             {
@@ -40,7 +52,8 @@ namespace AIServerConsoleApp
 
                 string pathToBlob = dtDateTime.Year + "//" + dtDateTime.Month + "//" + dtDateTime.Date;
 
-                // Retrieve reference to a previously created container.
+                // Retrieve reference to a previously created container
+                //TODO: query all the device names
                 CloudBlobContainer container = blobClient.GetContainerReference("sensor-hub");
                 CloudBlockBlob blob = container.GetBlockBlobReference(pathToBlob);
 
@@ -55,33 +68,7 @@ namespace AIServerConsoleApp
             return true;
         }
 
-    //    BlobContinuationToken continuationToken = null;
-    //    BlobResultSegment resultSegment = null;
-
-    //        try
-    //        {
-    //            //Call ListBlobsSegmentedAsync and enumerate the result segment returned, while the continuation token is non-null.
-    //            //When the continuation token is null, the last page has been returned and execution can exit the loop.
-    //            do
-    //            {
-    //                //This overload allows control of the page size. You can return all remaining results by passing null for the maxResults parameter,
-    //                //or by calling a different overload.
-    //                // from: https://hahoangv.wordpress.com/2016/05/16/azure-storage-step-4-blobs-storage-in-action/
-    //                List<string> prefixForBlob = GeneratePrefixStrings(WeatherSet.WeatherSetDateRanges.AllTime);
-    //                foreach (string prefix in prefixForBlob)
-    //                {
-    //                    if (resultSegment == null)
-    //                    {
-    //                        resultSegment = await con.ListBlobsSegmentedAsync(prefix, true, BlobListingDetails.All, 1000, continuationToken, null, null);
-    //}
-    //                    else
-    //                    {
-    //                        BlobResultSegment temp = await con.ListBlobsSegmentedAsync(prefix, true, BlobListingDetails.All, 1000, continuationToken, null, null);
-    //resultSegment.Results.Union(temp.Results);
-    //                    }
-    //                }
-
-        static async CloudBlockBlob GetLatestPath(CloudBlobClient blobCli)
+        static async Task<List<CloudBlockBlob>> GetAllList(CloudBlobClient blobCli)
         {
 
             BlobContinuationToken continuationToken = null;
@@ -89,16 +76,15 @@ namespace AIServerConsoleApp
             CloudBlobContainer container = blobCli.GetContainerReference("sensor-hub");
             try
             {
-                resultSegment = await container.ListBlobsSegmentedAsync("", true, BlobListingDetails.All, 1000, continuationToken, null, null);
+                resultSegment = await container.ListBlobsSegmentedAsync(@"/logs/pre", true, BlobListingDetails.All, 1000, continuationToken, null, null);
                 List<CloudBlockBlob> rgList = resultSegment.Results.OfType<CloudBlockBlob>().OrderByDescending(m => m.Properties.LastModified).ToList();
-                return rgList.First();
+                return rgList;
             }
             catch(Exception e)
             {
                 Console.WriteLine("Error getting latest blob: " + e.Message);
+                return null;
             }
- 
-
         }
     }
 }
