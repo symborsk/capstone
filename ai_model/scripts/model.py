@@ -302,13 +302,24 @@ def display_results(input_features, expected):
 			output_df.to_json(path_or_buf=output)
 
 	else:
-		# Loop over all input features to display them
-		for result in expected:
-			result_str = '{0}h: {1}'.format(result[0][0], result[0][1])
-			for instance in result[1:]:
-				result_str += '\t{0}h: {1}'.format(instance[0], instance[1])
+		# Loop over all input features to display them in string format
+		if json_obj==None:
+			for result in expected:
+				result_str = '{0}h: {1}'.format(result[0][0], result[0][1])
+				for instance in result[1:]:
+					result_str += '\t{0}h: {1}'.format(instance[0], instance[1])
 
-			print(result_str)
+				print(result_str)
+		# Otherwise build the JSON object and print it
+		else:
+			result_str = '{'
+			for result in expected:
+				result_str += '\"{0}\":{\"wind_speed\":{1}, \"relative_humidity\":{2}, \"temperature\":{3}},'.format(result[0][0], result[0][1][0], result[0][1][1], result[0][1][2])
+
+			# Replace the final comma with the closing bracket
+			result_str = list(result_str)
+			result_str[-1] = '}'
+			print(''.join(result_str))
 
 # Function to handle loading the model
 def load_model(model_name=model_name, loaded_model=loaded_model):
@@ -471,7 +482,6 @@ def eval_args(argv, json_obj=json_obj):
 		elif curr=='-json':
 			param = argv.pop(0)
 			json_obj = json.loads(param)
-
 
 """ Function to validate program input parameters with the predetermined range. 
 
