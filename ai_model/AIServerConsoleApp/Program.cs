@@ -53,9 +53,51 @@ namespace AIServerConsoleApp
             }
 
             return true;
+        }
 
+    //    BlobContinuationToken continuationToken = null;
+    //    BlobResultSegment resultSegment = null;
 
+    //        try
+    //        {
+    //            //Call ListBlobsSegmentedAsync and enumerate the result segment returned, while the continuation token is non-null.
+    //            //When the continuation token is null, the last page has been returned and execution can exit the loop.
+    //            do
+    //            {
+    //                //This overload allows control of the page size. You can return all remaining results by passing null for the maxResults parameter,
+    //                //or by calling a different overload.
+    //                // from: https://hahoangv.wordpress.com/2016/05/16/azure-storage-step-4-blobs-storage-in-action/
+    //                List<string> prefixForBlob = GeneratePrefixStrings(WeatherSet.WeatherSetDateRanges.AllTime);
+    //                foreach (string prefix in prefixForBlob)
+    //                {
+    //                    if (resultSegment == null)
+    //                    {
+    //                        resultSegment = await con.ListBlobsSegmentedAsync(prefix, true, BlobListingDetails.All, 1000, continuationToken, null, null);
+    //}
+    //                    else
+    //                    {
+    //                        BlobResultSegment temp = await con.ListBlobsSegmentedAsync(prefix, true, BlobListingDetails.All, 1000, continuationToken, null, null);
+    //resultSegment.Results.Union(temp.Results);
+    //                    }
+    //                }
 
+        static async CloudBlockBlob GetLatestPath(CloudBlobClient blobCli)
+        {
+
+            BlobContinuationToken continuationToken = null;
+            BlobResultSegment resultSegment = null;
+            CloudBlobContainer container = blobCli.GetContainerReference("sensor-hub");
+            try
+            {
+                resultSegment = await container.ListBlobsSegmentedAsync("", true, BlobListingDetails.All, 1000, continuationToken, null, null);
+                List<CloudBlockBlob> rgList = resultSegment.Results.OfType<CloudBlockBlob>().OrderByDescending(m => m.Properties.LastModified).ToList();
+                return rgList.First();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Error getting latest blob: " + e.Message);
+            }
+ 
 
         }
     }

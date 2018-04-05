@@ -37,7 +37,7 @@ function AddPinForStation(weatherStation) {
     var latlng = weatherStation.latlng;
     var googLatLng = new google.maps.LatLng(latlng.Lat, latlng.Lng);
     var marker = new google.maps.Marker({
-        icon: "Images//station.png",
+        icon: "Images/station.png",
         position: googLatLng,
         map: map,
         optimized: false,
