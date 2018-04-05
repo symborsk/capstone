@@ -23,6 +23,7 @@ inplace = False
 file_write = False
 useFile = True
 input_type = 'csv'
+json_obj = None
 
 # Default evaluation parameters
 data_path = '../test_files'
@@ -221,36 +222,38 @@ def get_data_dir():
 	return pf.join_dataframes(pf.load_data(path='../test_files/{0}'.format(sel_dir)))
 
 # Function to load the input data from a single JSON file stored in test_files
-def get_data_file():
-	# Prompt user to move data file if necessary
-	if menu_run:
-		prompt = 'Please move the desired data file into the \"test_files\" folder now. Press enter to continue...'
-		input(prompt)
+def get_data_file(json_obj=json_obj):
+	# Get json from file if not provided
+	if json_obj==None:
+		# Prompt user to move data file if necessary
+		if menu_run:
+			prompt = 'Please move the desired data file into the \"test_files\" folder now. Press enter to continue...'
+			input(prompt)
 
-		# Get a list of all files in the test_files directory
-		files = [f for f in os.listdir('../test_files') if f.endswith('.json')]
-		file_str = '\n'.join(['{0}. {1}'.format(i+1, files[i]) for i in range(len(files))])
-		print(file_str)
-		sel = menu_input(1, len(files))
+			# Get a list of all files in the test_files directory
+			files = [f for f in os.listdir('../test_files') if f.endswith('.json')]
+			file_str = '\n'.join(['{0}. {1}'.format(i+1, files[i]) for i in range(len(files))])
+			print(file_str)
+			sel = menu_input(1, len(files))
 
-		# Handle return key
-		if sel==None:
-			return None
+			# Handle return key
+			if sel==None:
+				return None
 
-		sel_file = files[sel-1]
-	else:
-		sel_file = data_file
+			sel_file = files[sel-1]
+		else:
+			sel_file=data_file
 
+		# Write the output
+		with open('{0}/{1}'.format(data_path, sel_file), 'r+') as f:
+			json_obj = json.loads(f.read())
+	
 	# Return the parsed version of the selected file
-	return parse_data_file('{0}/{1}'.format(data_path, sel_file))
+	return parse_data_file(json_obj)
 	
 # Function to parse the input data file to get the required features
-def parse_data_file(filename):
+def parse_data_file(parsed_response):
 	result = {}
-
-	# Load the parsed response
-	with open(filename, 'r+') as f:
-		parsed_response = json.loads(f.read())
 
 	# Get the data & access the required info
 	parsed_data = parsed_response['sensors']
@@ -425,7 +428,7 @@ def build_args(argv):
 	Inputs:
 		argv: sys.argv[1:] passed from main_menu()
 	"""
-def eval_args(argv):
+def eval_args(argv, json_obj=json_obj):
 	# Loop over all args to handle them
 	while(argv):
 		# Pop the argv to handle
@@ -465,6 +468,10 @@ def eval_args(argv):
 			else:
 				print('Error: Invalid model name suppplied.')
 				exit()
+		elif curr=='-json':
+			param = argv.pop(0)
+			json_obj = json.loads(param)
+
 
 """ Function to validate program input parameters with the predetermined range. 
 
