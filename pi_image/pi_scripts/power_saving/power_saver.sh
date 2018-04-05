@@ -17,3 +17,7 @@ sudo sh -c 'echo 0 > /sys/class/leds/led0/brightness'
 echo '1-1' |sudo tee /sys/bus/usb/drivers/usb/unbind
 
 # sudo shutdown -r now
+
+sleep 20
+
+/usr/bin/tv/service -p
