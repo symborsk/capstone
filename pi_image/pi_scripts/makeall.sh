@@ -10,6 +10,6 @@
 
 #!/bin/bash
 
-make -c ~/capstone/pi_image/sensors/SDL/
-make -c ~/capstone/pi_image/SingleBus/
-make -c ~/capstone/pi_image/WindVane/
+make -C ~/capstone/pi_image/sensors/SDL/
+make -C ~/capstone/pi_image/sensors/SingleBus/
+make -C ~/capstone/pi_image/sensors/WindVane/
