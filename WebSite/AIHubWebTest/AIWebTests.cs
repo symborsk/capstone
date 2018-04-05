@@ -129,8 +129,8 @@ namespace AIHubWebTest
                 Assert.AreEqual(2, test.Count, "Wrong number of data sets returned");
 
                 //These are our expected values for this specific test set
-                Assert.AreEqual("1/3/2018, 11:00:00 PM 14.4 24.1 Southeast 3.491153 0.000000 2.880000", test[0].Text, "Incorrect values return for first data set");
-                Assert.AreEqual("1/3/2018, 5:00:00 PM 10.5 15 West 51.862736 0.000000 0.000000", test[1].Text, "Incorrect values return for second data set");
+                Assert.AreEqual("1/3/2018, 11:00:00 PM 14.4 24.1 Southeast 3.491153 0.000000 2.880000 --- ---", test[0].Text, "Incorrect values return for first data set");
+                Assert.AreEqual("1/3/2018, 5:00:00 PM 10.5 15 West 51.862736 0.000000 0.000000 --- ---", test[1].Text, "Incorrect values return for second data set");
             }
 
             using (var driver = new FirefoxDriver())
@@ -169,8 +169,8 @@ namespace AIHubWebTest
                 Assert.AreEqual(2, test.Count, "Wrong number of data sets returned");
 
                 //These are our expected values for this specific test set
-                Assert.AreEqual("1/3/2018, 11:00:00 PM 14.4 24.1 Southeast 3.491153 0.000000 2.880000", test[0].Text, "Incorrect values return for first data set");
-                Assert.AreEqual("1/3/2018, 5:00:00 PM 10.5 15 West 51.862736 0.000000 0.000000", test[1].Text, "Incorrect values return for second data set");
+                Assert.AreEqual("1/3/2018, 11:00:00 PM 14.4 24.1 Southeast 3.491153 0.000000 2.880000 --- ---", test[0].Text, "Incorrect values return for first data set");
+                Assert.AreEqual("1/3/2018, 5:00:00 PM 10.5 15 West 51.862736 0.000000 0.000000 --- ---", test[1].Text, "Incorrect values return for second data set");
             }
 
         }
@@ -269,6 +269,8 @@ namespace AIHubWebTest
 
                 //Click the google map marker
                 driver.FindElementByCssSelector("div[title='thor']").Click();
+
+                System.Threading.Thread.Sleep(2000);
 
                 System.Threading.Thread.Sleep(2000);
 

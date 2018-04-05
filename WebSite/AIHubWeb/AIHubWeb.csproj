@@ -206,6 +206,7 @@
     <Content Include="Images\pcl_white_top.jpg" />
     <Content Include="Images\pcl.png" />
     <Content Include="Images\pcl_building.png" />
+    <Content Include="Images\station.png" />
     <Content Include="Scripts\ajax-data.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

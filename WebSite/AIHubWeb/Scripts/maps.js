@@ -37,12 +37,12 @@ function AddPinForStation(weatherStation) {
     var latlng = weatherStation.latlng;
     var googLatLng = new google.maps.LatLng(latlng.Lat, latlng.Lng);
     var marker = new google.maps.Marker({
+        icon: "Images//station.png",
         position: googLatLng,
         map: map,
-        title: weatherStation.StationName,
-        optimized: false
+        optimized: false,
+        title: weatherStation.StationName
     });
-    marker.myId = weatherStation.StationName;
 
     var infoWindowString = GenerateInfoString(weatherStation.StationName, weatherStation.latestTime, weatherStation.rgWeatherSets);
     var infowindow = new google.maps.InfoWindow({
@@ -86,7 +86,7 @@ function GenerateInfoString(name, latestRecordedTime, weatherSets) {
         tableDetailContent += "<tr><td>" + dateString + "</td >";
         for (var propName in set) {
 
-            if (propName.localeCompare("RecordedTime") == 0) {
+            if (propName.localeCompare("RecordedTime") === 0) {
                 continue;
             }
 
@@ -95,11 +95,11 @@ function GenerateInfoString(name, latestRecordedTime, weatherSets) {
             propNameDisplay = propNameDisplay.charAt(0).toUpperCase() + propNameDisplay.slice(1);
 
             //We only have to build the table header only once
-            if (i == 0) {
+            if (i === 0) {
                 tableHeaderContent += "<th>" + propNameDisplay + "</th>";
             }
 
-            if (set[propName] == null) {
+            if (set[propName] === null) {
                 tableDetailContent += "<td> --- </td>";
             }
             else {
@@ -119,23 +119,46 @@ function GenerateInfoString(name, latestRecordedTime, weatherSets) {
 
 function DisplayWeatherSetsForTable(data, status) {
 
-    if (data == null) {
+    if (data === null) {
         alert("No data available for this station");
     }
 
+    InsertWeatherAndAITableHtml(data);
+
+    //Scroll to the newly made table
+    $('html, body').animate({
+        'scrollTop': $("#map_list").position().top
+    });
+
+    //Display the tab for viewing different data sets
+    document.getElementById("TableSwitching").style.display = "block";
+}
+
+function DisplayWeatherSetsForTableOnRefresh(data, status) {
+
+    if (data === null) {
+        alert("No data available for this station");
+    }
+
+    InsertWeatherAndAITableHtml(data);
+
+    document.getElementById("refreshIcon").classList.remove("fa-spin");
+}
+
+function InsertWeatherAndAITableHtml(data) {
     //Our chosen date format
     var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
 
 
     var content = "";
-    if (data.length == 0) {
+    if (data.length === 0) {
         content = "<div style=\"margin-top:200px;margin-bottom:200px;\"><h2>No Content For Selected Date Range and Station: " + currentStation + "</h2></div>";
     }
     else {
         //Table will be built in parts so that we can keep the table building complety dynamic
         var tableHeaderContent = "";
         var tableDetailContent = "";
-        content += "<h2>" + currentStation +  "</h2><div><table id=\"resultsTable\" class=\"table table-striped table-bordered table-hover\">";
+        content += "<h2>" + currentStation + "</h2><div><table id=\"resultsTable\" class=\"table table-striped table-bordered table-hover\">";
         tableHeaderContent = "<thead><tr><th> Recorded Time </th>";
         for (var i = 0; i < data.length; i++) {
             var set = data[i];
@@ -147,7 +170,7 @@ function DisplayWeatherSetsForTable(data, status) {
             tableDetailContent += "<tr><td>" + dateString + "</td >";
             for (var propName in set) {
 
-                if (propName.localeCompare("RecordedTime") == 0) {
+                if (propName.localeCompare("RecordedTime") === 0) {
                     continue;
                 }
 
@@ -156,11 +179,11 @@ function DisplayWeatherSetsForTable(data, status) {
                 propNameDisplay = propNameDisplay.charAt(0).toUpperCase() + propNameDisplay.slice(1);
 
                 //We only have to build the table header only once
-                if (i == 0) {
+                if (i === 0) {
                     tableHeaderContent += "<th>" + propNameDisplay + "</th>";
                 }
 
-                if (set[propName] == null) {
+                if (set[propName] === null) {
                     tableDetailContent += "<td>---</td>";
                 }
                 else {
@@ -176,17 +199,7 @@ function DisplayWeatherSetsForTable(data, status) {
     }
 
     document.getElementById("map_list").innerHTML = content;
-
-    //Scroll to the newly made table
-    $('html, body').animate({
-        'scrollTop': $("#map_list").position().top
-    });
-
-    //Display the tab for viewing different data sets
-    document.getElementById("TableSwitching").style.display = "block";
 }
-
-
 
 //Given a clicked on weather station, center the map there
 function CenterMapOnStation(lat,lng) {
@@ -230,14 +243,14 @@ function DisplayConfigurationDialog(stationName) {
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
-        if (event.target == modal) {
+        if (event.target === modal) {
             modal.style.display = "none";
         }
     };
 }
 function SetCurrentConfig(data, status) {
 
-    if (status == 'success') {
+    if (status === 'success') {
         currentConfigOptions = data;
         currentConfigOptions["Timestamp"] = parseInt(currentConfigOptions["Timestamp"].substr(6));
     }       
@@ -248,7 +261,7 @@ function SetConfigModalInformation()
     var content = "<form id=\"configForm\" action=\"\" method=\"post\" onsubmit=\"UpdateConfigInformation()\">";
     var contentBool = "";
 
-    if (currentConfigOptions == null) {
+    if (currentConfigOptions === null) {
         alert("No data available for this station, try again shortly.");
         return;
     }
@@ -257,7 +270,7 @@ function SetConfigModalInformation()
     document.getElementById('modalConfigSettingsTitle').innerHTML = currentConfigOptions.RowKey + " - Configuration Settings";
 
     for (var name in currentConfigOptions) {
-        if (name == 'PartitionKey' || name == 'RowKey' || name == "ETag") {
+        if (name === 'PartitionKey' || name === 'RowKey' || name === "ETag") {
             continue;
         }
 
@@ -265,7 +278,7 @@ function SetConfigModalInformation()
 
         //Since we use camel case put spaces between the capital then capitalize first letter
         var propNameDisplay = "";
-        if (name == "Use3G") {
+        if (name === "Use3G") {
             propNameDisplay = "Use 3G";
         }
         else {
@@ -280,7 +293,7 @@ function SetConfigModalInformation()
             contentBool += "<label for=\"" + name + "\">     " + propNameDisplay + "</label>";
             contentBool += "<select class=\"form-control\" id=\"" +name +"\" name=\"" + name + "\">";
 
-            if (value === true || value == "true") {
+            if (value === true || value === "true") {
                 contentBool += "<option value=\"false\">No</option>";
                 contentBool += "<option value=\"true\" selected>Yes</option></select></div>";
             }
@@ -289,21 +302,16 @@ function SetConfigModalInformation()
                 contentBool += "<option value=\"true\">Yes</option></select></div>";
             }
 
-            //This is a strange workaround as chaning the checkbox does not change the value in checkbox
-            ////We need the value to be changed for the serialize form function to pick up change
-            //$(document).on('change', '[type=checkbox]', function () {
-            //    this.value = this.checked;
-            //});
         }
         //number
-        else if (typeof value === 'number' && name != "Timestamp") {
+        else if (typeof value === 'number' && name !== "Timestamp") {
             content += "<div class=\"form-group\">";
             content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
             content += "<input type=\"number\" class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
             content += "</div>";
         }
         //Timestamp is a special case
-        else if (name == "Timestamp") {
+        else if (name === "Timestamp") {
 
             var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
             var date = new Date(parseInt(value));
@@ -359,7 +367,7 @@ function DateRangeChange(start, end, init) {
     drp.setStartDate(start);
     drp.setEndDate(end);
 
-    if (init != true) {
+    if (init !== true) {
         GetWeatherSetsForNewRange(currentStation, start.format('MM/DD/YYYY'), end.format('MM/DD/YYYY'));
     }
 }
@@ -390,7 +398,7 @@ function DisplayStationDataTable(statName) {
     //Keep track of current station that we are displaying data for
     currentStation = statName;
 
-    if (document.getElementById("Toolbar").style.display == "none") {
+    if (document.getElementById("Toolbar").style.display === "none") {
         InitializeDatePicker();
     }
  
@@ -404,7 +412,7 @@ function UpdateConfigInformation() {
 
     $(formData).each(function (i, field) {
         //Timestamp needs special attention
-        if (field.name == "Timestamp") {
+        if (field.name === "Timestamp") {
             //We want to keep the date stored in a consitent matter, .net serializes the dates when we send them and they come out like this
             currentConfigOptions["Timestamp"] = moment().unix() * 1000;
         }
@@ -422,9 +430,7 @@ function UpdateAllTableInfo() {
     document.getElementById("refreshIcon").classList.add("fa-spin");
     var drp = $('#resultrange').data('daterangepicker');
    
-    GetWeatherSetsForNewRange(currentStation, drp.startDate.format('MM/DD/YYYY'), drp.endDate.format('MM/DD/YYYY'));
-
-    document.getElementById("refreshIcon").classList.remove("fa-spin");
+    RefreshWeatherSets(currentStation, drp.startDate.format('MM/DD/YYYY'), drp.endDate.format('MM/DD/YYYY'));
 }
 
 
