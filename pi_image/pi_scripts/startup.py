@@ -2,6 +2,7 @@ import os
 import time
 
 os.system("python ~/capstone/pi_image/gui/Wizard.py")
+os.system("sudo sh ~/capstone/pi_image/pi_scripts/makeall.sh")
 while not os.path.isfile("/home/thor/.start"):
 	pass
 
