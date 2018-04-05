@@ -48,7 +48,7 @@ secs_per_hour = 3600
 # Equation to calculate windchill
 # Taken from https://web.archive.org/web/20130627223738/http://climate.weatheroffice.gc.ca/prods_servs/normals_documentation_e.html on Feb 7, 2018
 windchill_row_formula = lambda row: 13.12 + (0.6215*row['temperature']) - (11.37*(row['wind_speed']**0.16)) + (0.3965*row['temperature']*(row['wind_speed']**0.16)) if row['temperature']<0  else row['temperature']
-windchill_formula = lambda t, w: 13.12 + (0.6215*t) - (11.37*(w**0.16)) + (0.3965*t*(w**0.16)) if row['temperature']<0  else row['temperature']
+windchill_formula = lambda t, w: 13.12 + (0.6215*t) - (11.37*(w**0.16)) + (0.3965*t*(w**0.16)) if t<0 else t
 
 # Equation to estimate dewpoint
 # Taken from https://www.ajdesigner.com/phphumidity/dewpoint_equation_dewpoint_temperature.php on Feb 7, 2018
@@ -82,7 +82,7 @@ def load_data(path=data_path, files=weather_files):
 		data.update(data['temperature'].round(0))
 		data.update(data['windchill'].round(0))
 		data.update(data['dew_point'].round(0))
-		data.update(data['pressure_station'].round(1))
+		data.update(data['pressure_station'].round(0))
 
 	# Drop rows with blanks in other columns
 	weather_data = [x.dropna(axis=row_axis, how='any') for x in weather_data]
@@ -241,19 +241,19 @@ def convert_wind_direction(dir_str):
 	if dir_str=='N':
 		return 0
 	elif dir_str=='NE':
-		return 45
+		return 5
 	elif dir_str=='E':
-		return 90
+		return 9
 	elif dir_str=='SE':
-		return 135
+		return 14
 	elif dir_str=='S':
-		return 180
+		return 18
 	elif dir_str=='SW':
-		return 225
+		return 23
 	elif dir_str=='W':
-		return 270
+		return 27
 	elif dir_str=='NW':
-		return 315
+		return 32
 	else:
 		print('Error: invalid wind direction provided: {0}'.format(dir_str))
 		exit()

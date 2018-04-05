@@ -92,7 +92,10 @@ class DecisionTree():
 	# Else: Build new decision tree
 	def __init__(self, rows=None, features=None, n_labels=None, forecast_col=None, obj_dict=None):
 		if obj_dict!=None:
-			self.root = Node(obj_dict['root'])
+			if obj_dict['root']['isLeaf']:
+				self.root = Leaf(obj_dict=obj_dict['root'])
+			else:
+				self.root = Node(obj_dict=obj_dict['root'])
 			self.leaf_dev = obj_dict['leaf_dev']
 			self.depth = obj_dict['depth']
 			self.features = obj_dict['features']
