@@ -10,7 +10,7 @@
 
 CC = g++
 
-CFLAGS = -g -Wall -std=gnu++11
+CFLAGS = -g -W -std=gnu++11
 
 TARGET = station
 
