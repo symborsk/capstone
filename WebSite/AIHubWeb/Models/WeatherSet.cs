@@ -28,7 +28,8 @@ namespace AIHubWeb
         public string gust { get; set; }
         public string rain { get; set; }
         public string windSpeed { get; set; }
-
+        public string pressure { get; set; }
+        public string visibility { get; set; }
 
         public enum WeatherSetDateRanges
         {

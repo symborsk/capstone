@@ -248,7 +248,7 @@ namespace AIHubMobile
                     return prefixes;
 
                 default:
-                    prefixes.Add("");
+                    prefixes.Add(sLogPrefix);
                     return prefixes;
             }
         }
