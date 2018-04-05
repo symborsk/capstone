@@ -27,3 +27,5 @@ while True:
 	# CPU drain and I/O in operation
 	time.sleep(interval)
 	os.system("sh ~/capstone/pi_image/sensors/batch_read.sh")
+	os.system("sudo pkill -9 station")
+	os.system("sudo ~/capstone/pi_image/sensors/interfacing/SDL/station &")
