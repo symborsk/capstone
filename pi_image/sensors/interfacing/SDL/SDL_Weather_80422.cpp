@@ -132,7 +132,7 @@ float SDL_Weather_80422::getWindGust()
   _shortestWindTime=0xffffffff;
   double time=latestTime/1000000.0;  // in microseconds
 
-  return (1/(time))*WIND_FACTOR/2;
+  return (1/(time))*WIND_FACTOR;
 
 }
 
