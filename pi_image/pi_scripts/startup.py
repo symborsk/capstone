@@ -2,10 +2,14 @@ import os
 import time
 
 os.system("python ~/capstone/pi_image/gui/Wizard.py")
+os.system("sudo sh ~/capstone/pi_image/pi_scripts/makeall.sh")
 while not os.path.isfile("/home/thor/.start"):
 	pass
 
 print("setup complete")
+
+#print("entering power saving mode")
+#os.system("sudo sh ~/capstone/pi_image/pi_scripts/power_saving/power_saving.sh")
 
 # for now run as sudo?
 # chmodding, we'll see what happens
