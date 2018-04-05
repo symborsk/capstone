@@ -107,7 +107,7 @@ void serviceInterruptRain()
 
 float SDL_Weather_80422::getCurrentRainTotal()
 {
-        float rain_amount = 0.2794 * _currentRainCount/2;  // mm of rain - we get two interrupts per bucket
+        float rain_amount = 1.2 * _currentRainCount;  // mm of rain - based on our own calibration
         _currentRainCount = 0;
 	return rain_amount;
 }
