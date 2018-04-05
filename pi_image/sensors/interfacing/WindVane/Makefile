@@ -15,8 +15,8 @@ TARGET = WindVane
 
 all: $(TARGET)
 
-$(TARGET): $(TARGET).cpp $(TARGET).h
-	$(CC) $(CFLAGS) -o $(TARGET) $VaneDirection.cpp
+$(TARGET): 
+	$(CC) $(CFLAGS) -o $(TARGET) *.cpp -lwiringPi -lwiringPiDev
 
 clean:
 	$(RM) $(TARGET)

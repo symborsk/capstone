@@ -9,7 +9,9 @@
 #############################################################################
 
 #!/bin/bash
-
-make -C ~/capstone/pi_image/sensors/SDL/
-make -C ~/capstone/pi_image/sensors/SingleBus/
-make -C ~/capstone/pi_image/sensors/WindVane/
+make clean -C ~/capstone/pi_image/sensors/interfacing/SDL
+make clean -C ~/capstone/pi_image/sensors/interfacing/SingleBus/
+make clean -C ~/capstone/pi_image/sensors/interfacing/WindVane/
+make -C ~/capstone/pi_image/sensors/interfacing/SDL
+make -C ~/capstone/pi_image/sensors/interfacing/SingleBus/
+make -C ~/capstone/pi_image/sensors/interfacing/WindVane/
