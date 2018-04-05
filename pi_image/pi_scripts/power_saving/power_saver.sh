@@ -4,7 +4,7 @@
 # sudo cp /home/thor/capstone/pi_image/pi_scripts/power_saving/rc.local /etc/rc.local
 
 # Disable HDMI
-/usr/bin/tvservice -o
+#/usr/bin/tvservice -o
 
 # Disable LEDs
 sudo sh -c 'echo none > /sys/class/leds/led0/trigger'
