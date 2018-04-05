@@ -16,7 +16,7 @@ api_url = 'http://api.wunderground.com/api'
 hourly_query = 'hourly/q'
 conditions_query = 'conditions/q'
 location = 'Canada/Edmonton'
-surrounding_locations = {'wainwright': '', 'slavelake': '', 'rockymtnhouse': '', 'reddeer': '', 'nordegg': '', 'lloydminster': '', 'laclabiche': '', 'esther': '', 'edson':'', 'barrhead':''}
+surrounding_locations = {'wainwright': '52.829446,-111.09556', 'slavelake': '55.293056,-114.77722', 'rockymtnhouse': '52.421391,-114.91222', 'reddeer': '52.182222,-113.89444', 'nordegg': '52.491969,-116.04000', 'lloydminster': '53.309167,-110.07250', 'laclabiche': '54.768889,-112.02361', 'esther': '51.669742,-110.20611', 'edson':'53.580280,-116.45333', 'barrhead':'54.094722,-114.44750'}
 response_format = '.json'
 hourly_map = {'wind_speed':'wspd', 'relative_humidity':'humidity', 'temperature': 'temp'}
 conditions_map = {'pressure_station': 'pressure_mb', 'wind_dir_10s': 'wind_degrees', 'wind_speed': 'wind_kph', 'relative_humidity': 'relative_humidity', 'dew_point': 'dewpoint_c', 'temperature': 'temp_c', 'windchill': 'windchill_c'}
@@ -47,7 +47,7 @@ model_path = '../models'
 class weather_model():
 	# Number of label columns & feature columns
 	n_labels = 3
-	n_features = 84
+	n_features = 81
 
 	# The columns that will be forecasted using the model
 	forecast_cols = ['wind_speed', 'relative_humidity', 'temperature']
@@ -225,10 +225,8 @@ class weather_model():
 			expected: List of label values
 		"""
 	def run(self, input_row, use_forecast=False, request_url=local_forecast_query, log=print):
-		print(input_row)
-
 		# Check number if input features & upadte if necessary
-		if len(input_row) < weather_model.n_features & len(input_row)==7:
+		if len(input_row) < weather_model.n_features and len(input_row)==7:
 			input_row = get_features(input_row)
 		elif len(input_row) != weather_model.n_features:
 			print('Error: Incorrect input row format')
@@ -351,13 +349,24 @@ def get_features(input_row):
 	result = {}
 	for loc in surrounding_locations:
 		with urllib.request.urlopen(query_builder(conditions_query, surrounding_locations[loc])) as response:
-			parsed_response[loc] = json.loads(response.read())
+			parsed_response[loc] = dict(json.loads(response.read())['current_observation'])
 
 	# Parse all responses
 	for i in parsed_response:
 		# Add result entry for all expected features
 		for j in conditions_map:
-			result['{0}_{1}'.format(j, i)] = parsed_response[i][conditions_map[j]]
+			# pressure_station, wind_dir_10s, relative_humidity & windchill need to be parsed specially
+			if j=='pressure_station':
+				result['{0}_{1}'.format(j, i)] = round(int(float	(parsed_response[i][conditions_map[j]]))/1000)
+			elif j=='wind_dir_10s':
+				result['{0}_{1}'.format(j, i)] = round(parsed_response[i][conditions_map[j]]%10)
+			elif j=='relative_humidity':
+				result['{0}_{1}'.format(j, i)] = int(parsed_response[i][conditions_map[j]].split('%')[0])
+			elif j=='windchill':
+				result['{0}_{1}'.format(j, i)] = pf.windchill_formula(parsed_response[i][conditions_map['temperature']], parsed_response[i][conditions_map['wind_speed']])
+			else:
+				result['{0}_{1}'.format(j, i)] = round(parsed_response[i][conditions_map[j]])
+
 
 	# Create the list containing date & time columns & extra features
 	ans = [int(time.strftime('%Y')), int(time.strftime('%m')), int(time.strftime('%d')), int(time.strftime('%H'))]
@@ -368,6 +377,10 @@ def get_features(input_row):
 # Try & load model
 if __name__=='__main__':
 	model = weather_model(model_file='default/1h_model.json')
-	for s in weather_model.seasons:
-		for c in weather_model.forecast_cols:
-			print('{0} {1}: {2}'.format(s, c, model.forests[s][c].avg_std_dev))
+	t = model.forests['sprall']['temperature'].trees[0]
+	print(t.depth)
+	print(t.leaf_mean)
+	print(t.root.index)
+	print(t.root.value)
+	print(t.root.std_dev)
+	print(t.root.isLeaf)

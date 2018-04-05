@@ -180,9 +180,7 @@ def evaluate(loaded_model=loaded_model):
 
 	# Check for loaded model
 	if loaded_model==None:
-		print(loaded_model)
 		loaded_model = load_model()
-		print(loaded_model)
 
 	# Set output mode if not inplace
 	if menu_run:
@@ -191,7 +189,7 @@ def evaluate(loaded_model=loaded_model):
 	# Get predictions using the model
 	expected = []
 	for row in input_features.values.tolist():
-		expected += [(i, loaded_model[i].run(row)) for i in pf.forecast_offsets]
+		expected += [[(i, loaded_model[i].run(row)) for i in pf.forecast_offsets]]
 
 	# Output the expected results
 	display_results(input_features, expected)
