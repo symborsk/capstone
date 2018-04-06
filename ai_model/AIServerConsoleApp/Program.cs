@@ -52,8 +52,10 @@ namespace AIServerConsoleApp
              
                     JObject obj = JObject.Parse(item);
 
+
                     string dir = Directory.GetCurrentDirectory();
-                    using (StreamWriter file = File.CreateText(dir + @"\test_files\" + Guid.NewGuid().ToString() +".json"))
+                    string guid = Guid.NewGuid().ToString();
+                    using (StreamWriter file = File.CreateText(dir + @"\test_files\" + guid + ".json"))
                     using (JsonTextWriter writer = new JsonTextWriter(file))
                     {
                         obj.WriteTo(writer);
@@ -66,7 +68,7 @@ namespace AIServerConsoleApp
                     Console.WriteLine("Running AI Model");
                     Console.WriteLine("-----------------------------------");
 
-                    string s = run_cmd(dir + @"\scripts\model.py", String.Format("-eval -file \'{0}\'", "test.json"));
+                    string s = run_cmd(dir + @"\scripts\model.py", String.Format("-eval -file \'{0}\'", guid + ".json"));
 
                     Console.WriteLine("-----------------------------------");
                     Console.WriteLine("AI Model Complete");
