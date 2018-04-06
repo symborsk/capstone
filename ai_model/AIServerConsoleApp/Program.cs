@@ -52,6 +52,8 @@ namespace AIServerConsoleApp
                     string timestamp = obj["timestamp"].ToString();
                     Console.WriteLine("Item timestamp... " + timestamp);
 
+                    Console.WriteLine("Running Model with : ... " + @"C:\git\ai_model\scripts\model.py", String.Format("-eval -json \'{0}\'", item));
+
                     Console.WriteLine("-----------------------------------");
                     Console.WriteLine("Running AI Model");
                     Console.WriteLine("-----------------------------------");
