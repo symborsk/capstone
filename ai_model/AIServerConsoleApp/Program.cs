@@ -39,7 +39,6 @@ namespace AIServerConsoleApp
             List<CloudBlockBlob> rgBlobs = task.Result;
             Console.WriteLine("Ran GetAll List... " + rgBlobs.ToString());
            
-
             foreach (CloudBlockBlob blob in rgBlobs)
             {
                 Task<string> taskDownload = Task.Run(() => blob.DownloadTextAsync());
@@ -67,9 +66,7 @@ namespace AIServerConsoleApp
                     Console.WriteLine("Running AI Model");
                     Console.WriteLine("-----------------------------------");
 
-                    Console.WriteLine(@"C:\Projects\Capstone\ai_model\scripts\model.py " + String.Format("-eval -file \'{0}\'", "test.json"));
-
-                    string s = run_cmd(@"C:\Projects\Capstone\ai_model\scripts\model.py", String.Format("-eval -file \'{0}\'", "test.json"));
+                    string s = run_cmd(dir + @"\scripts\model.py", String.Format("-eval -file \'{0}\'", "test.json"));
 
                     Console.WriteLine("-----------------------------------");
                     Console.WriteLine("AI Model Complete");
