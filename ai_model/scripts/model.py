@@ -172,8 +172,9 @@ def eval_menu():
 			load_model()
 
 # Function to handle evaluation
-def evaluate(loaded_model=loaded_model):
+def evaluate(loaded_model=loaded_model, useFile=useFile):
 	# Get input features
+	print(useFile)
 	if useFile:
 		input_features = get_data_file()
 	else:
@@ -189,6 +190,7 @@ def evaluate(loaded_model=loaded_model):
 
 	# Get predictions using the model
 	expected = []
+	print(input_features.values.tolist())
 	for row in input_features.values.tolist():
 		expected += [[(i, loaded_model[i].run(row)) for i in pf.forecast_offsets]]
 
@@ -439,7 +441,7 @@ def build_args(argv):
 	Inputs:
 		argv: sys.argv[1:] passed from main_menu()
 	"""
-def eval_args(argv, json_obj=json_obj):
+def eval_args(argv, json_obj=json_obj, useFile=useFile):
 	# Loop over all args to handle them
 	while(argv):
 		# Pop the argv to handle
@@ -457,6 +459,7 @@ def eval_args(argv, json_obj=json_obj):
 		elif curr=='-folder':
 			param = argv.pop(0)
 			if os.path.isdir('{0}/{1}'.format(data_path, param)):
+				useFile = False
 				data_dir = param
 			else:
 				print('Error: Invalid data folder provided.')
@@ -483,6 +486,8 @@ def eval_args(argv, json_obj=json_obj):
 			param = argv.pop(0)
 			json_obj = json.loads(param)
 
+	print(useFile)
+
 """ Function to validate program input parameters with the predetermined range. 
 
 	Inputs
@@ -508,7 +513,6 @@ def validate_param(param, mode, curr):
 
 # Run the main menu if program is ran
 if __name__=='__main__':
-	print(sys.argv[1:])
 	menu_run = not (sys.argv[1]=='-build' or sys.argv[1]=='-eval')
 
 	model_menu(sys.argv)
