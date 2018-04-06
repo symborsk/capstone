@@ -507,6 +507,7 @@ def validate_param(param, mode, curr):
 
 # Run the main menu if program is ran
 if __name__=='__main__':
+	print  sys.argv[1:]
 	menu_run = not (sys.argv[1]=='-build' or sys.argv[1]=='-eval')
 
 	model_menu(sys.argv)
