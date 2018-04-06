@@ -4,6 +4,7 @@ using System.Linq;
 using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -48,7 +49,17 @@ namespace AIServerConsoleApp
 
                 foreach (string item in sDownloadedBlobs)
                 {
+                    // write JSON directly to a file
+             
                     JObject obj = JObject.Parse(item);
+
+                    string dir = Directory.GetCurrentDirectory();
+                    using (StreamWriter file = File.CreateText(dir + @"\test_files\" + Guid.NewGuid().ToString() +".json"))
+                    using (JsonTextWriter writer = new JsonTextWriter(file))
+                    {
+                        obj.WriteTo(writer);
+                    }
+
                     string timestamp = obj["timestamp"].ToString();
                     Console.WriteLine("Item timestamp... " + timestamp);
 
@@ -56,7 +67,9 @@ namespace AIServerConsoleApp
                     Console.WriteLine("Running AI Model");
                     Console.WriteLine("-----------------------------------");
 
-                    string s = run_cmd(@"C:\git\ai_model\scripts\model.py", String.Format("-eval -json \'{0}\'", item));
+                    Console.WriteLine(@"C:\Projects\Capstone\ai_model\scripts\model.py " + String.Format("-eval -file \'{0}\'", "test.json"));
+
+                    string s = run_cmd(@"C:\Projects\Capstone\ai_model\scripts\model.py", String.Format("-eval -file \'{0}\'", "test.json"));
 
                     Console.WriteLine("-----------------------------------");
                     Console.WriteLine("AI Model Complete");
