@@ -1,6 +1,7 @@
 import pandas_formatting as pf
 import decision_forest as df
 import pandas as pd
+import weather_model as wm
 import time
 import json
 import sys
