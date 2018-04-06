@@ -122,18 +122,22 @@ namespace AIHubWeb
                 {
                     text = await blobItem.DownloadTextAsync();
 
-                    //The azure stream analytics job that creates the JSON array does not add a ']' at the end until the day is completed
-                    //This is an undesirable feature as it caused any data we downlod from today to break the JArray parser, add a ']'
-                    if (!text.EndsWith("]"))
-                    {
-                        text += "]";
-                    }
+                    ////The azure stream analytics job that creates the JSON array does not add a ']' at the end until the day is completed
+                    ////This is an undesirable feature as it caused any data we downlod from today to break the JArray parser, add a ']'
+                    //if (!text.EndsWith("]"))
+                    //{
+                    //    text += "]";
+                    //}
 
-                    JArray allDataSets = JArray.Parse(text);
+                    //JArray allDataSets = JArray.Parse(text);
+
                     Type weatherSetClass = typeof(WeatherSet);
 
-                    foreach (JObject root in allDataSets)
+                    string[] allDataSets =  text.Split('\n');
+
+                    foreach (String rootString in allDataSets)
                     {
+                        JObject root = JObject.Parse(rootString);
                         string devName = root["device_name"].ToString();
                         double lat = Convert.ToDouble(root["location"]["lat"].ToString());
                         double lon = Convert.ToDouble(root["location"]["lon"].ToString());
@@ -206,7 +210,7 @@ namespace AIHubWeb
             }
             else
             {
-                sLogPrefix = @"logs/";
+                sLogPrefix = @"logs/pre/";
             }
        
             switch (range)

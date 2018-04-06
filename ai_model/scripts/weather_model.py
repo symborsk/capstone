@@ -1,5 +1,4 @@
 import os
-import tensorflow as tf
 import pandas_formatting as pf
 import numpy as np
 import pandas as pd
