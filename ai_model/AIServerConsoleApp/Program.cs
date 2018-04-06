@@ -7,10 +7,13 @@ using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+
 namespace AIServerConsoleApp
 {
     class Program
     {
+        static string pythonPath = "";
+
         static void Main(string[] args)
         {
             if (args.Length != 0)
@@ -19,24 +22,47 @@ namespace AIServerConsoleApp
                 return;
             }
 
+            Console.WriteLine("Started the Application...");
+
+            Console.WriteLine("Checking for python path... ");
+            pythonPath = find_python_path();
+            Console.WriteLine("Python path is... :" +  pythonPath);
+
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=pcldevbgwilkinson01;AccountKey=NPkk2BjPvlG1Am78JrSi4ylEQNB3F6tacE/G8P3x8zLOe/BqZwvYMCXP+ni9KMwmx+px/f+J+n9QJq+v9eVSGg==;BlobEndpoint=https://pcldevbgwilkinson01.blob.core.windows.net/;QueueEndpoint=https://pcldevbgwilkinson01.queue.core.windows.net/;TableEndpoint=https://pcldevbgwilkinson01.table.core.windows.net/;FileEndpoint=https://pcldevbgwilkinson01.file.core.windows.net/");
             CloudBlobClient client = storageAccount.CreateCloudBlobClient();
 
-            Task<List<CloudBlockBlob>> task = Task.Run(() => GetAllList(client));
-            List<CloudBlockBlob> rgBlobs  = task.Result;
+            Console.WriteLine("Created the storage account...");
 
-            foreach(CloudBlockBlob blob in rgBlobs)
+        
+            Task<List<CloudBlockBlob>> task = Task.Run(() => GetAllList(client));
+            List<CloudBlockBlob> rgBlobs = task.Result;
+            Console.WriteLine("Ran GetAll List... " + rgBlobs.ToString());
+           
+
+            foreach (CloudBlockBlob blob in rgBlobs)
             {
                 Task<string> taskDownload = Task.Run(() => blob.DownloadTextAsync());
                 String sDownloadedBlob = taskDownload.Result;
                 String [] sDownloadedBlobs = sDownloadedBlob.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                Console.WriteLine("Download text from blob... " + sDownloadedBlobs.ToString());
 
                 foreach (string item in sDownloadedBlobs)
                 {
                     JObject obj = JObject.Parse(item);
                     string timestamp = obj["timestamp"].ToString();
-                    run_cmd(@"C:\git\ai_model\scripts\model.py", String.Format("-eval -json \'{0}\'", item));
-                    obj["Forecast"] = run_cmd(@"C:\git\ai_model\scripts\model.py", String.Format("-eval -json \'{0}\'", item));
+                    Console.WriteLine("Item timestamp... " + timestamp);
+
+                    Console.WriteLine("-----------------------------------");
+                    Console.WriteLine("Running AI Model");
+                    Console.WriteLine("-----------------------------------");
+
+                    string s = run_cmd(@"C:\git\ai_model\scripts\model.py", String.Format("-eval -json \'{0}\'", item));
+
+                    Console.WriteLine("-----------------------------------");
+                    Console.WriteLine("AI Model Complete");
+                    Console.WriteLine("-----------------------------------");
+                    Console.WriteLine("AI Model returned: " + s);
+                    obj["Forecast"] = s;
                 }
             }
         }
@@ -96,7 +122,7 @@ namespace AIServerConsoleApp
             CloudBlobContainer container = blobCli.GetContainerReference("sensor-hub");
             try
             {
-                resultSegment = await container.ListBlobsSegmentedAsync(@"/logs/pre", true, BlobListingDetails.All, 1000, continuationToken, null, null);
+                resultSegment = await container.ListBlobsSegmentedAsync(@"logs/pre/", true, BlobListingDetails.All, 1000, continuationToken, null, null);
                 List<CloudBlockBlob> rgList = resultSegment.Results.OfType<CloudBlockBlob>().OrderByDescending(m => m.Properties.LastModified).ToList();
                 return rgList;
             }
@@ -110,7 +136,7 @@ namespace AIServerConsoleApp
         private static string run_cmd(string cmd, string args)
         {
             ProcessStartInfo start = new ProcessStartInfo();
-            start.FileName = "my/full/path/to/python.exe";
+            start.FileName = pythonPath;
             start.Arguments = string.Format("{0} {1}", cmd, args);
             start.UseShellExecute = false;
             start.RedirectStandardOutput = true;
@@ -120,6 +146,29 @@ namespace AIServerConsoleApp
                 {
                     return reader.ReadToEnd();        
                 }
+            }
+        }
+
+        private static string find_python_path()
+        {
+            ProcessStartInfo procStartInfo = new ProcessStartInfo("cmd.exe", @"/C " + "python -c \"import sys; print(sys.executable)\"" );
+
+            procStartInfo.RedirectStandardOutput = true;
+            procStartInfo.UseShellExecute = false;
+            procStartInfo.CreateNoWindow = true;
+
+            // wrap IDisposable into using (in order to release hProcess) 
+            using (Process process = new Process())
+            {
+                process.StartInfo = procStartInfo;
+                process.Start();
+
+                // Add this: wait until process does its work
+                process.WaitForExit();
+
+                // and only then read the result
+                string result = process.StandardOutput.ReadToEnd();
+                return result;
             }
         }
     }
