@@ -45,7 +45,7 @@ with open('/home/thor/.connection_string.dat') as data_file:
 	connectionString = data_file.readline().strip("\n")
 
 print(connectionString)
-
+ 
 
 # connectionString = 'HostName=pcl-dev-bgwilkinson-ioth.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=+3mmzTBcle0MEROiQX6myvrSlCeM7GrUA4xdNeD7NVs='
 # shared
@@ -129,6 +129,10 @@ class IoTHub:
 		JSON string for the sensor hub message
 """
 def get_output(path=output_path, output=output_file, count=sensor_count):
+	print("getting output")
+	with open("/home/thor/.interval.dat") as interval_file:
+		polling_frequency = interval_file.readline()
+		polling_frequency = float(polling_frequency)/60
 	# Load all of the JSON objects then truncate the file
 	sensors = []
 	with open(path + output, 'r+') as f:
@@ -144,6 +148,7 @@ def get_output(path=output_path, output=output_file, count=sensor_count):
 	output = {
 				"device_name": hub_name,
 				"timestamp": timestamp,
+        "polling_frequency": polling_frequency,
 				"location": {
 					"lat": lat,
 					"lon": lon
@@ -181,7 +186,7 @@ def update_settings(settings):
 	print(dir(settings))
 	try:
 		# currently only PollingFrequency is considered
-		seconds = int(settings.PollingFrequency) * 60
+		seconds = int(settings.polling_frequency) * 60
 		with open("/home/thor/.interval.dat", "w+") as file:
 			file.write(str(seconds))
 	except:

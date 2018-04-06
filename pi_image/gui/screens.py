@@ -28,6 +28,7 @@ class WelcomeScreen(Screen):
 class InputScreen(Screen):
     input_label_text = "'HostName=pcl-dev-bgwilkinson-ioth.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=+3mmzTBcle0MEROiQX6myvrSlCeM7GrUA4xdNeD7NVs='"
 
+
     def on_back(self):
         pass
 
