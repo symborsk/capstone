@@ -1,18 +1,45 @@
-﻿using System;
+﻿/**
+ * AppOptions.cs
+ * By: John Symborski
+ * Capstone Group 2
+ * Model of the various app options you can pick
+ * */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.WindowsAzure.Storage.Table;
 
 namespace AIHubWeb
 {
-    public class StationOptions
+    public class StationOptions : TableEntity
     {
-        public EditableStationOptions editOptions { set; get; }
-        public ReadOnlyStationOptions readOnlyOptions { set; get; }
+        public double polling_frequency { set; get; }
+        public string email_address { set; get; }
+        public bool use_3G { set; get; }
+        public double  battery_temp { set; get; }
 
-        public StationOptions(EditableStationOptions editOpt, ReadOnlyStationOptions readOnly)
+        //We need this for TableEntity.... it how azure storage interacts with it
+        public StationOptions() { }
+
+        //This creation of the object if all is known about it
+        public StationOptions(string stationName, bool use3G, int pollFreq, string email, double temp)
         {
-            editOptions = editOpt;
-            readOnlyOptions = readOnly;
+            this.PartitionKey = stationName;
+            this.RowKey = stationName;
+            polling_frequency = pollFreq;
+            email_address = email;
+            battery_temp = temp;
+        }
+
+        //This is creation of object with the defaults 1 hour and no 3G
+        public StationOptions(string stationName)
+        {
+            this.PartitionKey = stationName;
+            this.RowKey = stationName;
+            polling_frequency = 60;
+            email_address = "No Entered Email";
+
         }
     }
 }

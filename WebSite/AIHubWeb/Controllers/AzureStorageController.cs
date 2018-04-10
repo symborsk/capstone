@@ -249,9 +249,9 @@ namespace AIHubWeb
             }
         }
 
-        private EditableStationOptions CreateDefaultEditableStationOption(CloudTable tab, String name)
+        private StationOptions CreateDefaultEditableStationOption(CloudTable tab, String name)
         {
-            EditableStationOptions option = new EditableStationOptions(name);
+            StationOptions option = new StationOptions(name);
 
             TableOperation insertOp = TableOperation.InsertOrReplace(option);
 
@@ -261,7 +261,7 @@ namespace AIHubWeb
             return option;
         }
 
-        public async Task<bool> UpdateDeviceConfigSettings(EditableStationOptions option)
+        public async Task<bool> UpdateDeviceConfigSettings(StationOptions option)
         {
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("DeviceConfigSettings");
@@ -277,24 +277,24 @@ namespace AIHubWeb
             return true;
         }
 
-        public async Task<EditableStationOptions> GetConfigSetting(String deviceName)
+        public async Task<StationOptions> GetConfigSetting(String deviceName)
         {
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("DeviceConfigSettings");
 
 
             //Get the station options or create them this may change later if we want to do this at the device
-            TableOperation op = TableOperation.Retrieve<EditableStationOptions>("EditableStationOptions", deviceName);
+            TableOperation op = TableOperation.Retrieve<StationOptions>(deviceName, deviceName);
             TableResult retrievedResult = await table.ExecuteAsync(op);
 
-            EditableStationOptions option;
+            StationOptions option;
             if (retrievedResult.Result == null)
             {
                 option = CreateDefaultEditableStationOption(table, deviceName);
             }
             else
             {
-                option = (EditableStationOptions)retrievedResult.Result;
+                option = (StationOptions)retrievedResult.Result;
             }
 
             return option;

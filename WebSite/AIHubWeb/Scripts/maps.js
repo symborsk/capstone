@@ -324,10 +324,19 @@ function SetConfigModalInformation()
         }
         //string
         else {
-            content += "<div class=\"form-group\">";
-            content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
-            content += "<input type=\"number\" class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
-            content += "</div>";
+            if (name.endsWith("ro")) {
+                content += "<div class=\"form-group\">";
+                content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
+                content += "<input readonly type=\"text\" class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
+                content += "</div>";
+            }
+            else {
+                content += "<div class=\"form-group\">";
+                content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
+                content += "<input type=\"text\" class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
+                content += "</div>";
+            }
+    
         }
     }
 

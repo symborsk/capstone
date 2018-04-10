@@ -31,6 +31,8 @@ namespace AIHubWeb
         public string pressure { get; set; }
         public string visibility { get; set; }
 
+       
+
         public enum WeatherSetDateRanges
         {
             Today = 0,
