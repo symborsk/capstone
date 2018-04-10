@@ -55,9 +55,9 @@ def get_current_visibility_rating():
 if __name__ == '__main__':
 	# Get current visibility rating & build JSON object    
 	vis = get_current_visibility_rating()
-    if vis > 0.6:
-        print("low visibility, sending email")
-        os.system("sudo python send_email.py")
+	if vis < 0.6:
+		print("low visibility, sending email")
+		os.system("sudo python send_email.py")
 	output = {
 				"sensor": sensor_name,
 				"data":{"visibility":vis}

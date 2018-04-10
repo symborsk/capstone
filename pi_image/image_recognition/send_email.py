@@ -7,7 +7,7 @@
 # based on this tutorial: http://naelshiab.com/tutorial-send-email-python/
 #
 #############################################################################
-import Camera
+from camera import Camera
 import smtplib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
