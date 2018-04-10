@@ -54,6 +54,7 @@ def get_current_visibility_rating():
 if __name__ == '__main__':
 	# Get current visibility rating & build JSON object    
 	vis = get_current_visibility_rating()
+	print(vis)
 	output = {
 				"sensor": sensor_name,
 				"data":{"visibility":vis}

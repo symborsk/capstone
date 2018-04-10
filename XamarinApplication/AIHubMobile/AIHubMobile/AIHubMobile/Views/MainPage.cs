@@ -22,9 +22,9 @@ namespace AIHubMobile
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
-                    itemsPage = new NavigationPage(new WeatherStationDetailPage())
+                    itemsPage = new NavigationPage(new WeatherStationsPage())
                     {
-                        Title = "View Weather"
+                    Title = "View Weather"
                     };
 
                     aboutPage = new NavigationPage(new AboutPage())

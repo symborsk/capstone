@@ -30,6 +30,11 @@ output_file = "output.json"
 hub_name = "sensor_hub"
 timestamp = int(time.time())
 
+# battery temp
+with open ("~/.bat_temp.dat") as bat_file:
+    bat_temp = bat_file.readline().strip("\n")
+os.system("rm -rf ~/.bat_temp.dat")
+
 # Number of sensors in the hub
 # TODO: Update to be a dynamic value based on config
 sensor_count = 1 
@@ -45,7 +50,7 @@ with open('/home/thor/.connection_string.dat') as data_file:
 	connectionString = data_file.readline().strip("\n")
 
 print(connectionString)
-
+ 
 
 # connectionString = 'HostName=pcl-dev-bgwilkinson-ioth.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=+3mmzTBcle0MEROiQX6myvrSlCeM7GrUA4xdNeD7NVs='
 # shared
@@ -129,7 +134,19 @@ class IoTHub:
 		JSON string for the sensor hub message
 """
 def get_output(path=output_path, output=output_file, count=sensor_count):
+	print("getting output")
+	with open("/home/thor/.interval.dat") as interval_file:
+		polling_frequency = interval_file.readline()
+		polling_frequency = float(polling_frequency)/60
 	# Load all of the JSON objects then truncate the file
+    with open("/home/thor/.email.dat", "r") as email_file:
+        email = email_file.readline().strip("\n")
+
+    if os.path.isfile("/home/thor/.use3G.dat"):
+        use_3g = "true"
+    else:
+        use_3g = "false"
+
 	sensors = []
 	with open(path + output, 'r+') as f:
 		# The 0th element is blank since all sensor programs lead with newline
@@ -144,6 +161,10 @@ def get_output(path=output_path, output=output_file, count=sensor_count):
 	output = {
 				"device_name": hub_name,
 				"timestamp": timestamp,
+        "polling_frequency": polling_frequency,
+        "battery_temp_ro": float(bat_temp),
+        "email_address":  email,
+        "use_3G": 
 				"location": {
 					"lat": lat,
 					"lon": lon
@@ -180,10 +201,16 @@ def parse_message(message):
 def update_settings(settings):
 	print(dir(settings))
 	try:
-		# currently only PollingFrequency is considered
-		seconds = int(settings.PollingFrequency) * 60
+		seconds = int(settings.polling_frequency) * 60
 		with open("/home/thor/.interval.dat", "w+") as file:
 			file.write(str(seconds))
+        email = str(settings.email_address)
+        with open("/home/thor/.email.dat") as file:
+            file.write(email)
+        if settings.use_3G == "true":
+            f = open("/home/thor/.use3G.dat")
+        else:
+            os.system("sudo rm -rf /home/thor/.use3G.dat")
 	except:
 		print("no polling freq?")
 

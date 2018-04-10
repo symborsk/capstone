@@ -14,7 +14,7 @@ namespace AIHubMobile
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
-                    itemsPage = new NavigationPage(new WeatherStationDetailPage(viewModel))
+                    itemsPage = new WeatherStationDetailPage(viewModel)
                     {
                         Title = "View Weather"
                     };
@@ -23,7 +23,7 @@ namespace AIHubMobile
                     {
                         Title = "About"
                     };
-                    itemsPage.Icon = "tab_feed.png";
+                    //itemsPage.Icon = "tab_feed.png";
                     aboutPage.Icon = "pcl.png";
                     break;
                 default:
