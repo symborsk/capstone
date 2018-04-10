@@ -31,7 +31,7 @@ hub_name = "sensor_hub"
 timestamp = int(time.time())
 
 # battery temp
-with open ("~/.bat_temp.dat") as bat_file:
+with open ("/home/thor/.bat_temp.dat") as bat_file:
     bat_temp = bat_file.readline().strip("\n")
 os.system("rm -rf ~/.bat_temp.dat")
 
@@ -155,6 +155,7 @@ def get_output(path=output_path, output=output_file, count=sensor_count):
 
     # Load all of the JSON objects from the file
     for c in contents:
+        print(c)
         sensors += [json.loads(c)]
 
     # Build the JSON object that will be transmitted
