@@ -54,8 +54,8 @@ class InputScreen(Screen):
         f.close()
 
     def activate_cellular(self):
-        pass
-
+        f = open("/home/thor/.use3G.dat", "w+")
+        f.close()
 
 class SensorScreen(Screen):
     input_label_text = "Please enter Sensor Information"
