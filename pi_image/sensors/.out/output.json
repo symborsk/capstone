@@ -1,0 +1,4 @@
+
+{"data": {"temperature": 21.2, "humidity": 23.2}, "sensor": "DHT22 External"}
+{"data": {"direction": "SW"}, "sensor": "WindVane"}
+{"data": {"gust": 18.867479, "windSpeed": 0.0, "rain": 3.0}, "sensor": "Station"}
