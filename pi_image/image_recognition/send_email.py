@@ -16,7 +16,7 @@ from email import encoders
 
 fromaddr = "sensorhubalpha@gmail.com"
 with open("/home/thor/.email.dat") as email_file:
-	toaddr = email_file.readlines().strip("\n")
+	toaddr = email_file.readline().strip("\n")
 
 msg = MIMEMultipart()
 
