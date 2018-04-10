@@ -1,6 +1,6 @@
 '''
 	DHT22.py
-	By: Brett Wilkinson & Dallin Toth
+	By: Brett Wilkinson, Dallin Toth & Joey-Michael Fallone
 
 	The following creates the json output obj for DHT22 data
 '''
@@ -15,18 +15,18 @@ output_path = r"/home/thor/capstone/pi_image/sensors/.out/"
 output_file = r"output.json"
 
 # JSON Output Variable
-ext_name, bat_name = "DHT22 External", "DHT22 Battery"
-ext_bytes, bat_bytes = "", ""
+ext_name  = "DHT22 External"
+ext_bytes = ""
 # Load the raw bytes
 with open(data_path + ext_file) as file:
   for line in file:
     # take latest line
     ext_bytes = line.split(" ")
 
-with open(data_path + bat_file) as file:
-  for line in file:
-    # take latest line
-    bat_bytes = line.split(" ")
+# with open(data_path + bat_file) as file:
+#   for line in file:
+#     # take latest line
+#     bat_bytes = line.split(" ")
 
 
 # from adafruit library
@@ -43,13 +43,16 @@ ext_output = {
 				"temperature":ext_temp
 			}
 		}
-bat_output = {
-			"sensor": bat_name,
-			"data": {
-				"humidity":bat_humidity,
-				"temperature":bat_temp
-			}
-		}
+with open('~/.bat_temp', 'w+') as bat_file:
+	file.write(str(bat_temp))
+
+# bat_output = {
+# 			"sensor": bat_name,
+# 			"data": {
+# 				"humidity":bat_humidity,
+# 				"temperature":bat_temp
+# 			}
+# 		}
 
 
 # Write the object to a new line of the output
