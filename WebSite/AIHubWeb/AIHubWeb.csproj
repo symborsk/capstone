@@ -173,9 +173,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AppOptions.cs" />
-    <Compile Include="Models\EditableStationOptions.cs" />
-    <Compile Include="Models\ReadOnlyStationOptions.cs" />
     <Compile Include="Models\StationOptions.cs" />
     <Compile Include="Models\WeatherSet.cs" />
     <Compile Include="Models\WeatherStation.cs" />
