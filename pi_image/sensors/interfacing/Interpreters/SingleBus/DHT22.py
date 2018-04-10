@@ -23,10 +23,10 @@ with open(data_path + ext_file) as file:
     # take latest line
     ext_bytes = line.split(" ")
 
-# with open(data_path + bat_file) as file:
-#   for line in file:
-#     # take latest line
-#     bat_bytes = line.split(" ")
+with open(data_path + bat_file) as file:
+   for line in file:
+     # take latest line
+     bat_bytes = line.split(" ")
 
 
 # from adafruit library
@@ -43,8 +43,8 @@ ext_output = {
 				"temperature":ext_temp
 			}
 		}
-with open('~/.bat_temp', 'w+') as bat_file:
-	file.write(str(bat_temp))
+with open('/home/thor/.bat_temp', 'w+') as bat_file:
+	bat_file.write(str(bat_temp))
 
 # bat_output = {
 # 			"sensor": bat_name,
@@ -57,4 +57,4 @@ with open('~/.bat_temp', 'w+') as bat_file:
 
 # Write the object to a new line of the output
 with open(output_path + output_file, 'a+') as file:
-	file.write('\n'+json.dumps(ext_output)+'\n'+json.dumps(bat_output))
+	file.write('\n'+json.dumps(ext_output)+'\n')

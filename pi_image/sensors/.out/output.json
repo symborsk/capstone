@@ -1,0 +1,3 @@
+
+{"data": {"direction": "NW"}, "sensor": "WindVane"}
+{"data": {"temperature": 20.7, "humidity": 23.5}, "sensor": "DHT22 External"}
