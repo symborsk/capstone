@@ -7,7 +7,7 @@
 # based on this tutorial: http://naelshiab.com/tutorial-send-email-python/
 #
 #############################################################################
-import camera
+import Camera
 import smtplib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
@@ -16,7 +16,7 @@ from email import encoders
 
 fromaddr = "sensorhubalpha@gmail.com"
 with open("/home/thor/.email.dat") as email_file:
-	toaddr = email_file.readline().strip("\n")
+	toaddr = email_file.readline().strip("\n")ˇ
 
 msg = MIMEMultipart()
 
