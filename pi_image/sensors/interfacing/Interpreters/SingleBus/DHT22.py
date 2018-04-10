@@ -57,4 +57,4 @@ with open('/home/thor/.bat_temp.dat', 'w+') as bat_file:
 
 # Write the object to a new line of the output
 with open(output_path + output_file, 'a+') as file:
-	file.write('\n'+json.dumps(ext_output)+'\n')
+	file.write('\n'+json.dumps(ext_output))
