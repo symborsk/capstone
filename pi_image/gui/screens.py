@@ -25,6 +25,16 @@ class WelcomeScreen(Screen):
     def on_next(self):
         pass
 
+class EmailScreen(Screen):
+    def on_back(self):
+        pass
+
+    def on_next(self):
+        email = self.ids['email_input'].text
+        f = open("/home/thor/.email.dat", "w+")
+        f.write(str(email))
+        f.close()
+
 class InputScreen(Screen):
     input_label_text = "'HostName=pcl-dev-bgwilkinson-ioth.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=+3mmzTBcle0MEROiQX6myvrSlCeM7GrUA4xdNeD7NVs='"
 

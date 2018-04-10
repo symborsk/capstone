@@ -17,6 +17,7 @@
 #############################################################################
 ScreenManager:
     WelcomeScreen:
+    EmailScreen:
     InputScreen:
     ProgressScreen:
     TextScreen:
@@ -95,6 +96,55 @@ ScreenManager:
 	            	root.on_next()
 		            root.manager.transition.direction = 'left'
 		            root.manager.current = 'input_screen'
+<EmailScreen>:
+	name: 'input_screen'
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			id: input_screen_title
+			font_size: 45
+			size_hint_y: None
+			height: 100
+			text: 'Contact Information'
+		Label:
+			id: input_screen_actions
+			font_size: 21
+			size_hint_y: None 
+			height: 45
+			text: 'For visibility alerts'
+		BoxLayout:
+			orientation: 'horizontal'
+			Widget:
+			TextInput:
+				id: email_input
+				font_size: 21
+				size_hint_x: None 
+				width: 300
+				size_hint_y: None 
+				height: 45
+				text: 'example@example.com'
+			Widget:
+		Widget:
+		BoxLayout:
+			orientation: 'horizontal'
+	        Button:
+	            text: 'Back'
+	            size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_back()
+		            root.manager.transition.direction = 'right'
+		            root.manager.current = 'text_screen'
+            Button:
+            	text: 'Next'
+				size_hint_y: None
+	            font_size: 30
+	            height: 50
+	            on_press:
+	            	root.on_next()
+		            root.manager.transition.direction = 'left'
+		            root.manager.current = 'input_screen'
 
 <InputScreen>:
 	name: 'input_screen'
@@ -151,7 +201,7 @@ ScreenManager:
 	            on_press:
 	            	root.on_back()
 		            root.manager.transition.direction = 'right'
-		            root.manager.current = 'text_screen'
+		            root.manager.current = 'email_screen'
             Button:
             	text: 'Next'
 				size_hint_y: None

@@ -40,3 +40,4 @@ class WizardApp(App):
 if __name__ == "__main__":
 	WizardApp().run()
 
+ß
