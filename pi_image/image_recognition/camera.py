@@ -19,8 +19,10 @@ class Camera:
 	img_path = r'/home/thor/capstone/pi_image/image_recognition/img/'
 
 	def __init__(self):
-		self.camera = PiCamera()
-
+		try:
+			self.camera = PiCamera()
+		except:
+			pass
 	def take_photo(self, path=None):
 		if not path:
 			path = (Camera.img_path + "img_" + 
