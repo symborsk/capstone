@@ -164,7 +164,7 @@ def get_output(path=output_path, output=output_file, count=sensor_count):
         "polling_frequency": polling_frequency,
         "battery_temp_ro": float(bat_temp),
         "email_address":  email,
-        "use_3G": 
+        "use_3G": use_3g,
                 "location": {
                     "lat": lat,
                     "lon": lon
