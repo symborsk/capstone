@@ -20,7 +20,7 @@ namespace AIHubWeb.Controllers
             client = ServiceClient.CreateFromConnectionString(conn);
         }
 
-        public async Task<bool> UpdateDeviceOptions(EditableStationOptions opt)
+        public async Task<bool> UpdateDeviceOptions(StationOptions opt)
         {
             try
             {

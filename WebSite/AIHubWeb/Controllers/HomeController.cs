@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Net;
 using System.Web.Mvc;
 using System.Threading.Tasks;
-using System.Text;
-using Newtonsoft.Json;
 
 namespace AIHubWeb.Controllers
 {
@@ -43,12 +39,12 @@ namespace AIHubWeb.Controllers
         [HttpGet]
         public async Task<ActionResult> GetConfigSetForStation(String statName)
         {
-           EditableStationOptions opt =  await restController.GetConfigSetting(statName);
+            StationOptions opt =  await restController.GetConfigSetting(statName);
            return Json(opt, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public async Task<ActionResult> UpdateConfigSetting(EditableStationOptions opt)
+        public async Task<ActionResult> UpdateConfigSetting(StationOptions opt)
         {
             if (opt == null)
             {

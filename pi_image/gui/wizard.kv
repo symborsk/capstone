@@ -95,9 +95,9 @@ ScreenManager:
 	            on_press:
 	            	root.on_next()
 		            root.manager.transition.direction = 'left'
-		            root.manager.current = 'input_screen'
+		            root.manager.current = 'email_screen'
 <EmailScreen>:
-	name: 'input_screen'
+	name: 'email_screen'
 	BoxLayout:
 		orientation: 'vertical'
 		Label:
@@ -188,7 +188,7 @@ ScreenManager:
 			Label:
 				text: '3G'
 			CheckBox:
-				on_active: root.activate_cellular
+				on_active: root.activate_cellular()
 			Widget:
 		Widget:
 		BoxLayout:
