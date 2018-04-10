@@ -56,7 +56,6 @@ class InputScreen(Screen):
     def activate_cellular(self):
         f = open("/home/thor/.use3G.dat", "w+")
         print("made 3g file")
-        exit(0)
         f.close()
 
 class SensorScreen(Screen):
