@@ -212,9 +212,11 @@ def update_settings(settings):
         os.system("sudo rm -rf /home/thor/.use3G.dat")
         if settings.cellular_backup:
             print("cellular backup is true")
+            os.system("sudo ifconfig ppp0 up")
             f = open("/home/thor/.use3G.dat", "w+")
         else:
             os.system("sudo rm -rf /home/thor/.use3G.dat")
+            os.system("sudo ifconfig ppp0 down")
     except:
         print("no polling freq?")
 

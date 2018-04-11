@@ -1,10 +1,14 @@
 import os
+import os.path
 import time
 
 os.system("python ~/capstone/pi_image/gui/Wizard.py")
 os.system("sudo sh ~/capstone/pi_image/pi_scripts/makeall.sh")
 while not os.path.isfile("/home/thor/.start"):
 	pass
+
+if os.path.exists("home/thor/.use3G.dat"):
+	os.system("sudo pon fona")
 
 print("setup complete")
 

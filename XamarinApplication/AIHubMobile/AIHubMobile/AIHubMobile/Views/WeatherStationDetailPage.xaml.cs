@@ -31,9 +31,9 @@ namespace AIHubMobile
         //This View model will represent a list item in detail
         public WeatherStationDetailPage(WeatherStationDetailViewModel passedInViewModel)
         {
+            InitializeComponent();
             viewModel = passedInViewModel;
             BindingContext = viewModel;
-            InitializeComponent();
         }
 
         async void Config_Clicked(object sender, EventArgs e)
