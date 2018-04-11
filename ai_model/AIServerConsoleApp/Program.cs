@@ -54,7 +54,7 @@ namespace AIServerConsoleApp
 
                     // Run AI model to get JSON forecast & then send it back to Azure
                     obj["Forecast"] = JObject.Parse(run_cmd(@"..\scripts\model.py", String.Format("-eval -file {0}", guid + ".json")));
-                    PushDataUpToAzure(client, obj.ToString(), timestamp);
+                    PushDataUpToAzure(client, obj.ToString(Formatting.None), timestamp);
                 }
             }
         }
