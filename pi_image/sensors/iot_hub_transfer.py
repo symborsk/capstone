@@ -165,7 +165,7 @@ def get_output(path=output_path, output=output_file, count=sensor_count):
         "polling_frequency": polling_frequency,
         "battery_temperature_ro": float(bat_temp),
         "notification_email":  email,
-        "cellular_backup": use_3g,
+        "cellular_backup_ro": use_3g,
                 "location": {
                     "lat": lat,
                     "lon": lon
@@ -208,10 +208,6 @@ def update_settings(settings):
         email = str(settings.notification_email)
         with open("/home/thor/.email.dat") as file:
             file.write(email)
-        if settings.cellular_backup == "true":
-            f = open("/home/thor/.use3G.dat")
-        else:
-            os.system("sudo rm -rf /home/thor/.use3G.dat")
     except:
         print("no polling freq?")
 
