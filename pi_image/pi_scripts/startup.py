@@ -14,7 +14,9 @@ print("setup complete")
 
 if os.path.isfile("/home/thor/.use3G.dat"):
 	print("starting up 3G chip")
-	os.command("sudo pon fona")
+	os.system("sudo pon fona")
+	time.sleep(15)
+	os.system("sudo ifmetric ppp0 3000")
 # for now run as sudo?
 # chmodding, we'll see what happens
 # start sdl process
