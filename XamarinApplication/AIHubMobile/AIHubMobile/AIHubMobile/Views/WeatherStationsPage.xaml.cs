@@ -32,16 +32,9 @@ namespace AIHubMobile
             if (item == null)
                 return;
 
-            //Async loading of the deail page
-            try
-            {
-                await Navigation.PushAsync(new WeatherStationDetailPage(new WeatherStationDetailViewModel(item)));
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine("Error rendering the detail page: " + e.Message);
-            }
-
+            //Async loading of the deail page        
+            await Navigation.PushAsync(new WeatherStationDetailPage(new WeatherStationDetailViewModel(item)));
+            
             // Manually deselect item
             ItemsListView.SelectedItem = null;
         }

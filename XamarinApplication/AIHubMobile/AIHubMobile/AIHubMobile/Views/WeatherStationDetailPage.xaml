@@ -27,7 +27,6 @@
                         <x:String>This Year</x:String>
                         <x:String>All Time</x:String>
                     </Picker.Items>
-                    <Picker.SelectedIndex>0</Picker.SelectedIndex>
                 </Picker>
 
                 <BoxView HorizontalOptions="Fill" VerticalOptions="Center" HeightRequest="2" Color="Black"/>
@@ -35,12 +34,12 @@
                 <Label x:Name="MessageText" Text="Recordings : " LineBreakMode="NoWrap" FontSize="Medium" FontAttributes="Bold"/>
 
                 <ListView x:Name="DetailWeatherSets"       
-                 HasUnevenRows="true"
-                 ItemsSource="{Binding RgSets}"
-                 RefreshCommand="{Binding RefreshWeatherSets}"
-                 IsPullToRefreshEnabled="true"
-                 IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-                 CachingStrategy="RecycleElement">
+                    VerticalOptions="FillAndExpand"
+                    HasUnevenRows="true"
+                    SeparatorColor="Black"
+                    RefreshCommand="{Binding RefreshWeatherSets}"
+                    IsPullToRefreshEnabled="true"
+                    IsRefreshing="{Binding IsBusy, Mode=OneWay}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
@@ -89,7 +88,7 @@
                                     <Label Text="Pressure( bar ): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="7" Grid.Column="0"/>
                                     <Label Text="{Binding pressure}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="7" Grid.Column="1"/>
 
-                                    <Label Text="visibility (1 full visibility -- 0 no visibilty): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="0"/>
+                                    <Label Text="visibility (1 full visibility 0 no visibilty): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="0"/>
                                     <Label Text="{Binding visibility}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="1"/>
 
                                 </Grid>
