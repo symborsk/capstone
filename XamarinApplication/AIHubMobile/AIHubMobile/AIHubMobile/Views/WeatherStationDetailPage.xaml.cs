@@ -21,10 +21,10 @@ namespace AIHubMobile
 
         //We need this default constructor by definition
         public WeatherStationDetailPage()
-        {   
-            viewModel = new WeatherStationDetailViewModel();
-            BindingContext = viewModel;
+        {
             InitializeComponent();
+            viewModel = new WeatherStationDetailViewModel();
+            BindingContext = viewModel;   
         }
 
         //When the page is connected we simply bind the proper view model class
@@ -34,6 +34,9 @@ namespace AIHubMobile
             InitializeComponent();
             DetailWeatherSets.ItemsSource = passedInViewModel.RgSets;
             BindingContext = this.viewModel = passedInViewModel;
+            
+            //Change the selected index
+            dateDropDown.SelectedIndex = 0;
         }
 
         async void Config_Clicked(object sender, EventArgs e)
@@ -80,7 +83,7 @@ namespace AIHubMobile
 
         private async void ViewAIInfo(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new AIDetailsPage(viewModel), false);
+            await Navigation.PushAsync(new AIDetailsPage(viewModel), false);
         }
 
 

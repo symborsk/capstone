@@ -6,7 +6,8 @@
     <ContentPage.Content>
         <ContentView>
             <StackLayout Orientation="Vertical">
-                <Picker Title="Show Records For:" SelectedIndexChanged="Picker_SelectedIndexChanged">
+                
+                <Picker x:Name="dateDropDown"  Title="Show Records For:" SelectedIndexChanged="Picker_SelectedIndexChanged">
                     <Picker.Items>
                         <x:String>Today</x:String>
                         <x:String>Past 3 Days</x:String>
@@ -15,7 +16,6 @@
                         <x:String>This Year</x:String>
                         <x:String>All Time</x:String>
                     </Picker.Items>
-                    <Picker.SelectedIndex>0</Picker.SelectedIndex>
                 </Picker>
 
                 <BoxView HorizontalOptions="Fill" VerticalOptions="Center" HeightRequest="2" Color="Black"/>
