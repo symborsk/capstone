@@ -21,7 +21,7 @@ namespace AIHubMobile
         {
             try
             {
-                var json = JsonConvert.SerializeObject(opt.editOptions);
+                var json = JsonConvert.SerializeObject(opt);
                 var commandMessage = new Message(Encoding.ASCII.GetBytes(json));
                 await client.SendAsync(DeviceName, commandMessage);
             }

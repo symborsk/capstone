@@ -23,7 +23,7 @@ namespace AIHubMobile
 {
     public class RestAzureStorage : IRestAzureStorage<WeatherStation>
     {
-        List<WeatherStation> Items;
+        List<WeatherStation> weatherStations;
         HttpClient client;
         CloudStorageAccount storageAccount;
 
@@ -35,7 +35,7 @@ namespace AIHubMobile
             //storageAccount = CloudStorageAccount.Parse("SharedAccessSignature=?st=2017-02-28T14%3A17%3A00Z&se=2018-03-03T14%3A17%3A00Z&sp=rl&sv=2017-04-17&sr=c&sig=nxoO5iSP8rZjiQilNQsOBa89W6LqtRyTEOpqnwnqXXE%3D;BlobEndpoint=https://pcldevbgwilkinson01.blob.core.windows.net/sensor-hub?st=2017-02-28T14%3A17%3A00Z&se=2018-03-03T14%3A17%3A00Z&sp=rl&sv=2017-04-17&sr=c&sig=nxoO5iSP8rZjiQilNQsOBa89W6LqtRyTEOpqnwnqXXE%3D");
             storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=pcldevbgwilkinson01;AccountKey=NPkk2BjPvlG1Am78JrSi4ylEQNB3F6tacE/G8P3x8zLOe/BqZwvYMCXP+ni9KMwmx+px/f+J+n9QJq+v9eVSGg==;BlobEndpoint=https://pcldevbgwilkinson01.blob.core.windows.net/;QueueEndpoint=https://pcldevbgwilkinson01.queue.core.windows.net/;TableEndpoint=https://pcldevbgwilkinson01.table.core.windows.net/;FileEndpoint=https://pcldevbgwilkinson01.file.core.windows.net/");
 
-            Items = new List<WeatherStation>();
+            weatherStations = new List<WeatherStation>();
         }
 
         public async Task<bool> RefreshWeatherSets(WeatherSet.WeatherSetDateRanges range)
@@ -52,7 +52,7 @@ namespace AIHubMobile
 
             BlobResultSegment seg = await ListBlobsAsync(container, range);
             
-            bool succ = await CreateWeatherStationsFromBlob(seg, table);
+            bool succ = await CreateWeatherStationsFromBlob(seg);
 
             // Retrieve reference to a blob named "myblob".
             return await Task.FromResult(true);
@@ -60,12 +60,12 @@ namespace AIHubMobile
 
         public async Task<IEnumerable<WeatherStation>> GetAllWeatherSets(bool forceRefresh = false, WeatherSet.WeatherSetDateRanges range = WeatherSet.WeatherSetDateRanges.Today)
         {
-            return await Task.FromResult(Items);
+            return await Task.FromResult(weatherStations);
         }
 
-        public async Task<bool> UpdateStationOptions(StationOptions station)
+        public async Task<bool> UpdateStationOptions(StationOptions stationOption)
         {
-            return await UpdateDeviceConfigSettings(station.editOptions);
+            return await UpdateDeviceConfigSettings(stationOption);
         }
 
         private async Task<BlobResultSegment> ListBlobsAsync(CloudBlobContainer con, WeatherSet.WeatherSetDateRanges range)
@@ -82,7 +82,7 @@ namespace AIHubMobile
                 {
                     //This overload allows control of the page size. You can return all remaining results by passing null for the maxResults parameter,
                     //or by calling a different overload.
-                    // from: https://hahoangv.wordpress.com/2016/05/16/azure-storage-step-4-blobs-storage-in-action/
+                    //from: https://hahoangv.wordpress.com/2016/05/16/azure-storage-step-4-blobs-storage-in-action/
                     List<string> prefixForBlob = GeneratePrefixStrings(WeatherSet.WeatherSetDateRanges.AllTime);
                     foreach(string prefix in prefixForBlob)
                     {
@@ -112,9 +112,11 @@ namespace AIHubMobile
             return resultSegment;
         }
 
-        private async Task<bool> CreateWeatherStationsFromBlob(BlobResultSegment seg, CloudTable tab)
+        private async Task<bool> CreateWeatherStationsFromBlob(BlobResultSegment seg)
         {
-            Items.Clear();
+
+            weatherStations.Clear();
+
             foreach (CloudBlockBlob blobItem in seg.Results)
             {
                 string text;
@@ -132,31 +134,14 @@ namespace AIHubMobile
                         string devName = root["device_name"].ToString();
                         double lat = Convert.ToDouble(root["location"]["lat"].ToString());
                         double lon = Convert.ToDouble(root["location"]["lon"].ToString());
-                       
-                        int currStationIndex = Items.FindIndex(x => x.StationName == devName);
-                        
+
+                        int currStationIndex = weatherStations.FindIndex(x => x.StationName == devName);
+
                         //If a station of that type does not exist add it now and set current index as that
                         if (currStationIndex == -1)
                         {
-                            //Get the station options or create them this may change later if we want to do this at the device
-                            TableOperation op = TableOperation.Retrieve<EditableStationOptions>("EditableStationOptions", devName);
-                            TableResult retrievedResult = await tab.ExecuteAsync(op);
-
-                            EditableStationOptions option;
-                            if(retrievedResult.Result == null)
-                            {
-                                option =  CreateDefaultEditableStationOption(tab, devName);
-                            }
-                            else
-                            {
-                                option = (EditableStationOptions)retrievedResult.Result;
-                            }
-
-
-                            WeatherStation stat = new WeatherStation(devName, lat, lon);
-                            stat.statOptions = new StationOptions(option, null);
-                            Items.Add(stat);
-                            currStationIndex = Items.Count - 1;
+                            weatherStations.Add(new WeatherStation(devName, lat, lon));
+                            currStationIndex = weatherStations.Count - 1;
                         }
 
                         //Set the recorded time of this in local time, as it is stored in UTC time on server
@@ -169,9 +154,48 @@ namespace AIHubMobile
 
                         //Sensors are another array that we need to dive into
                         JArray sensorArray = JArray.Parse(root["sensors"].ToString());
+                        JObject AIArray = JObject.Parse(root["ai_predictions"].ToString());
+
+                        foreach (KeyValuePair<String, JToken> tagAI in AIArray)
+                        {
+                            String tagName = tagAI.Key.ToString();
+                            String s = tagAI.Value.ToString();
+                            JObject tagValueObj = JObject.Parse(tagAI.Value.ToString());
+                            foreach (KeyValuePair<String, JToken> tagAIInner in tagValueObj)
+                            {
+                                string propName = tagAIInner.Key.ToString();
+                                switch (tagName)
+                                {
+                                    case "1h":
+                                        if (propName == "temperature")
+                                            newSet.ai_one_hour_temperature = tagAIInner.Value.ToString();
+                                        else if (propName == "relative_humidity")
+                                            newSet.ai_one_hour_humidity = tagAIInner.Value.ToString();
+                                        else if (propName == "wind_speed")
+                                            newSet.ai_one_hour_wind = tagAIInner.Value.ToString();
+                                        break;
+                                    case "2h":
+                                        if (propName == "relative_humidity")
+                                            newSet.ai_one_hour_temperature = tagAIInner.Value.ToString();
+                                        else if (propName == "relative_humidity")
+                                            newSet.ai_one_hour_humidity = tagAIInner.Value.ToString();
+                                        else if (propName == "wind_speed")
+                                            newSet.ai_one_hour_wind = tagAIInner.Value.ToString();
+                                        break;
+                                    case "24h":
+                                        if (propName == "temperature")
+                                            newSet.ai_24_hour_temperature = tagAIInner.Value.ToString();
+                                        else if (propName == "relative_humidity")
+                                            newSet.ai_24_hour_humidity = tagAIInner.Value.ToString();
+                                        else if (propName == "wind_speed")
+                                            newSet.ai_24_hour_wind = tagAIInner.Value.ToString();
+                                        break;
+                                }
+                            }
+                        }
 
                         foreach (JObject sensorRoot in sensorArray)
-                        {              
+                        {
                             JObject dataObj = JObject.Parse(sensorRoot["data"].ToString());
                             foreach (KeyValuePair<String, JToken> tag in dataObj)
                             {
@@ -190,13 +214,12 @@ namespace AIHubMobile
                         }
 
                         //Add the set once this is done
-                        Items[currStationIndex].AddWeatherSet(newSet);
+                        weatherStations[currStationIndex].AddWeatherSet(newSet);
                     }
                 }
                 //This can happen when there is an empty blob object 
                 catch (Exception ex)
-                {   
-                    
+                {
                     Console.WriteLine("Failure getting a blob: " + ex.Message);
                 }
             }
@@ -247,9 +270,9 @@ namespace AIHubMobile
             }
         }
 
-        private EditableStationOptions CreateDefaultEditableStationOption(CloudTable tab, String name)
+        private StationOptions CreateDefaultEditableStationOption(CloudTable tab, String name)
         {
-            EditableStationOptions option = new EditableStationOptions(name);
+            StationOptions option = new StationOptions(name);
 
             TableOperation insertOp = TableOperation.InsertOrReplace(option);
 
@@ -259,7 +282,7 @@ namespace AIHubMobile
             return option;
         }
 
-        private async Task<bool> UpdateDeviceConfigSettings(EditableStationOptions option)
+        private async Task<bool> UpdateDeviceConfigSettings(StationOptions option)
         {
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("DeviceConfigSettings");

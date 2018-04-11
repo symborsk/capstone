@@ -15,31 +15,22 @@ namespace AIHubWeb
     public class StationOptions : TableEntity
     {
         public double polling_frequency { set; get; }
-        public string email_address { set; get; }
-        public bool use_3G { set; get; }
-        public double  battery_temp_ro { set; get; }
+        public string notification_email { set; get; }
+        public string cellular_backup { set; get; }
+        public double  battery_temperature_ro { set; get; }
 
         //We need this for TableEntity.... it how azure storage interacts with it
         public StationOptions() { }
 
         //This creation of the object if all is known about it
-        public StationOptions(string stationName, bool use3G, int pollFreq, string email, double temp)
+        public StationOptions(string station_name, string cell_back, int pollFreq, string email, double temp)
         {
-            this.PartitionKey = stationName;
-            this.RowKey = stationName;
+            this.PartitionKey = station_name;
+            this.RowKey = station_name;
             polling_frequency = pollFreq;
-            email_address = email;
-            battery_temp_ro = temp;
-        }
-
-        //This is creation of object with the defaults 1 hour and no 3G
-        public StationOptions(string stationName)
-        {
-            this.PartitionKey = stationName;
-            this.RowKey = stationName;
-            polling_frequency = 60;
-            email_address = "No Entered Email";
-
+            notification_email = email;
+            battery_temperature_ro = temp;
+            cellular_backup = cell_back;
         }
     }
 }

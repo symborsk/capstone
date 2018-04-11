@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             x:Class="AIHubMobile.AIDetailsPage">
+    <ContentPage.Content>
+        <ContentView>
+            <StackLayout Orientation="Vertical">
+                <Picker Title="Show Records For:" SelectedIndexChanged="Picker_SelectedIndexChanged">
+                    <Picker.Items>
+                        <x:String>Today</x:String>
+                        <x:String>Past 3 Days</x:String>
+                        <x:String>Past Week</x:String>
+                        <x:String>This Month</x:String>
+                        <x:String>This Year</x:String>
+                        <x:String>All Time</x:String>
+                    </Picker.Items>
+                    <Picker.SelectedIndex>0</Picker.SelectedIndex>
+                </Picker>
+
+                <BoxView HorizontalOptions="Fill" VerticalOptions="Center" HeightRequest="2" Color="Black"/>
+
+                <Label x:Name="MessageText" Text="Recordings : " LineBreakMode="NoWrap" FontSize="Medium" FontAttributes="Bold"/>
+
+                <ListView x:Name="DetailWeatherSets"       
+                 HasUnevenRows="true"
+                 ItemsSource="{Binding RgSets}"
+                 RefreshCommand="{Binding RefreshWeatherSets}"
+                 IsPullToRefreshEnabled="true"
+                 IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                 CachingStrategy="RecycleElement">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid RowSpacing="0" ColumnSpacing="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="24"  />
+                                        <RowDefinition Height="16" />
+                                        <RowDefinition Height="16"  />
+                                        <RowDefinition Height="16" />
+                                        <RowDefinition Height="16" />
+                                        <RowDefinition Height="16" />
+                                        <RowDefinition Height="16" />
+                                        <RowDefinition Height="16" />
+                                        <RowDefinition Height="16" />
+                                        <RowDefinition Height="16" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40*"  />
+                                        <ColumnDefinition Width="60*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <BoxView Color="{StaticResource PrimaryLight}" Grid.Column="0" Grid.Row="0"/>
+                                    <BoxView Color="{StaticResource PrimaryLight}" Grid.Column="1" Grid.Row="0"/>
+                                    <BoxView Color="{StaticResource PrimaryLight}" Grid.Column="2" Grid.Row="0"/>
+
+                                    <Label Text="Recorded Time: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium" Grid.Row="0" Grid.Column="0"/>
+                                    <Label Text="{Binding RecordedTime}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium" Grid.Row="0" Grid.Column="1"/>
+
+                                    <Label Text="1 Hour Temperature( C ): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="1" Grid.Column="0"/>
+                                    <Label Text="{Binding ai_one_hour_temperature }" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="1" Grid.Column="1"/>
+
+                                    <Label Text="3 Hour Temperature( C ): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}"  FontSize="Micro" Grid.Row="2" Grid.Column="0"/>
+                                    <Label Text="{Binding ai_three_hour_temperature }" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="2" Grid.Column="1"/>
+
+                                    <Label Text="24 Hour Temperature( C ): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="3" Grid.Column="0"/>
+                                    <Label Text="{Binding ai_24_hour_temperature }" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="3" Grid.Column="1"/>
+
+                                    <Label Text="1 Hour Wind Speed( km/hr ): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="4" Grid.Column="0"/>
+                                    <Label Text="{Binding ai_one_hour_wind}"  LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="4" Grid.Column="1"/>
+
+                                    <Label Text="3 Hour Wind Speed( km/hr ): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="5" Grid.Column="0"/>
+                                    <Label Text="{Binding ai_one_hour_wind}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="5" Grid.Column="1"/>
+
+                                    <Label Text="24 Hour Wind Speed( km/hr ): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="6" Grid.Column="0"/>
+                                    <Label Text="{Binding ai_one_hour_wind}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="6" Grid.Column="1"/>
+
+                                    <Label Text="1 Hour Relative Humidity (%): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="7" Grid.Column="0"/>
+                                    <Label Text="{Binding ai_one_hour_humidity}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="7" Grid.Column="1"/>
+
+                                    <Label Text="3 Hour Relative Humidity (%): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="0"/>
+                                    <Label Text="{Binding ai_three_hour_humidity}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="1"/>
+
+                                    <Label Text="24 Hour Relative Humidity (%): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="0"/>
+                                    <Label Text="{Binding ai_24_hour_humidity}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="1"/>
+
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </ContentView>
+    </ContentPage.Content>
+</ContentPage>
+    
