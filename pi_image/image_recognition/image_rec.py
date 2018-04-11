@@ -53,16 +53,18 @@ def get_current_visibility_rating():
     return _get_visibility_rating(img_path + "baseline.jpg", camera.get_latest_photo_filename())
 
 if __name__ == '__main__':
-	# Get current visibility rating & build JSON object    
-	vis = get_current_visibility_rating()
-	if vis < 0.6:
-		print("low visibility, sending email")
-		os.system("sudo python ~/capstone/pi_image/image_recognition/send_email.py")
-	output = {
-				"sensor": sensor_name,
-				"data":{"visibility":vis}
-			}
+    # Get current visibility rating & build JSON object    
+    vis = get_current_visibility_rating()
+    if vis < 0.6:
+        print("low visibility, sending email")
+        os.system("sudo python ~/capstone/pi_image/image_recognition/send_email.py")
+        if vis < 0:
+            vis = 0
+    output = {
+                "sensor": sensor_name,
+                "data":{"visibility":vis}
+            }
 
-	# Write the output JSON object to the file
-	with open(output_path + output_file, 'a+') as f:
-		f.write('\n'+json.dumps(output))
+    # Write the output JSON object to the file
+    with open(output_path + output_file, 'a+') as f:
+        f.write('\n'+json.dumps(output))
