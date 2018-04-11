@@ -21,7 +21,7 @@ parameter_range = {
 menu_run = True
 inplace = False
 file_write = False
-useFile = True
+useFile = None
 input_type = 'csv'
 json_obj = None
 
@@ -172,9 +172,11 @@ def eval_menu():
 			load_model()
 
 # Function to handle evaluation
-def evaluate(loaded_model=loaded_model, useFile=useFile):
+def evaluate():
+	global useFile
+	global loaded_model
+
 	# Get input features
-	print(useFile)
 	if useFile:
 		input_features = get_data_file()
 	else:
@@ -190,7 +192,6 @@ def evaluate(loaded_model=loaded_model, useFile=useFile):
 
 	# Get predictions using the model
 	expected = []
-	print(input_features.values.tolist())
 	for row in input_features.values.tolist():
 		expected += [[(i, loaded_model[i].run(row)) for i in pf.forecast_offsets]]
 
@@ -199,6 +200,9 @@ def evaluate(loaded_model=loaded_model, useFile=useFile):
 
 # Function to load the input data from CSV files stored in a specified subdirectory of test_files
 def get_data_dir():
+	global menu_run
+	global data_dir
+
 	# Prompt user to move data folder if necessary
 	if menu_run:
 		prompt = 'Please move the desired data folder into the \"test_files\" folder now. Press enter to continue...'
@@ -221,10 +225,17 @@ def get_data_dir():
 		sel_dir = data_dir
 
 	# For CSV files pandas_formatting.load_data can load & format data appropriately
-	return pf.join_dataframes(pf.load_data(path='../test_files/{0}'.format(sel_dir)))
+	dir_path = '../test_files/{0}/'.format(sel_dir)
+	data_df = list(pf.load_data(path=dir_path))
+	dataframe = pf.join_dataframes(data_df, set_index=True)
+	return dataframe
 
 # Function to load the input data from a single JSON file stored in test_files
-def get_data_file(json_obj=json_obj):
+def get_data_file():
+	global json_obj
+	global menu_run
+	global data_file
+
 	# Get json from file if not provided
 	if json_obj==None:
 		# Prompt user to move data file if necessary
@@ -274,6 +285,9 @@ def parse_data_file(parsed_response):
 		
 # Set the output mode for the evaluation run
 def set_output():
+	global file_name
+	global file_write
+
 	prompt = '\nHow should the results be displayed?\n1. Output to a file\n2. Output to the command line'
 	print(prompt)
 	sel = menu_input(1, 2)
@@ -293,15 +307,21 @@ def set_output():
 
 # Display the results either by writing to a file or by printing them
 def display_results(input_features, expected):
+	global file_write
+	global json_obj
+	global output_type
+	global inplace
+	global file_name
+
 	if file_write:
 		# Create the appropriate dataframe to output
 		output_df = pf.create_prediction_dataframe(expected, input_features if inplace else None)
 
 		# Output the dataframe appropriately
 		if output_type=='csv':
-			output_df.to_csv(path_or_buf=output)
+			output_df.to_csv(path_or_buf=file_name)
 		else:
-			output_df.to_json(path_or_buf=output)
+			output_df.to_json(path_or_buf=file_name)
 
 	else:
 		# Loop over all input features to display them in string format
@@ -314,17 +334,19 @@ def display_results(input_features, expected):
 				print(result_str)
 		# Otherwise build the JSON object and print it
 		else:
-			result_str = '{'
-			for result in expected:
-				result_str += '\"{0}\":{\"wind_speed\":{1}, \"relative_humidity\":{2}, \"temperature\":{3}},'.format(result[0][0], result[0][1][0], result[0][1][1], result[0][1][2])
-
-			# Replace the final comma with the closing bracket
-			result_str = list(result_str)
-			result_str[-1] = '}'
-			print(''.join(result_str))
+			# Get the JSON from expected
+			expected_dict = [dict(x) for x in expected]
+			
+			# Print the JSON string to be read by the C# program
+			print(json.dumps(expected_dict[0]))
 
 # Function to handle loading the model
-def load_model(model_name=model_name, loaded_model=loaded_model):
+def load_model():
+	global model_name
+	global loaded_model
+	global model_postfix
+	global model_file
+
 	# Initialize the loaded model dictionary
 	loaded_model = dict([(x, None) for x in pf.forecast_offsets])
 
@@ -441,7 +463,16 @@ def build_args(argv):
 	Inputs:
 		argv: sys.argv[1:] passed from main_menu()
 	"""
-def eval_args(argv, json_obj=json_obj, useFile=useFile):
+def eval_args(argv):
+	global useFile
+	global json_obj
+	global data_file
+	global file_write
+	global file_name
+	global model_name
+	global data_dir
+	global inplace
+
 	# Loop over all args to handle them
 	while(argv):
 		# Pop the argv to handle
@@ -471,7 +502,7 @@ def eval_args(argv, json_obj=json_obj, useFile=useFile):
 			param = argv.pop(0)
 			if param.endswith('.csv') or param.endswith('.json'):
 				file_write = True
-				file_name = param
+				file_name = '{0}/{1}'.format(output_path, param)
 			else:
 				print('Error: Invalid output file supplied.')
 				exit()
@@ -485,8 +516,6 @@ def eval_args(argv, json_obj=json_obj, useFile=useFile):
 		elif curr=='-json':
 			param = argv.pop(0)
 			json_obj = json.loads(param)
-
-	print(useFile)
 
 """ Function to validate program input parameters with the predetermined range. 
 
