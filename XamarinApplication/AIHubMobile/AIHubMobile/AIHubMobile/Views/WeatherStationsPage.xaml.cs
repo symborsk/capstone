@@ -35,7 +35,7 @@ namespace AIHubMobile
             //Async loading of the deail page
             try
             {
-                await Navigation.PushModalAsync(new DetailTabbedPage(new WeatherStationDetailViewModel(item)));
+                await Navigation.PushAsync(new WeatherStationDetailPage(new WeatherStationDetailViewModel(item)));
             }
             catch(Exception e)
             {

@@ -81,8 +81,8 @@
                                     <Label Text="3 Hour Relative Humidity (%): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="0"/>
                                     <Label Text="{Binding ai_three_hour_humidity}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="1"/>
 
-                                    <Label Text="24 Hour Relative Humidity (%): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="0"/>
-                                    <Label Text="{Binding ai_24_hour_humidity}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="1"/>
+                                    <Label Text="24 Hour Relative Humidity (%): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="9" Grid.Column="0"/>
+                                    <Label Text="{Binding ai_24_hour_humidity}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="9" Grid.Column="1"/>
 
                                 </Grid>
                             </ViewCell>

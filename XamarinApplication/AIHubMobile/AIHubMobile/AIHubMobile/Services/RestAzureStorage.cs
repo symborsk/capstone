@@ -233,7 +233,7 @@ namespace AIHubMobile
             List<string> prefixes = new List<string>();
             //Blobs are stroed under utc time
             DateTime currentUtcDay = DateTime.UtcNow;
-            string sLogPrefix = @"logs/pre/";
+            string sLogPrefix = @"logs/post/";
             switch (range)
             {
                 case WeatherSet.WeatherSetDateRanges.Today:    
