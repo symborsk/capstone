@@ -163,7 +163,7 @@ def get_output(path=output_path, output=output_file, count=sensor_count):
                 "device_name": hub_name,
                 "timestamp": timestamp,
         "polling_frequency": polling_frequency,
-        "battery_temp_ro": float(bat_temp),
+        "battery_temperature_ro": float(bat_temp),
         "notification_email":  email,
         "cellular_backup": use_3g,
                 "location": {
