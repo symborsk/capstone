@@ -164,7 +164,7 @@ def get_output(path=output_path, output=output_file, count=sensor_count):
                 "timestamp": timestamp,
         "polling_frequency": polling_frequency,
         "battery_temp_ro": float(bat_temp),
-        "email_address":  email,
+        "notification_email":  email,
         "cellular_backup": use_3g,
                 "location": {
                     "lat": lat,
@@ -205,7 +205,7 @@ def update_settings(settings):
         seconds = int(settings.polling_frequency) * 60
         with open("/home/thor/.interval.dat", "w+") as file:
             file.write(str(seconds))
-        email = str(settings.email_address)
+        email = str(settings.notification_email)
         with open("/home/thor/.email.dat") as file:
             file.write(email)
         if settings.cellular_backup == "true":
