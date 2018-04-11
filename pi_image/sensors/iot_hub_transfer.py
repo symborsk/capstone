@@ -206,10 +206,13 @@ def update_settings(settings):
         with open("/home/thor/.interval.dat", "w+") as file:
             file.write(str(seconds))
         email = str(settings.notification_email)
-        with open("/home/thor/.email.dat") as file:
+        os.system("sudo rm -rf /home/thor/.email.dat")
+        with open("/home/thor/.email.dat", "w+") as file:
             file.write(email)
-        if settings.cellular_backup == "true":
-            f = open("/home/thor/.use3G.dat")
+        os.system("sudo rm -rf /home/thor/.use3G.dat")
+        if settings.cellular_backup:
+            print("cellular backup is true")
+            f = open("/home/thor/.use3G.dat", "w+")
         else:
             os.system("sudo rm -rf /home/thor/.use3G.dat")
     except:
