@@ -33,9 +33,8 @@ namespace AIServerConsoleApp
            
             foreach (CloudBlockBlob blob in rgBlobs)
             {
-                Task<string> taskDownload = Task.Run(() => blob.DownloadTextAsync());
-                String sDownloadedBlob = taskDownload.Result;
-                String [] sDownloadedBlobs = sDownloadedBlob.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                string taskDownload = blob.DownloadText();
+                String [] sDownloadedBlobs = taskDownload.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
 
                 foreach (string item in sDownloadedBlobs)
                 {
@@ -43,7 +42,14 @@ namespace AIServerConsoleApp
                     JObject obj = JObject.Parse(item);
                     string dir = Directory.GetCurrentDirectory();
                     string guid = Guid.NewGuid().ToString();
-                    using (StreamWriter file = File.CreateText(@"..\test_files\" + guid + ".json"))
+
+                    //Delete the file if it exists
+                    if(File.Exists(@"..\test_files\preprocessed_data.json"))
+                    {
+                        File.Delete(@"..\test_files\preprocessed_data.json");
+                    }
+
+                    using (StreamWriter file = File.CreateText(@"..\test_files\preprocessed_data.json"))
                     using (JsonTextWriter writer = new JsonTextWriter(file))
                     {
                         obj.WriteTo(writer);
@@ -55,7 +61,11 @@ namespace AIServerConsoleApp
                     // Run AI model to get JSON forecast & then send it back to Azure
                     obj["Forecast"] = JObject.Parse(run_cmd(@"..\scripts\model.py", String.Format("-eval -file {0}", guid + ".json")));
                     PushDataUpToAzure(client, obj.ToString(Formatting.None), timestamp);
+
                 }
+
+                //Delete the pre blob after it is processed
+                blob.Delete();
             }
         }
 
@@ -88,12 +98,13 @@ namespace AIServerConsoleApp
 
                if(resultSegment.Results.Count() ==  1)
                 {
+                    fullText = Environment.NewLine + fullText;
                     CloudAppendBlob blob =  (CloudAppendBlob) resultSegment.Results.First();
                     blob.AppendText(fullText);
                 }
                 else
                 {
-                    fullText = Environment.NewLine +fullText;
+                    fullText = Environment.NewLine + fullText;
                     CloudAppendBlob blob = container.GetAppendBlobReference(outputPath + "/" + Guid.NewGuid() + ".json");
                     blob.UploadText(fullText);
                 }
