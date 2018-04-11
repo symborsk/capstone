@@ -163,9 +163,9 @@ def get_output(path=output_path, output=output_file, count=sensor_count):
                 "device_name": hub_name,
                 "timestamp": timestamp,
         "polling_frequency": polling_frequency,
-        "battery_temp_ro": float(bat_temp),
-        "email_address":  email,
-        "use_3G": use_3g,
+        "battery_temperature_ro": float(bat_temp),
+        "notification_email":  email,
+        "cellular_backup": use_3g,
                 "location": {
                     "lat": lat,
                     "lon": lon
@@ -205,10 +205,10 @@ def update_settings(settings):
         seconds = int(settings.polling_frequency) * 60
         with open("/home/thor/.interval.dat", "w+") as file:
             file.write(str(seconds))
-        email = str(settings.email_address)
+        email = str(settings.notification_email)
         with open("/home/thor/.email.dat") as file:
             file.write(email)
-        if settings.use_3G == "true":
+        if settings.cellular_backup == "true":
             f = open("/home/thor/.use3G.dat")
         else:
             os.system("sudo rm -rf /home/thor/.use3G.dat")
