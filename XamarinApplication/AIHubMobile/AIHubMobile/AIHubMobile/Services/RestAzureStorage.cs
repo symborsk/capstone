@@ -117,7 +117,7 @@ namespace AIHubMobile
 
             weatherStations.Clear();
 
-            foreach (CloudBlockBlob blobItem in seg.Results)
+            foreach (CloudAppendBlob blobItem in seg.Results)
             {
                 string text;
                 try

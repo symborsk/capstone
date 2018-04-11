@@ -93,6 +93,7 @@ namespace AIServerConsoleApp
                 }
                 else
                 {
+                    fullText = Environment.NewLine +fullText;
                     CloudAppendBlob blob = container.GetAppendBlobReference(outputPath + "/" + Guid.NewGuid() + ".json");
                     blob.UploadText(fullText);
                 }
