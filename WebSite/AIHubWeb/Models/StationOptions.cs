@@ -17,7 +17,7 @@ namespace AIHubWeb
         public double polling_frequency { set; get; }
         public string email_address { set; get; }
         public bool use_3G { set; get; }
-        public double  battery_temp { set; get; }
+        public double  battery_temp_ro { set; get; }
 
         //We need this for TableEntity.... it how azure storage interacts with it
         public StationOptions() { }
@@ -29,7 +29,7 @@ namespace AIHubWeb
             this.RowKey = stationName;
             polling_frequency = pollFreq;
             email_address = email;
-            battery_temp = temp;
+            battery_temp_ro = temp;
         }
 
         //This is creation of object with the defaults 1 hour and no 3G

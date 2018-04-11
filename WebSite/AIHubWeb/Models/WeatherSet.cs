@@ -31,7 +31,18 @@ namespace AIHubWeb
         public string pressure { get; set; }
         public string visibility { get; set; }
 
-       
+        //These are hardcoded values since 
+        public string ai_one_hour_temperature { get; set; }
+        public string ai_three_hour_temperature { get; set; }
+        public string ai_24_hour_temperature { get; set; }
+
+        public string ai_one_hour_humidity{ get; set; }
+        public string ai_three_hour_humidity { get; set; }
+        public string ai_24_hour_humidity { get; set; }
+
+        public string ai_one_hour_wind { get; set; }
+        public string ai_three_hour_wind { get; set; }
+        public string ai_24_hour_wind { get; set; }
 
         public enum WeatherSetDateRanges
         {

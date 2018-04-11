@@ -123,7 +123,8 @@ function DisplayWeatherSetsForTable(data, status) {
         alert("No data available for this station");
     }
 
-    InsertWeatherAndAITableHtml(data);
+    InsertWeatherTableHtml(data);
+    InsertAITableHtml(data);
 
     //Scroll to the newly made table
     $('html, body').animate({
@@ -140,12 +141,13 @@ function DisplayWeatherSetsForTableOnRefresh(data, status) {
         alert("No data available for this station");
     }
 
-    InsertWeatherAndAITableHtml(data);
+    InsertWeatherTableHtml(data);
+    InsertAITableHtml(data);
 
     document.getElementById("refreshIcon").classList.remove("fa-spin");
 }
 
-function InsertWeatherAndAITableHtml(data) {
+function InsertWeatherTableHtml(data) {
     //Our chosen date format
     var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
 
@@ -170,7 +172,7 @@ function InsertWeatherAndAITableHtml(data) {
             tableDetailContent += "<tr><td>" + dateString + "</td >";
             for (var propName in set) {
 
-                if (propName.localeCompare("RecordedTime") === 0) {
+                if (propName.localeCompare("RecordedTime") === 0 || propName.toLocaleLowerCase().startsWith("ai")) {
                     continue;
                 }
 
@@ -199,6 +201,63 @@ function InsertWeatherAndAITableHtml(data) {
     }
 
     document.getElementById("map_list").innerHTML = content;
+}
+
+function InsertAITableHtml(data) {
+    //Our chosen date format
+    var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+
+
+    var content = "";
+    if (data.length === 0) {
+        content = "<div style=\"margin-top:200px;margin-bottom:200px;\"><h2>No Content For Selected Date Range and Station: " + currentStation + "</h2></div>";
+    }
+    else {
+        //Table will be built in parts so that we can keep the table building complety dynamic
+        var tableHeaderContent = "";
+        var tableDetailContent = "";
+        content += "<h2>" + currentStation + "</h2><div><table id=\"resultsTable\" class=\"table table-striped table-bordered table-hover\">";
+        tableHeaderContent = "<thead><tr><th> Recorded Time </th>";
+        for (var i = 0; i < data.length; i++) {
+            var set = data[i];
+
+            //Parse the date and sip;ay it in the first column always
+            var date = new Date(parseInt(set.RecordedTime.substr(6)));
+            var dateString = date.toLocaleString("en-US", options);
+
+            tableDetailContent += "<tr><td>" + dateString + "</td >";
+            for (var propName in set) {
+
+                if (!propName.toLocaleLowerCase().startsWith("ai")) {
+                    continue;
+                }
+
+                //Since we use camel case put spaces between the capital then capitalize first letter
+                var propNameDisplay = propName.replace(/_/g, ' ');
+                propNameDisplay = propNameDisplay.substring(2); // Trim AI in the name
+                propNameDisplay = propNameDisplay.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+
+                //We only have to build the table header only once
+                if (i === 0) {
+                    tableHeaderContent += "<th>" + propNameDisplay + "</th>";
+                }
+
+                if (set[propName] === null) {
+                    tableDetailContent += "<td>---</td>";
+                }
+                else {
+                    tableDetailContent += "<td>" + set[propName] + "</td>";
+                }
+
+            }
+            tableDetailContent += "</tr>";
+        }
+
+        tableHeaderContent += "</tr></thead>";
+        content += tableHeaderContent + tableDetailContent + "</table></div>";
+    }
+
+    document.getElementById("ai_info_list").innerHTML = content;
 }
 
 //Given a clicked on weather station, center the map there
@@ -278,12 +337,12 @@ function SetConfigModalInformation()
 
         //Since we use camel case put spaces between the capital then capitalize first letter
         var propNameDisplay = "";
-        if (name === "Use3G") {
+        if (name === "use_3G") {
             propNameDisplay = "Use 3G";
         }
         else {
-            propNameDisplay = name.replace(/([A-Z])/g, ' $1').trim();
-            propNameDisplay = propNameDisplay.charAt(0).toUpperCase() + propNameDisplay.slice(1);
+            propNameDisplay = name.replace(/_/g, ' ');
+            propNameDisplay = propNameDisplay.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
         }
  
         //boolean check for some reason does not evaluate strings as 'true' 'false' as boolean
@@ -302,6 +361,14 @@ function SetConfigModalInformation()
                 contentBool += "<option value=\"true\">Yes</option></select></div>";
             }
 
+        }
+        else if (name.endsWith("ro")) {
+            //Trim the ro
+            propNameDisplay = propNameDisplay.slice(0, -2);
+            content += "<div class=\"form-group\">";
+            content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
+            content += "<input type=\"text\" readonly class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
+            content += "</div>";
         }
         //number
         else if (typeof value === 'number' && name !== "Timestamp") {
@@ -324,19 +391,11 @@ function SetConfigModalInformation()
         }
         //string
         else {
-            if (name.endsWith("ro")) {
-                content += "<div class=\"form-group\">";
-                content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
-                content += "<input readonly type=\"text\" class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
-                content += "</div>";
-            }
-            else {
-                content += "<div class=\"form-group\">";
-                content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
-                content += "<input type=\"text\" class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
-                content += "</div>";
-            }
-    
+
+            content += "<div class=\"form-group\">";
+            content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
+            content += "<input type=\"text\" class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
+            content += "</div>";
         }
     }
 

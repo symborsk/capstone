@@ -19,8 +19,6 @@ namespace AIHubWeb
 
         public AzureStorageController()
         {
-            //TODO: look at using shared accounts
-            //storageAccount = CloudStorageAccount.Parse("SharedAccessSignature=?st=2017-02-28T14%3A17%3A00Z&se=2018-03-03T14%3A17%3A00Z&sp=rl&sv=2017-04-17&sr=c&sig=nxoO5iSP8rZjiQilNQsOBa89W6LqtRyTEOpqnwnqXXE%3D;BlobEndpoint=https://pcldevbgwilkinson01.blob.core.windows.net/sensor-hub?st=2017-02-28T14%3A17%3A00Z&se=2018-03-03T14%3A17%3A00Z&sp=rl&sv=2017-04-17&sr=c&sig=nxoO5iSP8rZjiQilNQsOBa89W6LqtRyTEOpqnwnqXXE%3D");
             storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=pcldevbgwilkinson01;AccountKey=NPkk2BjPvlG1Am78JrSi4ylEQNB3F6tacE/G8P3x8zLOe/BqZwvYMCXP+ni9KMwmx+px/f+J+n9QJq+v9eVSGg==;BlobEndpoint=https://pcldevbgwilkinson01.blob.core.windows.net/;QueueEndpoint=https://pcldevbgwilkinson01.queue.core.windows.net/;TableEndpoint=https://pcldevbgwilkinson01.table.core.windows.net/;FileEndpoint=https://pcldevbgwilkinson01.file.core.windows.net/");
             weatherStations = new List<WeatherStation>();
         }
@@ -122,15 +120,6 @@ namespace AIHubWeb
                 {
                     text = await blobItem.DownloadTextAsync();
 
-                    ////The azure stream analytics job that creates the JSON array does not add a ']' at the end until the day is completed
-                    ////This is an undesirable feature as it caused any data we downlod from today to break the JArray parser, add a ']'
-                    //if (!text.EndsWith("]"))
-                    //{
-                    //    text += "]";
-                    //}
-
-                    //JArray allDataSets = JArray.Parse(text);
-
                     Type weatherSetClass = typeof(WeatherSet);
 
                     string[] allDataSets =  text.Split('\n');
@@ -161,8 +150,48 @@ namespace AIHubWeb
 
                         //Sensors are another array that we need to dive into
                         JArray sensorArray = JArray.Parse(root["sensors"].ToString());
+                        JObject AIArray = JObject.Parse(root["ai_predictions"].ToString());
 
-                        foreach (JObject sensorRoot in sensorArray)
+                        foreach (KeyValuePair<String, JToken> tag in AIArray)
+                        {
+                            String tagName = tag.Key.ToString();
+                            JObject tagValueObj = JObject.Parse(root["sensors"].ToString());
+                            foreach (KeyValuePair<String, JToken> tagAI in tagValueObj)
+                            {
+                                string propName = tagAI.Key.ToString();
+                                switch (tagName)
+                                {
+                                    case "1hr":
+                                        if (propName == "temperature")
+                                            newSet.ai_one_hour_temperature = tagAI.Value.ToString();
+                                        else if (propName == "relative_humidity")
+                                            newSet.ai_one_hour_humidity = tagAI.Value.ToString();
+                                        else if (propName == "wind_speed")
+                                            newSet.ai_one_hour_wind = tagAI.Value.ToString();
+                                        break;
+                                    case "2hr":
+                                        if (propName == "relative_humidity")
+                                            newSet.ai_one_hour_temperature = tagAI.Value.ToString();
+                                        else if (propName == "relative_humidity")
+                                            newSet.ai_one_hour_humidity = tagAI.Value.ToString();
+                                        else if (propName == "wind_speed")
+                                            newSet.ai_one_hour_wind = tagAI.Value.ToString();
+                                        break;
+                                    case "24hr":
+                                        if (propName == "temperature")
+                                            newSet.ai_24_hour_temperature = tagAI.Value.ToString();
+                                        else if (propName == "relative_humidity")
+                                            newSet.ai_24_hour_humidity = tagAI.Value.ToString();
+                                        else if (propName == "wind_speed")
+                                            newSet.ai_24_hour_wind = tagAI.Value.ToString();
+                                        break;
+                                }
+                            }
+                        }
+
+
+
+                            foreach (JObject sensorRoot in sensorArray)
                         {
                             JObject dataObj = JObject.Parse(sensorRoot["data"].ToString());
                             foreach (KeyValuePair<String, JToken> tag in dataObj)
