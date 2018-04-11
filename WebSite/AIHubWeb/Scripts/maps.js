@@ -59,7 +59,7 @@ function AddPinForStation(weatherStation) {
 
 function GenerateInfoString(name, latestRecordedTime, weatherSets) {
     //Our chosen date format
-    var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+    var options = {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
 
     //Table will be built in parts so that we can keep the table building complety dynamic
     var content;
@@ -126,10 +126,19 @@ function DisplayWeatherSetsForTable(data, status) {
     InsertWeatherTableHtml(data);
     InsertAITableHtml(data);
 
-    //Scroll to the newly made table
-    $('html, body').animate({
-        'scrollTop': $("#map_list").position().top
-    });
+    //Scroll to the newly made table weather table
+    if (document.getElementById("map_list").style.display !== "none") {
+        $('html, body').animate({
+            'scrollTop': $("#map_list").position().top
+            });
+    }
+
+    //Scroll to the newly made table ai table
+    if (document.getElementById("ai_info_list").style.display !== "none") {
+        $('html, body').animate({
+            'scrollTop': $("#ai_info_list").position().top
+        });
+    }
 
     //Display the tab for viewing different data sets
     document.getElementById("TableSwitching").style.display = "block";
@@ -149,8 +158,7 @@ function DisplayWeatherSetsForTableOnRefresh(data, status) {
 
 function InsertWeatherTableHtml(data) {
     //Our chosen date format
-    var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-
+    var options = {weekday:'short', year:'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
 
     var content = "";
     if (data.length === 0) {
@@ -205,8 +213,7 @@ function InsertWeatherTableHtml(data) {
 
 function InsertAITableHtml(data) {
     //Our chosen date format
-    var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-
+    var options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
 
     var content = "";
     if (data.length === 0) {
@@ -273,7 +280,7 @@ function CreateStationList(lat, lng, stationName) {
     var content = "";
 
     //Grabs only the lat, lng, and station name to create new button
-    content += "<a href=\"#\" style=\"margin:5px;\" class=\"list-group-item list-group-item-action flex-column align-items-start\" onclick=\"CenterMapOnStation('" + lat + "','" + lng + "')\"><h5>" + stationName + "</h5></a > ";
+    content += "<a href=\"#map_canvas\" style=\"margin:5px;\" class=\"list-group-item list-group-item-action flex-column align-items-start\" onclick=\"CenterMapOnStation('" + lat + "','" + lng + "')\"><h5>" + stationName + "</h5></a > ";
 
     // Generate the html content
     document.getElementById("station_list").innerHTML += content;
@@ -329,6 +336,8 @@ function SetConfigModalInformation()
     document.getElementById('modalConfigSettingsTitle').innerHTML = currentConfigOptions.RowKey + " - Configuration Settings";
 
     for (var name in currentConfigOptions) {
+
+        //These are the Meta-Data
         if (name === 'PartitionKey' || name === 'RowKey' || name === "ETag") {
             continue;
         }
@@ -337,14 +346,13 @@ function SetConfigModalInformation()
 
         //Since we use camel case put spaces between the capital then capitalize first letter
         var propNameDisplay = "";
-        if (name === "use_3G") {
-            propNameDisplay = "Use 3G";
-        }
-        else {
-            propNameDisplay = name.replace(/_/g, ' ');
-            propNameDisplay = propNameDisplay.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
-        }
- 
+        //if (name === "use_3G") {
+        //    propNameDisplay = "Use 3G";
+        //}
+        //else {
+        propNameDisplay = name.replace(/_/g, ' ');
+        propNameDisplay = propNameDisplay.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+
         //boolean check for some reason does not evaluate strings as 'true' 'false' as boolean
         if (typeof value === 'boolean' || value === "true" || value === "false") {
             contentBool += "<div class=\"form-check\">";
@@ -377,15 +385,15 @@ function SetConfigModalInformation()
             content += "<input type=\"number\" class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
             content += "</div>";
         }
-        //Timestamp is a special case
+        //timestamp is a special case.. display read only different title
         else if (name === "Timestamp") {
 
-            var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+            var options = {weekday:'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
             var date = new Date(parseInt(value));
             var dateString = date.toLocaleString("en-US", options);
 
             content += "<div class=\"form-group\">";
-            content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
+            content += "<label for=\"" + name + "\">Last Updated</label>";
             content += "<input type=\"text\" readonly class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + dateString + "\">";
             content += "</div>";
         }
@@ -420,7 +428,6 @@ function InitializeDatePicker() {
             'All Time': [moment(new Date(1995, 1, 4)), moment()]
         }
     }, DateRangeChange);
-
 
     var start = moment().subtract(6, 'days');
     var end = moment();

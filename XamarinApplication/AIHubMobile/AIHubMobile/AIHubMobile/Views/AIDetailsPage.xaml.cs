@@ -1,27 +1,17 @@
-﻿/**
- * WeatherItemsDetailPage.xaml.cs
- * By: John Symborski
- * Capstone Group 2
- * This file is the back end functionality bound to the Weather Detail Page Markup. It will perform any logic and
- * events the page has
- * */
-
-using System;
-using System.Collections.ObjectModel;
+﻿using System;
 using Xamarin.Forms;
-using System.Threading.Tasks;
 using Xamarin.Forms.Xaml;
 
 namespace AIHubMobile
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class WeatherStationDetailPage : ContentPage
-    {
+	[XamlCompilation(XamlCompilationOptions.Compile)]
+	public partial class AIDetailsPage : ContentPage
+	{
         WeatherStationDetailViewModel viewModel;
 
         //We need this default constructor by definition
-        public WeatherStationDetailPage()
-        {   
+        public AIDetailsPage()
+        {
             viewModel = new WeatherStationDetailViewModel();
             BindingContext = viewModel;
             InitializeComponent();
@@ -29,7 +19,7 @@ namespace AIHubMobile
 
         //When the page is connected we simply bind the proper view model class
         //This View model will represent a list item in detail
-        public WeatherStationDetailPage(WeatherStationDetailViewModel passedInViewModel)
+        public AIDetailsPage(WeatherStationDetailViewModel passedInViewModel)
         {
             viewModel = passedInViewModel;
             BindingContext = viewModel;
@@ -73,16 +63,15 @@ namespace AIHubMobile
 
             //Refresh the weather sets
             if (DetailWeatherSets != null)
-            { 
+            {
                 viewModel.RefreshWeatherSets.Execute(null);
-            }   
+            }
         }
 
         private async void ViewAIInfo(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new AIDetailsPage(viewModel), false);
+            await Navigation.PushModalAsync(new AboutPage(), false);
         }
-
 
     }
 }

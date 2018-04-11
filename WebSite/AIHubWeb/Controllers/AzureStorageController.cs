@@ -190,9 +190,7 @@ namespace AIHubWeb
                             }
                         }
 
-
-
-                            foreach (JObject sensorRoot in sensorArray)
+                        foreach (JObject sensorRoot in sensorArray)
                         {
                             JObject dataObj = JObject.Parse(sensorRoot["data"].ToString());
                             foreach (KeyValuePair<String, JToken> tag in dataObj)
@@ -218,7 +216,6 @@ namespace AIHubWeb
                 //This can happen when there is an empty blob object 
                 catch (Exception ex)
                 {
-
                     Console.WriteLine("Failure getting a blob: " + ex.Message);
                 }
             }
@@ -279,18 +276,6 @@ namespace AIHubWeb
             }
         }
 
-        private StationOptions CreateDefaultEditableStationOption(CloudTable tab, String name)
-        {
-            StationOptions option = new StationOptions(name);
-
-            TableOperation insertOp = TableOperation.InsertOrReplace(option);
-
-            //We do not need to await this 
-            tab.ExecuteAsync(insertOp);
-
-            return option;
-        }
-
         public async Task<bool> UpdateDeviceConfigSettings(StationOptions option)
         {
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
@@ -320,7 +305,7 @@ namespace AIHubWeb
             StationOptions option;
             if (retrievedResult.Result == null)
             {
-                option = CreateDefaultEditableStationOption(table, deviceName);
+                return null;
             }
             else
             {
