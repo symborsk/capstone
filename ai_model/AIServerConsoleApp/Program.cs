@@ -49,19 +49,19 @@ namespace AIServerConsoleApp
                         obj.WriteTo(writer);
                     }
 
-					// Get a timestamp for the processed data
+                    // Get a timestamp for the processed data
                     string timestamp = obj["timestamp"].ToString();
 
-					// Run AI model to get JSON forecast & then send it back to Azure
+                    // Run AI model to get JSON forecast & then send it back to Azure
                     obj["Forecast"] = JObject.Parse(run_cmd(@"..\scripts\model.py", String.Format("-eval -file {0}", guid + ".json")));
-					PushDataUpToAzure(client, obj.ToString(), timestamp);
+                    PushDataUpToAzure(client, obj.ToString(), timestamp);
                 }
             }
         }
 
-        static async void PushDataUpToAzure(CloudBlobClient cli, string jsonObj, string timestamp)
+        static void PushDataUpToAzure(CloudBlobClient cli, string jsonObj, string timestamp)
         {
-            bool succ = await SendJsonToStorage(cli, jsonObj, timestamp);
+            bool succ = SendJsonToStorage(cli, jsonObj, timestamp);
 
             if (succ)
                 Console.WriteLine("Success writing JSON file to azure storage");
@@ -69,7 +69,7 @@ namespace AIServerConsoleApp
                 Console.WriteLine("Failure Loading JSON file to azure storage... Goodbye");
         }
 
-        static async Task<bool> SendJsonToStorage(CloudBlobClient blobClient, string fullFilePath, string timeStamp)
+        static bool SendJsonToStorage(CloudBlobClient blobClient, string fullText, string timeStamp)
         {
             BlobContinuationToken continuationToken = null;
             BlobResultSegment resultSegment = null;
@@ -81,19 +81,20 @@ namespace AIServerConsoleApp
                 dtDateTime = dtDateTime.AddSeconds(Double.Parse(timeStamp));
 				String outputPath = String.Format(@"logs/post/{0}/{1}/{2}", dtDateTime.Year, dtDateTime.Month, dtDateTime.Day);
 
-				// Retrieve reference to a previously created container
-				CloudBlobContainer container = blobClient.GetContainerReference("sensor-hub");
-                resultSegment = await container.ListBlobsSegmentedAsync(outputPath, true, BlobListingDetails.All, 1000, continuationToken, null, null);
+                // Retrieve reference to a previously created container
+                https://pcldevbgwilkinson01.blob.core.windows.net/sensor-hub/logs/pre/2018/04/06/0_8b385536905846c68aa7a3e4e476200b_1.json
+                CloudBlobContainer container = blobClient.GetContainerReference("sensor-hub");
+                resultSegment = container.ListBlobsSegmented(outputPath, true, BlobListingDetails.All, 1000, continuationToken, null, null);
 
                if(resultSegment.Results.Count() ==  1)
                 {
                     CloudAppendBlob blob =  (CloudAppendBlob) resultSegment.Results.First();
-                    await blob.AppendTextAsync(fullFilePath);
+                    blob.AppendText(fullText);
                 }
                 else
                 {
                     CloudAppendBlob blob = container.GetAppendBlobReference(outputPath + "/" + Guid.NewGuid() + ".json");
-                    await blob.UploadTextAsync(fullFilePath);
+                    blob.UploadText(fullText);
                 }
             }
             catch(Exception e)
