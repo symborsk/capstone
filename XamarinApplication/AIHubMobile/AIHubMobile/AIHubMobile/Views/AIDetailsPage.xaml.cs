@@ -14,6 +14,7 @@ namespace AIHubMobile
         {
             viewModel = new WeatherStationDetailViewModel();
             BindingContext = viewModel;
+            Title = "AI Page";
             InitializeComponent();
         }
 
@@ -21,9 +22,13 @@ namespace AIHubMobile
         //This View model will represent a list item in detail
         public AIDetailsPage(WeatherStationDetailViewModel passedInViewModel)
         {
-            viewModel = passedInViewModel;
-            BindingContext = viewModel;
             InitializeComponent();
+            DetailWeatherSets.ItemsSource = passedInViewModel.RgSets;
+            BindingContext = this.viewModel = passedInViewModel;
+
+            Title = "AI Page Station: " + viewModel.Item.StationName;
+            //Change the selected index
+            this.dateDropDown.SelectedIndex = 0;
         }
 
         async void Config_Clicked(object sender, EventArgs e)
@@ -33,7 +38,6 @@ namespace AIHubMobile
 
         private void Picker_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //TODO: Update Options functionality
             Picker pick = (Picker)sender;
 
             String selected = pick.SelectedItem.ToString();

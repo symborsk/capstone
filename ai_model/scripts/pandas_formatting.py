@@ -6,7 +6,8 @@ import numpy as np
 # # # # # # # # # #
 
 # Path to the weather data folder
-data_path = '../historical_weather_data/'
+build_data_path = '../historical_weather_data/'
+eval_data_path = ''
 
 # List of weather csv files
 weather_files = ['weatherstats_edmonton_hourly.csv', 'weatherstats_barrhead_hourly.csv', \
@@ -68,7 +69,7 @@ humidex_row_formula = lambda row: 6.11 * float(np.exp(5417.7530 * ((1/273.16)-(1
 	Outputs
 		Corresponding list of pandas dataframes
 	"""
-def load_data(path=data_path, files=weather_files): 
+def load_data(path=build_data_path, files=weather_files): 
 	# Create an list of dataframes
 	weather_data = [pd.read_csv(path + x, header=0, low_memory=False).filter(items=data_cols) for x in files]
 
@@ -145,7 +146,11 @@ def build_dataset(dataframes, offset):
 	Outputs
 		Singe pandas dataframe
 	"""
-def join_dataframes(dataframes): 
+def join_dataframes(dataframes, set_index=False):
+	# If set_index is set we need to set initial join index of dataframes[0]
+	if set_index:
+		dataframes[0] = dataframes[0].set_index('date_time_local')
+
 	# Loop over dataframes[1] & onward, joining them to dataframes[0]
 	for i in range(1, len(dataframes)):
 		# Set the index to join on
@@ -169,8 +174,11 @@ def join_dataframes(dataframes):
 	dataframes[0].insert(loc=3, column='day', value=dataframes[0]['date_time_local'].str.slice(d_start,d_end).astype('int'), allow_duplicates=True)
 	dataframes[0].insert(loc=4, column='hour', value=dataframes[0]['date_time_local'].str.slice(h_start,h_end).astype('int'), allow_duplicates=True)
 
-	# Set the index & return
-	return dataframes[0].set_index(return_index)
+	# Set the index & return depending on set_index
+	if set_index:
+		return dataframes[0].set_index(return_index).drop('unixtime', axis=col_axis)
+	else:
+		return dataframes[0].set_index(return_index)
 
 """ Function used to split the data into training & evaluation sets 
 

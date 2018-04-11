@@ -6,7 +6,8 @@
     <ContentPage.Content>
         <ContentView>
             <StackLayout Orientation="Vertical">
-                <Picker Title="Show Records For:" SelectedIndexChanged="Picker_SelectedIndexChanged">
+                
+                <Picker x:Name="dateDropDown"  Title="Show Records For:" SelectedIndexChanged="Picker_SelectedIndexChanged">
                     <Picker.Items>
                         <x:String>Today</x:String>
                         <x:String>Past 3 Days</x:String>
@@ -15,7 +16,6 @@
                         <x:String>This Year</x:String>
                         <x:String>All Time</x:String>
                     </Picker.Items>
-                    <Picker.SelectedIndex>0</Picker.SelectedIndex>
                 </Picker>
 
                 <BoxView HorizontalOptions="Fill" VerticalOptions="Center" HeightRequest="2" Color="Black"/>
@@ -29,6 +29,28 @@
                  IsPullToRefreshEnabled="true"
                  IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                  CachingStrategy="RecycleElement">
+                    <ListView.Header>
+                        <Grid RowSpacing="0" ColumnSpacing="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="15*"  />
+                                <ColumnDefinition Width="15*" />
+                                <ColumnDefinition Width="15*"  />
+                                <ColumnDefinition Width="15*" />
+                                <ColumnDefinition Width="15*"  />
+                                <ColumnDefinition Width="15*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Fields: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium" Grid.Row="0" Grid.Column="0"/>
+                            <Label Text="1 Hr: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium" Grid.Row="0" Grid.Column="1"/>
+                            <Label Text="4 Hr: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium" Grid.Row="0" Grid.Column="2"/>
+                            <Label Text="12 Hr: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium" Grid.Row="0" Grid.Column="3"/>
+                            <Label Text="24 Hr: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium" Grid.Row="0" Grid.Column="4"/>
+                            <Label Text="Date: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium" Grid.Row="0" Grid.Column="5"/>
+
+                        </Grid>
+                    </ListView.Header>
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>

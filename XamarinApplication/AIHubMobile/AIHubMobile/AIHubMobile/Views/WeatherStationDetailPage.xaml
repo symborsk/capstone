@@ -18,7 +18,7 @@
         <ContentView>
             <StackLayout Orientation="Vertical">
                 <Button Text="View AI Info" Clicked="ViewAIInfo" />
-                <Picker Title="Show Records For:" SelectedIndexChanged="Picker_SelectedIndexChanged">
+                <Picker x:Name="dateDropDown" Title="Show Records For:" SelectedIndexChanged="Picker_SelectedIndexChanged">
                     <Picker.Items>
                         <x:String>Today</x:String>
                         <x:String>Past 3 Days</x:String>
