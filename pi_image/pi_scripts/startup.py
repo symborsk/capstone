@@ -1,4 +1,5 @@
 import os
+import os.path
 import time
 
 os.system("python ~/capstone/pi_image/gui/Wizard.py")
@@ -11,6 +12,9 @@ print("setup complete")
 #print("entering power saving mode")
 #os.system("sudo sh ~/capstone/pi_image/pi_scripts/power_saving/power_saving.sh")
 
+if os.path.isfile("/home/thor/.use3G.dat"):
+	print("starting up 3G chip")
+	os.command("sudo pon fona")
 # for now run as sudo?
 # chmodding, we'll see what happens
 # start sdl process
