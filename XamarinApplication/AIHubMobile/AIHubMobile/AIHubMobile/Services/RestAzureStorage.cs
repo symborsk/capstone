@@ -122,19 +122,13 @@ namespace AIHubMobile
                 {
                     text = await blobItem.DownloadTextAsync();
 
-                    //The azure stream analytics job that creates the JSON array does not add a ']' at the end until the day is completed
-                    //This is an undesirable feature as it caused any data we downlod from today to break the JArray parser, add a ']'
-                    if (!text.EndsWith("]"))
-                    {
-                        text = text + "]";
-                    }
-
-                    JArray allDataSets = JArray.Parse(text);
                     Type weatherSetClass = typeof(WeatherSet);
 
-                    foreach (JObject root in allDataSets)
+                    string[] allDataSets = text.Split('\n');
+
+                    foreach (String rootString in allDataSets)
                     {
-                        //Device is the same as station
+                        JObject root = JObject.Parse(rootString);
                         string devName = root["device_name"].ToString();
                         double lat = Convert.ToDouble(root["location"]["lat"].ToString());
                         double lon = Convert.ToDouble(root["location"]["lon"].ToString());
@@ -216,7 +210,7 @@ namespace AIHubMobile
             List<string> prefixes = new List<string>();
             //Blobs are stroed under utc time
             DateTime currentUtcDay = DateTime.UtcNow;
-            string sLogPrefix = @"logs/";
+            string sLogPrefix = @"logs/pre/";
             switch (range)
             {
                 case WeatherSet.WeatherSetDateRanges.Today:    
