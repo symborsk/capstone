@@ -280,7 +280,7 @@ function CreateStationList(lat, lng, stationName) {
     var content = "";
 
     //Grabs only the lat, lng, and station name to create new button
-    content += "<a href=\"#\" style=\"margin:5px;\" class=\"list-group-item list-group-item-action flex-column align-items-start\" onclick=\"CenterMapOnStation('" + lat + "','" + lng + "')\"><h5>" + stationName + "</h5></a > ";
+    content += "<a href=\"#map_canvas\" style=\"margin:5px;\" class=\"list-group-item list-group-item-action flex-column align-items-start\" onclick=\"CenterMapOnStation('" + lat + "','" + lng + "')\"><h5>" + stationName + "</h5></a > ";
 
     // Generate the html content
     document.getElementById("station_list").innerHTML += content;
@@ -385,7 +385,7 @@ function SetConfigModalInformation()
             content += "<input type=\"number\" class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
             content += "</div>";
         }
-        //timestamp is a special case.. display read only
+        //timestamp is a special case.. display read only different title
         else if (name === "Timestamp") {
 
             var options = {weekday:'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
@@ -428,7 +428,6 @@ function InitializeDatePicker() {
             'All Time': [moment(new Date(1995, 1, 4)), moment()]
         }
     }, DateRangeChange);
-
 
     var start = moment().subtract(6, 'days');
     var end = moment();
