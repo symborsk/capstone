@@ -152,38 +152,39 @@ namespace AIHubWeb
                         JArray sensorArray = JArray.Parse(root["sensors"].ToString());
                         JObject AIArray = JObject.Parse(root["ai_predictions"].ToString());
 
-                        foreach (KeyValuePair<String, JToken> tag in AIArray)
+                        foreach (KeyValuePair<String, JToken> tagAI in AIArray)
                         {
-                            String tagName = tag.Key.ToString();
-                            JObject tagValueObj = JObject.Parse(root["sensors"].ToString());
-                            foreach (KeyValuePair<String, JToken> tagAI in tagValueObj)
+                            String tagName = tagAI.Key.ToString();
+                            String s = tagAI.Value.ToString();
+                            JObject tagValueObj = JObject.Parse(tagAI.Value.ToString());
+                            foreach (KeyValuePair<String, JToken> tagAIInner in tagValueObj)
                             {
-                                string propName = tagAI.Key.ToString();
+                                string propName = tagAIInner.Key.ToString();
                                 switch (tagName)
                                 {
-                                    case "1hr":
+                                    case "1h":
                                         if (propName == "temperature")
-                                            newSet.ai_one_hour_temperature = tagAI.Value.ToString();
+                                            newSet.ai_one_hour_temperature = tagAIInner.Value.ToString();
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_one_hour_humidity = tagAI.Value.ToString();
+                                            newSet.ai_one_hour_humidity = tagAIInner.Value.ToString();
                                         else if (propName == "wind_speed")
-                                            newSet.ai_one_hour_wind = tagAI.Value.ToString();
+                                            newSet.ai_one_hour_wind = tagAIInner.Value.ToString();
                                         break;
-                                    case "2hr":
+                                    case "2h":
                                         if (propName == "relative_humidity")
-                                            newSet.ai_one_hour_temperature = tagAI.Value.ToString();
+                                            newSet.ai_one_hour_temperature = tagAIInner.Value.ToString();
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_one_hour_humidity = tagAI.Value.ToString();
+                                            newSet.ai_one_hour_humidity = tagAIInner.Value.ToString();
                                         else if (propName == "wind_speed")
-                                            newSet.ai_one_hour_wind = tagAI.Value.ToString();
+                                            newSet.ai_one_hour_wind = tagAIInner.Value.ToString();
                                         break;
-                                    case "24hr":
+                                    case "24h":
                                         if (propName == "temperature")
-                                            newSet.ai_24_hour_temperature = tagAI.Value.ToString();
+                                            newSet.ai_24_hour_temperature = tagAIInner.Value.ToString();
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_24_hour_humidity = tagAI.Value.ToString();
+                                            newSet.ai_24_hour_humidity = tagAIInner.Value.ToString();
                                         else if (propName == "wind_speed")
-                                            newSet.ai_24_hour_wind = tagAI.Value.ToString();
+                                            newSet.ai_24_hour_wind = tagAIInner.Value.ToString();
                                         break;
                                 }
                             }
@@ -239,7 +240,7 @@ namespace AIHubWeb
             }
             else
             {
-                sLogPrefix = @"logs/pre/";
+                sLogPrefix = @"logs/post/";
             }
        
             switch (range)
