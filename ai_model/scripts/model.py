@@ -184,10 +184,6 @@ def evaluate():
 	global loaded_model
 	global loop
 
-	# Check for loaded model
-	if loaded_model==None:
-		loaded_model = load_model()
-
 	while True:
 		# Run the pull process to get the data
 		pull_proc = subprocess.Popen([console_cmd, pull_flag], stdout=subprocess.PIPE)
@@ -207,6 +203,10 @@ def evaluate():
 			input_features = get_data_file()
 		else:
 			input_features = get_data_dir()
+
+		# Check for loaded model
+		if loaded_model==None:
+			loaded_model = load_model()
 
 		# Set output mode if not inplace
 		if menu_run:
