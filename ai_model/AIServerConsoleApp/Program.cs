@@ -43,26 +43,33 @@ namespace AIServerConsoleApp
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=pcldevbgwilkinson01;AccountKey=NPkk2BjPvlG1Am78JrSi4ylEQNB3F6tacE/G8P3x8zLOe/BqZwvYMCXP+ni9KMwmx+px/f+J+n9QJq+v9eVSGg==;BlobEndpoint=https://pcldevbgwilkinson01.blob.core.windows.net/;QueueEndpoint=https://pcldevbgwilkinson01.queue.core.windows.net/;TableEndpoint=https://pcldevbgwilkinson01.table.core.windows.net/;FileEndpoint=https://pcldevbgwilkinson01.file.core.windows.net/");
             CloudBlobClient client = storageAccount.CreateCloudBlobClient();
 
-            List<CloudBlockBlob> rgBlobs = GetAllList(client);
-
-            if(rgBlobs.Count == 0 )
+            try
             {
-                Console.WriteLine(false);
-                return;
+                List<CloudBlockBlob> rgBlobs = GetAllList(client);
+
+                if (rgBlobs.Count == 0)
+                {
+                    Console.WriteLine(false);
+                    return;
+                }
+
+                CloudBlockBlob blockBlob = rgBlobs[0];
+                string blobText = blockBlob.DownloadText();
+
+                if (File.Exists(@"..\test_files\preprocessed_data.json"))
+                {
+                    File.Delete(@"..\test_files\preprocessed_data.json");
+                }
+
+                File.WriteAllText(@"..\test_files\preprocessed_data.json", blobText);
+
+                blockBlob.Delete();
+                Console.WriteLine(true);
             }
-
-            CloudBlockBlob blockBlob = rgBlobs[0];
-            string blobText = blockBlob.DownloadText();
-
-            if (File.Exists(@"..\test_files\preprocessed_data.json"))
+            catch(Exception e)
             {
-                File.Delete(@"..\test_files\preprocessed_data.json");
-            }
-
-            File.WriteAllText(@"..\test_files\preprocessed_data.json", blobText);
-
-            blockBlob.Delete();
-            Console.WriteLine(true);          
+                Console.WriteLine("False " + e.Message);
+            }     
         }
 
         static void PushDataUpToAzure(CloudBlobClient cli, string jsonObj, string timestamp)
