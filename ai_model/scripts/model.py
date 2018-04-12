@@ -184,12 +184,17 @@ def evaluate():
 	global loaded_model
 	global loop
 
+	# Check for loaded model
+	if loaded_model==None:
+		loaded_model = load_model()
+
 	while True:
 		# Run the pull process to get the data
 		pull_proc = subprocess.Popen([console_cmd, pull_flag], stdout=subprocess.PIPE)
 		out, err = pull_proc.communicate()
 
-		while out=='False\\r\\n':
+		while (b'False' in out):
+			print('Sleeping...')
 			time.sleep(10)
 			pull_proc = subprocess.Popen([console_cmd, pull_flag], stdout=subprocess.PIPE)
 			out, err = pull_proc.communicate()
@@ -202,10 +207,6 @@ def evaluate():
 			input_features = get_data_file()
 		else:
 			input_features = get_data_dir()
-
-		# Check for loaded model
-		if loaded_model==None:
-			loaded_model = load_model()
 
 		# Set output mode if not inplace
 		if menu_run:
@@ -379,8 +380,8 @@ def display_results(input_features, expected):
 
 			# Write the output dict to the output file
 			with open(file_name, 'x+') as f:
-				for i in range(len(input_features)):
-					f.write('{0}\n'.format(json.dumps(input_features[i], default=wm.serialize)))
+				for i in range(len(json_obj)):
+					f.write('{0}\n'.format(json.dumps(json_obj[i], default=wm.serialize)))
 
 	else:
 		# Loop over all input features to display them in string format
