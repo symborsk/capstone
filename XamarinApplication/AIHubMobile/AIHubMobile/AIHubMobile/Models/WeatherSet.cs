@@ -29,21 +29,21 @@ namespace AIHubMobile
         public string visibility { get; set; }
 
         //These are hardcoded values since 
-        public string ai_one_hour_temperature { get; set; }
-        public string ai_four_hour_temperature { get; set; }
-        public string ai_eight_hour_temperature { get; set; }
+        public string ai_1_hour_temperature { get; set; }
+        public string ai_4_hour_temperature { get; set; }
+        public string ai_8_hour_temperature { get; set; }
         public string ai_12_hour_temperature { get; set; }
         public string ai_24_hour_temperature { get; set; }
 
-        public string ai_one_hour_humidity { get; set; }
-        public string ai_four_hour_humidity { get; set; }
-        public string ai_eight_hour_humidity { get; set; }
+        public string ai_1_hour_humidity { get; set; }
+        public string ai_4_hour_humidity { get; set; }
+        public string ai_8_hour_humidity { get; set; }
         public string ai_12_hour_humidity { get; set; }
         public string ai_24_hour_humidity { get; set; }
 
-        public string ai_one_hour_wind { get; set; }
-        public string ai_four_hour_wind { get; set; }
-        public string ai_eight_hour_wind { get; set; }
+        public string ai_1_hour_wind { get; set; }
+        public string ai_4_hour_wind { get; set; }
+        public string ai_8_hour_wind { get; set; }
         public string ai_12_hour_wind { get; set; }
         public string ai_24_hour_wind { get; set; }
 

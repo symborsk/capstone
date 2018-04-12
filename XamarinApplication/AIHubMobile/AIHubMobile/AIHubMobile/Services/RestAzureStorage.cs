@@ -154,7 +154,7 @@ namespace AIHubMobile
 
                         //Sensors are another array that we need to dive into
                         JArray sensorArray = JArray.Parse(root["sensors"].ToString());
-                        JObject AIArray = JObject.Parse(root["ai_predictions"].ToString());
+                        JObject AIArray = JObject.Parse(root["Forecast"].ToString());
 
                         foreach (KeyValuePair<String, JToken> tagAI in AIArray)
                         {
@@ -168,28 +168,28 @@ namespace AIHubMobile
                                 {
                                     case "1h":
                                         if (propName == "temperature")
-                                            newSet.ai_one_hour_temperature = tagAIInner.Value.ToString();
+                                            newSet.ai_1_hour_temperature = tagAIInner.Value.ToString();
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_one_hour_humidity = tagAIInner.Value.ToString();
+                                            newSet.ai_1_hour_humidity = tagAIInner.Value.ToString();
                                         else if (propName == "wind_speed")
-                                            newSet.ai_one_hour_wind = tagAIInner.Value.ToString();
+                                            newSet.ai_1_hour_wind = tagAIInner.Value.ToString();
                                         break;
                                     case "4h":
-                                        if (propName == "relative_humidity")
-                                            newSet.ai_one_hour_temperature = tagAIInner.Value.ToString();
+                                        if (propName == "temperature")
+                                            newSet.ai_4_hour_temperature = tagAIInner.Value.ToString();
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_one_hour_humidity = tagAIInner.Value.ToString();
+                                            newSet.ai_4_hour_humidity = tagAIInner.Value.ToString();
                                         else if (propName == "wind_speed")
-                                            newSet.ai_one_hour_wind = tagAIInner.Value.ToString();
+                                            newSet.ai_4_hour_wind = tagAIInner.Value.ToString();
                                         break;
 
                                     case "8h":
                                         if (propName == "temperature")
-                                            newSet.ai_eight_hour_temperature = tagAIInner.Value.ToString();
+                                            newSet.ai_8_hour_temperature = tagAIInner.Value.ToString();
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_eight_hour_humidity = tagAIInner.Value.ToString();
+                                            newSet.ai_8_hour_humidity = tagAIInner.Value.ToString();
                                         else if (propName == "wind_speed")
-                                            newSet.ai_eight_hour_wind = tagAIInner.Value.ToString();
+                                            newSet.ai_8_hour_wind = tagAIInner.Value.ToString();
                                         break;
 
                                     case "12h":

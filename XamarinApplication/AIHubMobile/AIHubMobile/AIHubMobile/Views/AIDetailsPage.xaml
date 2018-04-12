@@ -80,28 +80,28 @@
                                     <Label Text="{Binding RecordedTime}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium" Grid.Row="0" Grid.Column="1"/>
 
                                     <Label Text="1 Hour Temperature( C ): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="1" Grid.Column="0"/>
-                                    <Label Text="{Binding ai_one_hour_temperature }" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="1" Grid.Column="1"/>
+                                    <Label Text="{Binding ai_1_hour_temperature }" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="1" Grid.Column="1"/>
 
                                     <Label Text="3 Hour Temperature( C ): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}"  FontSize="Micro" Grid.Row="2" Grid.Column="0"/>
-                                    <Label Text="{Binding ai_three_hour_temperature }" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="2" Grid.Column="1"/>
+                                    <Label Text="{Binding ai_4_hour_temperature }" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="2" Grid.Column="1"/>
 
                                     <Label Text="24 Hour Temperature( C ): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="3" Grid.Column="0"/>
                                     <Label Text="{Binding ai_24_hour_temperature }" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="3" Grid.Column="1"/>
 
                                     <Label Text="1 Hour Wind Speed( km/hr ): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="4" Grid.Column="0"/>
-                                    <Label Text="{Binding ai_one_hour_wind}"  LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="4" Grid.Column="1"/>
+                                    <Label Text="{Binding ai_1_hour_wind}"  LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="4" Grid.Column="1"/>
 
                                     <Label Text="3 Hour Wind Speed( km/hr ): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="5" Grid.Column="0"/>
-                                    <Label Text="{Binding ai_one_hour_wind}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="5" Grid.Column="1"/>
+                                    <Label Text="{Binding ai_4_hour_wind}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="5" Grid.Column="1"/>
 
                                     <Label Text="24 Hour Wind Speed( km/hr ): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="6" Grid.Column="0"/>
-                                    <Label Text="{Binding ai_one_hour_wind}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="6" Grid.Column="1"/>
+                                    <Label Text="{Binding ai_24_hour_wind}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="6" Grid.Column="1"/>
 
                                     <Label Text="1 Hour Relative Humidity (%): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="7" Grid.Column="0"/>
-                                    <Label Text="{Binding ai_one_hour_humidity}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="7" Grid.Column="1"/>
+                                    <Label Text="{Binding ai_1_hour_humidity}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="7" Grid.Column="1"/>
 
                                     <Label Text="3 Hour Relative Humidity (%): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="0"/>
-                                    <Label Text="{Binding ai_three_hour_humidity}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="1"/>
+                                    <Label Text="{Binding ai_4_hour_humidity}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="1"/>
 
                                     <Label Text="24 Hour Relative Humidity (%): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="9" Grid.Column="0"/>
                                     <Label Text="{Binding ai_24_hour_humidity}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="9" Grid.Column="1"/>
