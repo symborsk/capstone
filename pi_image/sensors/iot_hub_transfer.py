@@ -206,7 +206,8 @@ def update_settings(settings):
         with open("/home/thor/.interval.dat", "w+") as file:
             file.write(str(seconds))
         email = str(settings.notification_email)
-        with open("/home/thor/.email.dat") as file:
+        print("EMAIL: " + email) 
+        with open("/home/thor/.email.dat", "w+") as file:
             file.write(email)
     except:
         print("no polling freq?")

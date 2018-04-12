@@ -105,5 +105,10 @@ namespace AIHubMobile
                 }
             });                  
         }
+
+        public async  Task<StationOptions> GetStationOptions()
+        {
+            return await WeatherStationDependency.GetConfigSetting(Item.StationName);
+        }
     }
 }
