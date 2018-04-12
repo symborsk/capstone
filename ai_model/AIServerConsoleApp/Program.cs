@@ -137,22 +137,29 @@ namespace AIServerConsoleApp
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=pcldevbgwilkinson01;AccountKey=NPkk2BjPvlG1Am78JrSi4ylEQNB3F6tacE/G8P3x8zLOe/BqZwvYMCXP+ni9KMwmx+px/f+J+n9QJq+v9eVSGg==;BlobEndpoint=https://pcldevbgwilkinson01.blob.core.windows.net/;QueueEndpoint=https://pcldevbgwilkinson01.queue.core.windows.net/;TableEndpoint=https://pcldevbgwilkinson01.table.core.windows.net/;FileEndpoint=https://pcldevbgwilkinson01.file.core.windows.net/");
             CloudBlobClient client = storageAccount.CreateCloudBlobClient();
 
-            string file = File.ReadAllText(@"..\test_files\processed_data.json");
-            string[] objs = file.Split(new[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-            foreach(string jsonString in objs)
+            try
             {
-                JObject obj = JObject.Parse(jsonString);
-                string timestamp = obj["timestamp"].ToString();
-                SendJsonToStorage(client, obj.ToString(Formatting.None), timestamp);
-            }
+                string file = File.ReadAllText(@"..\test_files\processed_data.json");
+                string[] objs = file.Split(new[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-            if (File.Exists(@"..\test_files\processed_data.json"))
+                foreach (string jsonString in objs)
+                {
+                    JObject obj = JObject.Parse(jsonString);
+                    string timestamp = obj["timestamp"].ToString();
+                    SendJsonToStorage(client, obj.ToString(Formatting.None), timestamp);
+                }
+
+                if (File.Exists(@"..\test_files\processed_data.json"))
+                {
+                    File.Delete(@"..\test_files\processed_data.json");
+                }
+
+                Console.WriteLine("true");
+            }
+            catch (Exception e)
             {
-                File.Delete(@"..\test_files\processed_data.json");
+                Console.WriteLine(e.Message);
             }
-
-            Console.WriteLine("true");
         }
     }
 }
