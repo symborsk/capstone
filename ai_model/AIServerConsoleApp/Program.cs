@@ -100,7 +100,6 @@ namespace AIServerConsoleApp
                 }
                 else
                 {
-                    fullText = Environment.NewLine + fullText;
                     CloudAppendBlob blob = container.GetAppendBlobReference(outputPath + "/" + Guid.NewGuid() + ".json");
                     blob.UploadText(fullText);
                 }
@@ -154,7 +153,7 @@ namespace AIServerConsoleApp
                     File.Delete(@"..\test_files\processed_data.json");
                 }
 
-                Console.WriteLine("true");
+                Console.WriteLine(true);
             }
             catch (Exception e)
             {
