@@ -13,60 +13,55 @@ namespace AIServerConsoleApp
 {
     class Program
     {
-        static string pythonPath = "";
 
         static void Main(string[] args)
         {
-            if (args.Length != 0)
+            if (args.Length != 1)
             {
-                Console.WriteLine("Invalid number of arguments: expected 0" + args.Length);
+                Console.WriteLine("Please specify -GetLatestData or -SendToAzureBlob" + args.Length);
                 return;
             }
 
-            pythonPath = find_python_path();
+            string function = args[0];
 
+            switch (function)
+            {
+                case "-GetLatestData":
+                    GetLatestPreProcessedData();
+                    return;
+                case "-SendToAzureBlob":
+                    SendAllDataInPostProccessing();
+                    return;
+                default:
+                    Console.WriteLine("Unrecognized command... Goodbye");
+                    return;
+            }     
+        }
+
+        static private void GetLatestPreProcessedData()
+        {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=pcldevbgwilkinson01;AccountKey=NPkk2BjPvlG1Am78JrSi4ylEQNB3F6tacE/G8P3x8zLOe/BqZwvYMCXP+ni9KMwmx+px/f+J+n9QJq+v9eVSGg==;BlobEndpoint=https://pcldevbgwilkinson01.blob.core.windows.net/;QueueEndpoint=https://pcldevbgwilkinson01.queue.core.windows.net/;TableEndpoint=https://pcldevbgwilkinson01.table.core.windows.net/;FileEndpoint=https://pcldevbgwilkinson01.file.core.windows.net/");
             CloudBlobClient client = storageAccount.CreateCloudBlobClient();
-      
-            Task<List<CloudBlockBlob>> task = Task.Run(() => GetAllList(client));
-            List<CloudBlockBlob> rgBlobs = task.Result;
-           
-            foreach (CloudBlockBlob blob in rgBlobs)
+
+            List<CloudBlockBlob> rgBlobs = GetAllList(client);
+
+            if(rgBlobs.Count == 0 )
             {
-                string taskDownload = blob.DownloadText();
-                String [] sDownloadedBlobs = taskDownload.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-
-                foreach (string item in sDownloadedBlobs)
-                {
-                    // Write the JSON to a file
-                    JObject obj = JObject.Parse(item);
-                    string dir = Directory.GetCurrentDirectory();
-                    string guid = Guid.NewGuid().ToString();
-
-                    //Delete the file if it exists
-                    if(File.Exists(@"..\test_files\preprocessed_data.json"))
-                    {
-                        File.Delete(@"..\test_files\preprocessed_data.json");
-                    }
-
-                    using (StreamWriter file = File.CreateText(@"..\test_files\preprocessed_data.json"))
-                    using (JsonTextWriter writer = new JsonTextWriter(file))
-                    {
-                        obj.WriteTo(writer);
-                    }
-
-                    // Get a timestamp for the processed data
-                    string timestamp = obj["timestamp"].ToString();
-
-                    // Run AI model to get JSON forecast & then send it back to Azure
-                    obj["Forecast"] = JObject.Parse(run_cmd(@"..\scripts\model.py", String.Format("-eval -file {0}", guid + ".json")));
-                    PushDataUpToAzure(client, obj.ToString(Formatting.None), timestamp);
-
-                }
-
-                //Delete the pre blob after it is processed
-                blob.Delete();
+                Console.WriteLine(false);
+                return;
             }
+
+            CloudBlockBlob blockBlob = rgBlobs[0];
+            string blobText = blockBlob.DownloadText();
+
+            if (File.Exists(@"..\test_files\preprocessed_data.json"))
+            {
+                File.Delete(@"..\test_files\preprocessed_data.json");
+            }
+
+            File.WriteAllText(@"..\test_files\preprocessed_data.json", blobText);
+
+            Console.WriteLine(true);          
         }
 
         static void PushDataUpToAzure(CloudBlobClient cli, string jsonObj, string timestamp)
@@ -118,15 +113,14 @@ namespace AIServerConsoleApp
             return true;
         }
 
-        static async Task<List<CloudBlockBlob>> GetAllList(CloudBlobClient blobCli)
+        static List<CloudBlockBlob> GetAllList(CloudBlobClient blobCli)
         {
-
             BlobContinuationToken continuationToken = null;
             BlobResultSegment resultSegment = null;
             CloudBlobContainer container = blobCli.GetContainerReference("sensor-hub");
             try
             {
-                resultSegment = await container.ListBlobsSegmentedAsync(@"logs/pre/", true, BlobListingDetails.All, 1000, continuationToken, null, null);
+                resultSegment = container.ListBlobsSegmented(@"logs/pre/", true, BlobListingDetails.All, 1000, continuationToken, null, null);
                 List<CloudBlockBlob> rgList = resultSegment.Results.OfType<CloudBlockBlob>().OrderByDescending(m => m.Properties.LastModified).ToList();
                 return rgList;
             }
@@ -137,43 +131,22 @@ namespace AIServerConsoleApp
             }
         }
 
-        private static string run_cmd(string cmd, string args)
+        private static void SendAllDataInPostProccessing()
         {
-            ProcessStartInfo start = new ProcessStartInfo();
-            start.FileName = pythonPath;
-            start.Arguments = string.Format("{0} {1}", cmd, args);
-            start.UseShellExecute = false;
-            start.RedirectStandardOutput = true;
-            using (Process process = Process.Start(start))
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=pcldevbgwilkinson01;AccountKey=NPkk2BjPvlG1Am78JrSi4ylEQNB3F6tacE/G8P3x8zLOe/BqZwvYMCXP+ni9KMwmx+px/f+J+n9QJq+v9eVSGg==;BlobEndpoint=https://pcldevbgwilkinson01.blob.core.windows.net/;QueueEndpoint=https://pcldevbgwilkinson01.queue.core.windows.net/;TableEndpoint=https://pcldevbgwilkinson01.table.core.windows.net/;FileEndpoint=https://pcldevbgwilkinson01.file.core.windows.net/");
+            CloudBlobClient client = storageAccount.CreateCloudBlobClient();
+
+            string file = File.ReadAllText(@"..\test_files\postprocessed_data.json");
+            string[] objs = file.Split(new[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach(string jsonString in objs)
             {
-                using (StreamReader reader = process.StandardOutput)
-                {
-                    return reader.ReadToEnd();        
-                }
+                JObject obj = JObject.Parse(jsonString);
+                string timestamp = obj["timestamp"].ToString();
+                SendJsonToStorage(client, obj.ToString(Formatting.None), timestamp);
             }
-        }
 
-        private static string find_python_path()
-        {
-            ProcessStartInfo procStartInfo = new ProcessStartInfo("cmd.exe", @"/C " + "python -c \"import sys; print(sys.executable)\"" );
-
-            procStartInfo.RedirectStandardOutput = true;
-            procStartInfo.UseShellExecute = false;
-            procStartInfo.CreateNoWindow = true;
-
-            // wrap IDisposable into using (in order to release hProcess) 
-            using (Process process = new Process())
-            {
-                process.StartInfo = procStartInfo;
-                process.Start();
-
-                // Add this: wait until process does its work
-                process.WaitForExit();
-
-                // and only then read the result
-                string result = process.StandardOutput.ReadToEnd();
-                return result;
-            }
+            Console.WriteLine("true");
         }
     }
 }

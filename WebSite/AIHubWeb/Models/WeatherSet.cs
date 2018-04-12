@@ -13,10 +13,7 @@ namespace AIHubWeb
 {
     public class WeatherSet
     {
-        public WeatherSet()
-        {
-
-        }
+        public WeatherSet() { }
 
         public DateTime RecordedTime { get; set; }
 
@@ -32,16 +29,22 @@ namespace AIHubWeb
         public string visibility { get; set; }
 
         //These are hardcoded values since 
-        public string ai_one_hour_temperature { get; set; }
-        public string ai_three_hour_temperature { get; set; }
+        public string ai_1_hour_temperature { get; set; }
+        public string ai_4_hour_temperature { get; set; }
+        public string ai_8_hour_temperature { get; set; }
+        public string ai_12_hour_temperature { get; set; }
         public string ai_24_hour_temperature { get; set; }
 
-        public string ai_one_hour_humidity{ get; set; }
-        public string ai_three_hour_humidity { get; set; }
+        public string ai_1_hour_humidity { get; set; }
+        public string ai_4_hour_humidity { get; set; }
+        public string ai_8_hour_humidity { get; set; }
+        public string ai_12_hour_humidity { get; set; }
         public string ai_24_hour_humidity { get; set; }
 
-        public string ai_one_hour_wind { get; set; }
-        public string ai_three_hour_wind { get; set; }
+        public string ai_1_hour_wind { get; set; }
+        public string ai_4_hour_wind { get; set; }
+        public string ai_8_hour_wind { get; set; }
+        public string ai_12_hour_wind { get; set; }
         public string ai_24_hour_wind { get; set; }
 
         public enum WeatherSetDateRanges

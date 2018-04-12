@@ -23,7 +23,7 @@ namespace AIHubMobile
 
         public WeatherStationDetailViewModel(WeatherStation item = null)
         {
-            Title = "Station Name: " + item?.StationName;
+            Title = "Weather Details: " + item?.StationName;
             dateRange = WeatherSet.WeatherSetDateRanges.Today;
             Item = item;
 
@@ -104,6 +104,11 @@ namespace AIHubMobile
                     IsBusy = false;
                 }
             });                  
+        }
+
+        public async  Task<StationOptions> GetStationOptions()
+        {
+            return await WeatherStationDependency.GetConfigSetting(Item.StationName);
         }
     }
 }

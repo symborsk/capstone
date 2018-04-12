@@ -223,7 +223,7 @@ function InsertAITableHtml(data) {
         //Table will be built in parts so that we can keep the table building complety dynamic
         var tableHeaderContent = "";
         var tableDetailContent = "";
-        content += "<h2>" + currentStation + "</h2><div><table id=\"resultsTable\" class=\"table table-striped table-bordered table-hover\">";
+        content += "<h2>" + currentStation + "</h2><div><table id=\"resultsTable\" class=\"table table-condensed table-striped table-bordered table-hover\">";
         tableHeaderContent = "<thead><tr><th> Recorded Time </th>";
         for (var i = 0; i < data.length; i++) {
             var set = data[i];
@@ -253,7 +253,9 @@ function InsertAITableHtml(data) {
                     tableDetailContent += "<td>---</td>";
                 }
                 else {
-                    tableDetailContent += "<td>" + set[propName] + "</td>";
+                    var tempRound = parseFloat(set[propName]).toFixed(2);
+
+                    tableDetailContent += "<td>" + tempRound + "</td>";
                 }
 
             }
@@ -354,7 +356,15 @@ function SetConfigModalInformation()
         propNameDisplay = propNameDisplay.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
 
         //boolean check for some reason does not evaluate strings as 'true' 'false' as boolean
-        if (typeof value === 'boolean' || value === "true" || value === "false") {
+        if (name.endsWith("ro")) {
+            //Trim the ro
+            propNameDisplay = propNameDisplay.slice(0, -2);
+            content += "<div class=\"form-group\">";
+            content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
+            content += "<input type=\"text\" readonly class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
+            content += "</div>";
+        }
+        else if (typeof value === 'boolean' || value === "true" || value === "false") {
             contentBool += "<div class=\"form-check\">";
             //contentBool += "<input type=\"checkbox\" checked=\""+ value  +"\" value=\"" + value + "\" class=\"form-check-input\" name=\"" + name + "\" id=\"" + name + "\">";
             contentBool += "<label for=\"" + name + "\">     " + propNameDisplay + "</label>";
@@ -369,14 +379,6 @@ function SetConfigModalInformation()
                 contentBool += "<option value=\"true\">Yes</option></select></div>";
             }
 
-        }
-        else if (name.endsWith("ro")) {
-            //Trim the ro
-            propNameDisplay = propNameDisplay.slice(0, -2);
-            content += "<div class=\"form-group\">";
-            content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
-            content += "<input type=\"text\" readonly class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
-            content += "</div>";
         }
         //number
         else if (typeof value === 'number' && name !== "Timestamp") {

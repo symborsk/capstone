@@ -154,7 +154,7 @@ namespace AIHubMobile
 
                         //Sensors are another array that we need to dive into
                         JArray sensorArray = JArray.Parse(root["sensors"].ToString());
-                        JObject AIArray = JObject.Parse(root["ai_predictions"].ToString());
+                        JObject AIArray = JObject.Parse(root["Forecast"].ToString());
 
                         foreach (KeyValuePair<String, JToken> tagAI in AIArray)
                         {
@@ -168,46 +168,46 @@ namespace AIHubMobile
                                 {
                                     case "1h":
                                         if (propName == "temperature")
-                                            newSet.ai_one_hour_temperature = tagAIInner.Value.ToString();
+                                            newSet.ai_1_hour_temperature = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_one_hour_humidity = tagAIInner.Value.ToString();
+                                            newSet.ai_1_hour_humidity = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "wind_speed")
-                                            newSet.ai_one_hour_wind = tagAIInner.Value.ToString();
+                                            newSet.ai_1_hour_wind = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         break;
                                     case "4h":
-                                        if (propName == "relative_humidity")
-                                            newSet.ai_one_hour_temperature = tagAIInner.Value.ToString();
+                                        if (propName == "temperature")
+                                            newSet.ai_4_hour_temperature = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_one_hour_humidity = tagAIInner.Value.ToString();
+                                            newSet.ai_4_hour_humidity = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "wind_speed")
-                                            newSet.ai_one_hour_wind = tagAIInner.Value.ToString();
+                                            newSet.ai_4_hour_wind = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         break;
 
                                     case "8h":
                                         if (propName == "temperature")
-                                            newSet.ai_eight_hour_temperature = tagAIInner.Value.ToString();
+                                            newSet.ai_8_hour_temperature = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_eight_hour_humidity = tagAIInner.Value.ToString();
+                                            newSet.ai_8_hour_humidity = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "wind_speed")
-                                            newSet.ai_eight_hour_wind = tagAIInner.Value.ToString();
+                                            newSet.ai_8_hour_wind = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         break;
 
                                     case "12h":
                                         if (propName == "temperature")
-                                            newSet.ai_12_hour_temperature = tagAIInner.Value.ToString();
+                                            newSet.ai_12_hour_temperature = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_12_hour_humidity = tagAIInner.Value.ToString();
+                                            newSet.ai_12_hour_humidity = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "wind_speed")
-                                            newSet.ai_12_hour_wind = tagAIInner.Value.ToString();
+                                            newSet.ai_12_hour_wind = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         break;
 
                                     case "24h":
                                         if (propName == "temperature")
-                                            newSet.ai_24_hour_temperature = tagAIInner.Value.ToString();
+                                            newSet.ai_24_hour_temperature = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_24_hour_humidity = tagAIInner.Value.ToString();
+                                            newSet.ai_24_hour_humidity = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "wind_speed")
-                                            newSet.ai_24_hour_wind = tagAIInner.Value.ToString();
+                                            newSet.ai_24_hour_wind = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         break;
                                 }
                             }
@@ -315,6 +315,29 @@ namespace AIHubMobile
             }
 
             return true;
+        }
+
+        public async Task<StationOptions> GetConfigSetting(String deviceName)
+        {
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            CloudTable table = tableClient.GetTableReference("DeviceConfigSettings");
+
+
+            //Get the station options or create them this may change later if we want to do this at the device
+            TableOperation op = TableOperation.Retrieve<StationOptions>(deviceName, deviceName);
+            TableResult retrievedResult = await table.ExecuteAsync(op);
+
+            StationOptions option;
+            if (retrievedResult.Result == null)
+            {
+                return null;
+            }
+            else
+            {
+                option = (StationOptions)retrievedResult.Result;
+            }
+
+            return option;
         }
     }
 }
