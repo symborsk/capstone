@@ -51,11 +51,11 @@ sensor_map = {'DHT22 External': {'temperature': 'temperature', 'relative_humidit
 
 # Main menu for the AI model CMI interface
 def model_menu(argv):
+	global menu_run
+
 	# Check for any input flags
 	if (len(argv)>1):
 		if argv[1]=='-build':
-			menu_run = False
-
 			# Handle additional configuration flags
 			if (len(argv)>2):
 				build_args(argv[1:])
@@ -64,14 +64,16 @@ def model_menu(argv):
 			wm.generate()
 			
 		elif argv[1]=='-eval':
-			menu_run = False
-			
 			# Handle additional configuration flags
 			if (len(argv)>2):
 				eval_args(argv[1:])
 
 			# Load & run the model
 			evaluate()
+
+		elif argv[1]=='-benchmark':
+			# Run the benchmark function
+			get_benchmark()
 	else:
 		# Print the menu options & get a response
 		print('\nECE 492 AI Weather Model Command Line Interface\n\n' + '\n'.join(['{0}. {1}'.format(x+1, options[x][1]) for x in range(len(options))]))
@@ -626,8 +628,31 @@ def validate_param(param, mode, curr):
 	else:
 		raise ValueError
 
+def get_benchmark():
+	global loaded_model
+
+	# Load the model
+	load_model()
+
+	# Load the test data set
+	eval_set = pf.load_data(path = '../test_files/example_folder/')
+
+	# Get the 5 necessary offsets
+	MAE = []
+	for i in [1, 4, 8, 12, 24]:
+		curr_set = list(eval_set)
+
+		curr_set[0] = pf.shift_results(curr_set[0], i)
+
+		df = pf.join_dataframes(curr_set)
+
+		MAE += [loaded_model[i].evaluate(df.values.tolist(), log_output=True)]
+
+	print(MAE)
+
+
 # Run the main menu if program is ran
 if __name__=='__main__':
-	menu_run = not (sys.argv[1]=='-build' or sys.argv[1]=='-eval')
+	menu_run = not (sys.argv[1]=='-build' or sys.argv[1]=='-eval' or sys.argv[1]=='-benchmark')
 
 	model_menu(sys.argv)

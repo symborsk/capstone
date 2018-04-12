@@ -176,7 +176,7 @@ class weather_model():
 			print(output_str)
 
 		# Return the mean absolute error for each label
-		return MAE
+		return [MAE]
 
 	""" Function to dump the model to the output folder as a JSON object """
 	def save(self): 
