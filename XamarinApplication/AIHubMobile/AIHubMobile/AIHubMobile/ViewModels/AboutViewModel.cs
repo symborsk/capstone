@@ -20,7 +20,7 @@ namespace AIHubMobile
             Title = "About";
 
             //This will be replaced with our web portal once it is made
-            OpenWebCommand = new Command(() => Device.OpenUri(new Uri("https://xamarin.com/platform")));
+            OpenWebCommand = new Command(() => Device.OpenUri(new Uri("http://174.3.172.24/")));
         }
 
         public ICommand OpenWebCommand { get; }
