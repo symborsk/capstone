@@ -189,6 +189,10 @@ def evaluate():
 		pull_proc = subprocess.Popen([console_cmd, pull_flag], stdout=subprocess.PIPE)
 		out, err = pull_proc.communicate()
 
+		while out=='False\r\n':
+			time.sleep(10)
+			out, err = pull_proc.communicate()
+
 		print('Pull\tOut: {0}\tErr: {1}'.format(out, err))
 
 		# Get input features
@@ -372,7 +376,7 @@ def display_results(input_features, expected):
 				json_obj[i]['Forecast'] = dict(curr_dict)
 
 			# Write the output dict to the output file
-			with open(file_name, 'x+') as f:
+			with open(file_name, 'r+') as f:
 				for i in range(len(input_features)):
 					f.write('{0}\n'.format(json.dumps(input_features[i], default=wm.serialize)))
 
