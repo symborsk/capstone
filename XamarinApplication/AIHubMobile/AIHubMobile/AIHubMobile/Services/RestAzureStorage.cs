@@ -168,46 +168,46 @@ namespace AIHubMobile
                                 {
                                     case "1h":
                                         if (propName == "temperature")
-                                            newSet.ai_1_hour_temperature = tagAIInner.Value.ToString();
+                                            newSet.ai_1_hour_temperature = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_1_hour_humidity = tagAIInner.Value.ToString();
+                                            newSet.ai_1_hour_humidity = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "wind_speed")
-                                            newSet.ai_1_hour_wind = tagAIInner.Value.ToString();
+                                            newSet.ai_1_hour_wind = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         break;
                                     case "4h":
                                         if (propName == "temperature")
-                                            newSet.ai_4_hour_temperature = tagAIInner.Value.ToString();
+                                            newSet.ai_4_hour_temperature = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_4_hour_humidity = tagAIInner.Value.ToString();
+                                            newSet.ai_4_hour_humidity = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "wind_speed")
-                                            newSet.ai_4_hour_wind = tagAIInner.Value.ToString();
+                                            newSet.ai_4_hour_wind = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         break;
 
                                     case "8h":
                                         if (propName == "temperature")
-                                            newSet.ai_8_hour_temperature = tagAIInner.Value.ToString();
+                                            newSet.ai_8_hour_temperature = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_8_hour_humidity = tagAIInner.Value.ToString();
+                                            newSet.ai_8_hour_humidity = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "wind_speed")
-                                            newSet.ai_8_hour_wind = tagAIInner.Value.ToString();
+                                            newSet.ai_8_hour_wind = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         break;
 
                                     case "12h":
                                         if (propName == "temperature")
-                                            newSet.ai_12_hour_temperature = tagAIInner.Value.ToString();
+                                            newSet.ai_12_hour_temperature = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_12_hour_humidity = tagAIInner.Value.ToString();
+                                            newSet.ai_12_hour_humidity = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "wind_speed")
-                                            newSet.ai_12_hour_wind = tagAIInner.Value.ToString();
+                                            newSet.ai_12_hour_wind = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         break;
 
                                     case "24h":
                                         if (propName == "temperature")
-                                            newSet.ai_24_hour_temperature = tagAIInner.Value.ToString();
+                                            newSet.ai_24_hour_temperature = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "relative_humidity")
-                                            newSet.ai_24_hour_humidity = tagAIInner.Value.ToString();
+                                            newSet.ai_24_hour_humidity = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         else if (propName == "wind_speed")
-                                            newSet.ai_24_hour_wind = tagAIInner.Value.ToString();
+                                            newSet.ai_24_hour_wind = Double.Parse(tagAIInner.Value.ToString()).ToString("N2");
                                         break;
                                 }
                             }

@@ -356,7 +356,15 @@ function SetConfigModalInformation()
         propNameDisplay = propNameDisplay.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
 
         //boolean check for some reason does not evaluate strings as 'true' 'false' as boolean
-        if (typeof value === 'boolean' || value === "true" || value === "false") {
+        if (name.endsWith("ro")) {
+            //Trim the ro
+            propNameDisplay = propNameDisplay.slice(0, -2);
+            content += "<div class=\"form-group\">";
+            content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
+            content += "<input type=\"text\" readonly class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
+            content += "</div>";
+        }
+        else if (typeof value === 'boolean' || value === "true" || value === "false") {
             contentBool += "<div class=\"form-check\">";
             //contentBool += "<input type=\"checkbox\" checked=\""+ value  +"\" value=\"" + value + "\" class=\"form-check-input\" name=\"" + name + "\" id=\"" + name + "\">";
             contentBool += "<label for=\"" + name + "\">     " + propNameDisplay + "</label>";
@@ -371,14 +379,6 @@ function SetConfigModalInformation()
                 contentBool += "<option value=\"true\">Yes</option></select></div>";
             }
 
-        }
-        else if (name.endsWith("ro")) {
-            //Trim the ro
-            propNameDisplay = propNameDisplay.slice(0, -2);
-            content += "<div class=\"form-group\">";
-            content += "<label for=\"" + name + "\">" + propNameDisplay + "</label>";
-            content += "<input type=\"text\" readonly class=\"form-control\" name=\"" + name + "\" id=\"" + name + "\" value=\"" + value + "\">";
-            content += "</div>";
         }
         //number
         else if (typeof value === 'number' && name !== "Timestamp") {

@@ -16,7 +16,7 @@
             <TableView Intent="Form" x:Name="Options" RowHeight="50">
                 <TableRoot>
                     <TableSection Title="Connectivity">
-                        <SwitchCell Text="Cellular Backup" On="{Binding stationOption.cellular_backup}"/>
+                        <SwitchCell Text="Cellular Backup" On="{Binding stationOption.cellular_backup_ro}"/>
                     </TableSection>
                     <TableSection Title="Polling Frequency (minutes)">
                         <EntryCell Text="{Binding stationOption.polling_frequency}" Keyboard="Numeric"/>
