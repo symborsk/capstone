@@ -84,9 +84,16 @@ function GenerateInfoString(name, latestRecordedTime, weatherSets) {
         var dateString = date.toLocaleString("en-US", options);
 
         tableDetailContent += "<tr><td>" + dateString + "</td >";
-        for (var propName in set) {
 
-            if (propName.localeCompare("RecordedTime") === 0) {
+        //We need to ensure the order so put it into an array
+        var array = Object.keys(set);
+        array.sort();
+
+        for (var iArr = 0; iArr < array.length; iArr++) {
+
+            var propName = array[iArr];
+
+            if (propName.localeCompare("RecordedTime") === 0 || propName.toLocaleLowerCase().startsWith("ai")) {
                 continue;
             }
 
@@ -178,7 +185,14 @@ function InsertWeatherTableHtml(data) {
             var dateString = date.toLocaleString("en-US", options);
 
             tableDetailContent += "<tr><td>" + dateString + "</td >";
-            for (var propName in set) {
+
+            //We need to ensure the order so put it into an array
+            var array = Object.keys(set);
+            array.sort();
+
+            for (var iArr = 0; iArr < array.length; iArr++) {
+
+                var propName = array[iArr];
 
                 if (propName.localeCompare("RecordedTime") === 0 || propName.toLocaleLowerCase().startsWith("ai")) {
                     continue;

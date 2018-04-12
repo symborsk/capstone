@@ -45,15 +45,15 @@
                             <ViewCell>
                                 <Grid RowSpacing="0" ColumnSpacing="0">
                                     <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"  />
+                                        <RowDefinition Height="24" />
                                         <RowDefinition Height="24"  />
-                                        <RowDefinition Height="16" />
-                                        <RowDefinition Height="16"  />
-                                        <RowDefinition Height="16" />
-                                        <RowDefinition Height="16" />
-                                        <RowDefinition Height="16" />
-                                        <RowDefinition Height="16" />
-                                        <RowDefinition Height="16" />
-                                        <RowDefinition Height="16" />
+                                        <RowDefinition Height="24" />
+                                        <RowDefinition Height="24" />
+                                        <RowDefinition Height="24" />
+                                        <RowDefinition Height="24" />
+                                        <RowDefinition Height="24" />
+                                        <RowDefinition Height="24" />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="40*"  />
@@ -67,29 +67,29 @@
                                     <Label Text="Recorded Time: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium" Grid.Row="0" Grid.Column="0"/>
                                     <Label Text="{Binding RecordedTime}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium" Grid.Row="0" Grid.Column="1"/>
 
-                                    <Label Text="Temperature: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="1" Grid.Column="0"/>
-                                    <Label Text="{Binding temperature, StringFormat='{0:N2}&#186;C'}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="1" Grid.Column="1"/>
+                                    <Label Text="Temperature: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" Grid.Row="1" Grid.Column="0"/>
+                                    <Label Text="{Binding temperature, StringFormat='{0:N2}&#186;C'}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" Grid.Row="1" Grid.Column="1"/>
 
-                                    <Label Text="Humidity(%): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}"  FontSize="Micro" Grid.Row="2" Grid.Column="0"/>
-                                    <Label Text="{Binding humidity, StringFormat='{0:N2} %'}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="2" Grid.Column="1"/>
+                                    <Label Text="Humidity: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}"  FontSize="Small" Grid.Row="2" Grid.Column="0"/>
+                                    <Label Text="{Binding humidity, StringFormat='{0:N2} %'}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" Grid.Row="2" Grid.Column="1"/>
 
-                                    <Label Text="Wind Direction: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="3" Grid.Column="0"/>
-                                    <Label Text="{Binding direction}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="3" Grid.Column="1"/>
+                                    <Label Text="Wind Direction: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" Grid.Row="3" Grid.Column="0"/>
+                                    <Label Text="{Binding direction}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" Grid.Row="3" Grid.Column="1"/>
 
-                                    <Label Text="Wind Speed(km/hr): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="4" Grid.Column="0"/>
-                                    <Label Text="{Binding windSpeed, StringFormat='{0:N2} km/hr'}"  LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="4" Grid.Column="1"/>
+                                    <Label Text="Wind Speed: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" Grid.Row="4" Grid.Column="0"/>
+                                    <Label Text="{Binding windSpeed, StringFormat='{0:N2} km/hr'}"  LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" Grid.Row="4" Grid.Column="1"/>
 
-                                    <Label Text="Wind Gust(km/hr): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="5" Grid.Column="0"/>
-                                    <Label Text="{Binding gust, StringFormat='{0:N2} km/hr'}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="5" Grid.Column="1"/>
+                                    <Label Text="Wind Gust: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" Grid.Row="5" Grid.Column="0"/>
+                                    <Label Text="{Binding gust, StringFormat='{0:N2} km/hr'}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" Grid.Row="5" Grid.Column="1"/>
 
-                                    <Label Text="Rainfall(mm): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="6" Grid.Column="0"/>
-                                    <Label Text="{Binding rain, StringFormat='{0:N2} mm'}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="6" Grid.Column="1"/>
+                                    <Label Text="Rainfall: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" Grid.Row="6" Grid.Column="0"/>
+                                    <Label Text="{Binding rain, StringFormat='{0:N2} mm'}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" Grid.Row="6" Grid.Column="1"/>
 
-                                    <Label Text="Pressure(bar): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="7" Grid.Column="0"/>
-                                    <Label Text="{Binding pressure, StringFormat='{0:N2} bar'}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="7" Grid.Column="1"/>
+                                    <Label Text="Pressure: " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" Grid.Row="7" Grid.Column="0"/>
+                                    <Label Text="{Binding pressure, StringFormat='{0:N2} kPa'}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" Grid.Row="7" Grid.Column="1"/>
 
-                                    <Label Text="visibility (0-1): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="0"/>
-                                    <Label Text="{Binding visibility}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Micro" Grid.Row="8" Grid.Column="1"/>
+                                    <Label Text="visibility(0-1): " LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" Grid.Row="8" Grid.Column="0"/>
+                                    <Label Text="{Binding visibility}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" Grid.Row="8" Grid.Column="1"/>
 
                                 </Grid>
                             </ViewCell>
