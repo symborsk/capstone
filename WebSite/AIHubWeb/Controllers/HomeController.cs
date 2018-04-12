@@ -20,7 +20,7 @@ namespace AIHubWeb.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "View data from the AI Hub Weatherstation.";
 
             return View();
         }
