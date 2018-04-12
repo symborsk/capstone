@@ -189,6 +189,10 @@ def evaluate():
 		pull_proc = subprocess.Popen([console_cmd, pull_flag], stdout=subprocess.PIPE)
 		out, err = pull_proc.communicate()
 
+		while out=='False\r\n':
+			time.sleep(10)
+			out, err = pull_proc.communicate()
+
 		print('Pull\tOut: {0}\tErr: {1}'.format(out, err))
 
 		# Get input features
