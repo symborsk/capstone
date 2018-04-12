@@ -189,9 +189,11 @@ def evaluate():
 		pull_proc = subprocess.Popen([console_cmd, pull_flag], stdout=subprocess.PIPE)
 		out, err = pull_proc.communicate()
 
-		while out=='False\r\n':
+		while out=='False\\r\\n':
 			time.sleep(10)
+			pull_proc = subprocess.Popen([console_cmd, pull_flag], stdout=subprocess.PIPE)
 			out, err = pull_proc.communicate()
+
 
 		print('Pull\tOut: {0}\tErr: {1}'.format(out, err))
 
@@ -219,7 +221,7 @@ def evaluate():
 		display_results(input_features, expected)
 
 		# Run the push process to post the data
-		push_proc = subprocess.Popen([console_cmd, pull_flag], stdout=subprocess.PIPE)
+		push_proc = subprocess.Popen([console_cmd, push_flag], stdout=subprocess.PIPE)
 		out, err = push_proc.communicate()
 		print('Push\tOut: {0}\tErr: {1}'.format(out, err))
 
@@ -376,7 +378,7 @@ def display_results(input_features, expected):
 				json_obj[i]['Forecast'] = dict(curr_dict)
 
 			# Write the output dict to the output file
-			with open(file_name, 'r+') as f:
+			with open(file_name, 'x+') as f:
 				for i in range(len(input_features)):
 					f.write('{0}\n'.format(json.dumps(input_features[i], default=wm.serialize)))
 
