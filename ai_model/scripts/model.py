@@ -183,6 +183,11 @@ def evaluate():
 	global useFile
 	global loaded_model
 	global loop
+	global json_obj
+
+	# Check for loaded model
+	if loaded_model==None:
+		loaded_model = load_model()
 
 	while True:
 		# Run the pull process to get the data
@@ -204,10 +209,6 @@ def evaluate():
 		else:
 			input_features = get_data_dir()
 
-		# Check for loaded model
-		if loaded_model==None:
-			loaded_model = load_model()
-
 		# Set output mode if not inplace
 		if menu_run:
 			set_output()
@@ -227,7 +228,9 @@ def evaluate():
 		print('Push\tOut: {0}\tErr: {1}'.format(out, err))
 
 		# If not looping then exit
-		if not loop:
+		if loop:
+			json_obj=None
+		else:
 			break
 
 # Function to load the input data from CSV files stored in a specified subdirectory of test_files
@@ -293,7 +296,7 @@ def get_data_file():
 		# Read the input file
 		with open('{0}/{1}'.format(data_path, sel_file), 'r+') as f:
 			json_str = f.read().split('\n')
-
+			
 		# Add the strings to the json object
 		for i in range(len(json_str)):
 			json_obj[i] = json.loads(json_str[i])
@@ -379,9 +382,16 @@ def display_results(input_features, expected):
 				json_obj[i]['Forecast'] = dict(curr_dict)
 
 			# Write the output dict to the output file
+			dump_str = '\n'.join([json.dumps(json_obj[i], default=wm.serialize) for i in range(len(json_obj))])
+
+			# Attempt to remove file first
+			try:
+   				os.remove(file_name)
+			except OSError:
+				pass
+
 			with open(file_name, 'x+') as f:
-				for i in range(len(json_obj)):
-					f.write('{0}\n'.format(json.dumps(json_obj[i], default=wm.serialize)))
+				f.write(dump_str)
 
 	else:
 		# Loop over all input features to display them in string format
