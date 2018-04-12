@@ -61,6 +61,7 @@ namespace AIServerConsoleApp
 
             File.WriteAllText(@"..\test_files\preprocessed_data.json", blobText);
 
+            blockBlob.Delete();
             Console.WriteLine(true);          
         }
 
@@ -144,6 +145,11 @@ namespace AIServerConsoleApp
                 JObject obj = JObject.Parse(jsonString);
                 string timestamp = obj["timestamp"].ToString();
                 SendJsonToStorage(client, obj.ToString(Formatting.None), timestamp);
+            }
+
+            if (File.Exists(@"..\test_files\postprocessed_data.json"))
+            {
+                File.Delete(@"..\test_files\postprocessed_data.json");
             }
 
             Console.WriteLine("true");
