@@ -21,10 +21,9 @@ namespace AIHubMobile
 
         public DeviceConfigPage(StationOptions options, string devName)
         {
-            stationOption = options;
-            deviceName = devName;
-            BindingContext = this;
             InitializeComponent();
+            BindingContext = stationOption = options; 
+            deviceName = devName;         
         }
 
          private async void UpdateOptions_Clicked(object sender, EventArgs e)

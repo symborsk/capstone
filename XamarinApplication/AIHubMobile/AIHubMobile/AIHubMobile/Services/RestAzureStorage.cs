@@ -316,5 +316,28 @@ namespace AIHubMobile
 
             return true;
         }
+
+        public async Task<StationOptions> GetConfigSetting(String deviceName)
+        {
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            CloudTable table = tableClient.GetTableReference("DeviceConfigSettings");
+
+
+            //Get the station options or create them this may change later if we want to do this at the device
+            TableOperation op = TableOperation.Retrieve<StationOptions>(deviceName, deviceName);
+            TableResult retrievedResult = await table.ExecuteAsync(op);
+
+            StationOptions option;
+            if (retrievedResult.Result == null)
+            {
+                return null;
+            }
+            else
+            {
+                option = (StationOptions)retrievedResult.Result;
+            }
+
+            return option;
+        }
     }
 }

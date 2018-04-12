@@ -16,16 +16,16 @@
             <TableView Intent="Form" x:Name="Options" RowHeight="50">
                 <TableRoot>
                     <TableSection Title="Connectivity">
-                        <SwitchCell Text="Cellular Backup" On="{Binding stationOption.cellular_backup_ro}"/>
+                        <SwitchCell Text="Cellular Backup" On="{Binding cellular_backup_ro}"/>
                     </TableSection>
                     <TableSection Title="Polling Frequency (minutes)">
-                        <EntryCell Text="{Binding stationOption.polling_frequency}" Keyboard="Numeric"/>
+                        <EntryCell Text="{Binding polling_frequency}" Keyboard="Numeric"/>
                     </TableSection>
                     <TableSection Title="Notification Email">
-                        <EntryCell Text="{Binding stationOption.notification_email}" Keyboard="Numeric"/>
+                        <EntryCell Text="{Binding notification_email}"/>
                     </TableSection>
                     <TableSection Title="Battery Temperature ( Celsius )">
-                        <EntryCell Text="{Binding stationOption.battery_temperature_ro}" Keyboard="Numeric"/>
+                        <EntryCell Text="{Binding battery_temperature_ro}" Keyboard="Numeric"  IsEnabled="false"/>
                     </TableSection>
                 </TableRoot>
             </TableView>
