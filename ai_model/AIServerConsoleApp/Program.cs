@@ -13,6 +13,7 @@ namespace AIServerConsoleApp
 {
     class Program
     {
+        static string tempPath = Path.GetTempPath() + @"\AI_LOG.text";
 
         static void Main(string[] args)
         {
@@ -150,6 +151,7 @@ namespace AIServerConsoleApp
 
                 foreach (string jsonString in objs)
                 {
+                    WriteToTempPath(jsonString);
                     JObject obj = JObject.Parse(jsonString);
                     string timestamp = obj["timestamp"].ToString();
                     SendJsonToStorage(client, obj.ToString(Formatting.None), timestamp);
@@ -165,6 +167,25 @@ namespace AIServerConsoleApp
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+            }
+        }
+
+        private static void WriteToTempPath(string sString)
+        {
+            try
+            {
+                if (File.Exists(tempPath))
+                {
+                    File.AppendAllText(tempPath, DateTime.Now.ToString() + "******************" + sString);
+                }
+                else
+                {
+                    File.WriteAllText(tempPath, DateTime.Now.ToString() + "******************" + sString);
+                }
+            }
+            catch(Exception)
+            {
+                //Do nothing logging
             }
         }
     }
