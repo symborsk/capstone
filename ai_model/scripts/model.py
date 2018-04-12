@@ -2,6 +2,7 @@ import pandas_formatting as pf
 import decision_forest as df
 import pandas as pd
 import weather_model as wm
+import subprocess
 import time
 import json
 import sys
@@ -24,6 +25,7 @@ file_write = False
 useFile = None
 input_type = 'csv'
 json_obj = None
+loop = False
 
 # Default evaluation parameters
 data_path = '../test_files'
@@ -32,9 +34,14 @@ data_dir = 'example'
 data_file = 'example.json'
 
 # Default output parameters
-output_path = '../test_files/output'
+output_path = '../test_files'
 output_type = 'csv'
 file_name = '{0}/{1}.{2}'.format(output_path, str(round(time.time())), output_type)
+
+# Variables for console app
+console_cmd = 'AIServerConsoleApp.exe'
+pull_flag = '-GetLatestData'
+push_flag = '-SendToAzureBlob'
 
 # Variable storing currently loaded model for session
 loaded_model = None
@@ -175,28 +182,46 @@ def eval_menu():
 def evaluate():
 	global useFile
 	global loaded_model
+	global loop
 
-	# Get input features
-	if useFile:
-		input_features = get_data_file()
-	else:
-		input_features = get_data_dir()
+	while True:
+		# Run the pull process to get the data
+		pull_proc = subprocess.Popen([console_cmd, pull_flag], stdout=subprocess.PIPE)
+		out, err = pull_proc.communicate()
 
-	# Check for loaded model
-	if loaded_model==None:
-		loaded_model = load_model()
+		print('Pull\tOut: {0}\tErr: {1}'.format(out, err))
 
-	# Set output mode if not inplace
-	if menu_run:
-		set_output()
+		# Get input features
+		if useFile:
+			input_features = get_data_file()
+		else:
+			input_features = get_data_dir()
 
-	# Get predictions using the model
-	expected = []
-	for row in input_features.values.tolist():
-		expected += [[(i, loaded_model[i].run(row)) for i in pf.forecast_offsets]]
+		# Check for loaded model
+		if loaded_model==None:
+			loaded_model = load_model()
 
-	# Output the expected results
-	display_results(input_features, expected)
+		# Set output mode if not inplace
+		if menu_run:
+			set_output()
+
+		# Get predictions using the model
+		expected = []
+		for df in input_features:
+			for row in df.values.tolist():
+				expected += [[(i, loaded_model[i].run(row)) for i in pf.forecast_offsets]]
+
+		# Output the expected results
+		display_results(input_features, expected)
+
+		# Run the push process to post the data
+		push_proc = subprocess.Popen([console_cmd, pull_flag], stdout=subprocess.PIPE)
+		out, err = push_proc.communicate()
+		print('Push\tOut: {0}\tErr: {1}'.format(out, err))
+
+		# If not looping then exit
+		if not loop:
+			break
 
 # Function to load the input data from CSV files stored in a specified subdirectory of test_files
 def get_data_dir():
@@ -228,7 +253,7 @@ def get_data_dir():
 	dir_path = '../test_files/{0}/'.format(sel_dir)
 	data_df = list(pf.load_data(path=dir_path))
 	dataframe = pf.join_dataframes(data_df, set_index=True)
-	return dataframe
+	return [dataframe]
 
 # Function to load the input data from a single JSON file stored in test_files
 def get_data_file():
@@ -238,6 +263,7 @@ def get_data_file():
 
 	# Get json from file if not provided
 	if json_obj==None:
+		json_obj = {}
 		# Prompt user to move data file if necessary
 		if menu_run:
 			prompt = 'Please move the desired data file into the \"test_files\" folder now. Press enter to continue...'
@@ -257,31 +283,40 @@ def get_data_file():
 		else:
 			sel_file=data_file
 
-		# Write the output
+		# Read the input file
 		with open('{0}/{1}'.format(data_path, sel_file), 'r+') as f:
-			json_obj = json.loads(f.read())
+			json_str = f.read().split('\n')
+
+		# Add the strings to the json object
+		for i in range(len(json_str)):
+			json_obj[i] = json.loads(json_str[i])
 	
 	# Return the parsed version of the selected file
 	return parse_data_file(json_obj)
 	
 # Function to parse the input data file to get the required features
 def parse_data_file(parsed_response):
-	result = {}
+	result = []
+	for i in parsed_response:
+		curr = {}
 
-	# Get the data & access the required info
-	parsed_data = parsed_response['sensors']
-	for d in parsed_data:
-		if d['sensor'] in sensor_map:
-			for r in sensor_map[d['sensor']]:
-				result[r] = d['data'][sensor_map[d['sensor']][r]]
+		# Get the data & access the required info
+		parsed_data = parsed_response[i]['sensors']
+		for d in parsed_data:
+			if d['sensor'] in sensor_map:
+				for r in sensor_map[d['sensor']]:
+					curr[r] = d['data'][sensor_map[d['sensor']][r]]
 
-	# Calculate the dew point & relative humidity
-	result['dew_point'] = round(pf.dewpoint_row_formula(result))
-	result['windchill'] = round(pf.windchill_row_formula(result))
-	result['wind_dir_10s'] = pf.convert_wind_direction(result['wind_dir_10s'])
+		# Calculate the dew point & relative humidity
+		curr['dew_point'] = round(pf.dewpoint_row_formula(curr))
+		curr['windchill'] = round(pf.windchill_row_formula(curr))
+		curr['wind_dir_10s'] = pf.convert_wind_direction(curr['wind_dir_10s'])
+
+		# Add the current object to the result
+		result += [pd.DataFrame(curr, index=[0])]
 
 	# Return the dataframe
-	return pd.DataFrame(result, index=[0])
+	return result
 		
 # Set the output mode for the evaluation run
 def set_output():
@@ -314,14 +349,32 @@ def display_results(input_features, expected):
 	global file_name
 
 	if file_write:
-		# Create the appropriate dataframe to output
-		output_df = pf.create_prediction_dataframe(expected, input_features if inplace else None)
+		if json_obj==None:
+			# Create the appropriate dataframe to output
+			output_df = pf.create_prediction_dataframe(expected, input_features if inplace else None)
 
-		# Output the dataframe appropriately
-		if output_type=='csv':
-			output_df.to_csv(path_or_buf=file_name)
+			# Output the dataframe appropriately
+			if output_type=='csv':
+				output_df.to_csv(path_or_buf=file_name)
+			else:
+				output_df.to_json(path_or_buf=file_name)
 		else:
-			output_df.to_json(path_or_buf=file_name)
+			output_dict = {}
+			for i in range(len(expected)):
+				# Get the JSON from expected
+				curr_dict = {}
+
+				# Loop over all forecasts & add
+				for result in expected[i]:
+					curr_dict['{0}h'.format(result[0])] = {'wind_speed': result[1][0], 'relative_humidity': result[1][1], 'temperature': result[1][2]}
+
+				# Add prediction to output_dict
+				json_obj[i]['Forecast'] = dict(curr_dict)
+
+			# Write the output dict to the output file
+			with open(file_name, 'x+') as f:
+				for i in range(len(input_features)):
+					f.write('{0}\n'.format(json.dumps(input_features[i], default=wm.serialize)))
 
 	else:
 		# Loop over all input features to display them in string format
@@ -334,11 +387,21 @@ def display_results(input_features, expected):
 				print(result_str)
 		# Otherwise build the JSON object and print it
 		else:
-			# Get the JSON from expected
-			expected_dict = [dict(x) for x in expected]
-			
-			# Print the JSON string to be read by the C# program
-			print(json.dumps(expected_dict[0]))
+			output_dict = {}
+			for i in range(len(expected)):
+				# Get the JSON from expected
+				curr_dict = {}
+
+				# Loop over all forecasts & add
+				for result in expected[i]:
+					curr_dict['{0}h'.format(expected[i][0])] = {'wind_speed': expected[i][1][0], 'relative_humidity': expected[i][1][1], 'temperature': expected[i][1][2]}
+
+				# Add prediction to output_dict
+				output_dict[i] = dict(curr_dict)
+
+			# Loop over all entries and print
+			for key in output_dict:
+				print(json.dumps(output_dict[key], default=wm.serialize))
 
 # Function to handle loading the model
 def load_model():
@@ -469,9 +532,12 @@ def eval_args(argv):
 	global data_file
 	global file_write
 	global file_name
+	global output_type
+	global output_path
 	global model_name
 	global data_dir
 	global inplace
+	global loop
 
 	# Loop over all args to handle them
 	while(argv):
@@ -481,7 +547,7 @@ def eval_args(argv):
 		# Update accordingly
 		if curr=='-file':
 			param = argv.pop(0)
-			if param.endswith('.json') and os.path.isfile('{0}/{1}'.format(data_path, param)):
+			if param.endswith('.json'):
 				useFile = True
 				data_file = param
 			else:
@@ -503,6 +569,7 @@ def eval_args(argv):
 			if param.endswith('.csv') or param.endswith('.json'):
 				file_write = True
 				file_name = '{0}/{1}'.format(output_path, param)
+				output_type = param.split('.')[-1]
 			else:
 				print('Error: Invalid output file supplied.')
 				exit()
@@ -516,6 +583,8 @@ def eval_args(argv):
 		elif curr=='-json':
 			param = argv.pop(0)
 			json_obj = json.loads(param)
+		elif curr=='-loop':
+			loop = True
 
 """ Function to validate program input parameters with the predetermined range. 
 
