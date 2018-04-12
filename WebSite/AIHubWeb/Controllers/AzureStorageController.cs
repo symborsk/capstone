@@ -220,6 +220,7 @@ namespace AIHubWeb
                                 //This may seem strange but this will allows us to download the data and simply check and see what sensors have data
                                 //This allows the sensors at the station side to be easily turned on or off without crashing the app
                                 //If we have a property that matched the data we will
+                                tagName = char.ToUpper(tagName[0]) + tagName.Substring(1);
                                 PropertyInfo info = weatherSetClass.GetProperty(tagName);
                                 if (info != null)
                                 {
