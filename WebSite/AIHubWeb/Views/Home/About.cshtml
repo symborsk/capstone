@@ -6,7 +6,48 @@
 @{
     ViewBag.Title = "About";
 }
-<h2 id="AboutTitle">@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+<div id="aboutTitle">
+    <h2 id="AboutTitle">@ViewBag.Title.</h2>
+    <h3>@ViewBag.Message</h3>
+</div>
 
-<p>Use this area to provide additional information.</p>
+<div>
+    <div id="aboutInfo" style="display:inline-block;width:50%">
+        <p>
+            Each weather station gathers localized data for a specific jobsite.
+            We use it to predict forecasts and record the local weather at the jobsites.
+        </p>
+        <p>
+            Using an artificial intelligence model we are able predict future weather patterns
+            based on the historical data in the surrounding area.
+        </p>
+    </div>
+
+    <div style="display:inline-block">
+        <img src="~/Images/map.png" style="height:auto;width:auto; max-width:500px;" alt="Station">
+    </div>
+</div>
+
+<div>
+    <div id="aboutPicture" style="display:inline-block">
+        <img src="~/Images/project_pic.png" style="height:auto;width:auto; max-width:500px;" alt="Station">
+    </div>
+
+    <div style="display:inline-block">
+
+        <h3>Sensors</h3>
+        <ul>
+            <li>Temperature</li>
+            <li>Humidity</li>
+            <li>Pressure</li>
+            <li>Rain</li>
+            <li>Wind</li>
+            <li>Visibility</li>
+        </ul>
+    </div>
+</div>
+
+
+<p>Created by John Symborski, Dallin Toth, Joey-Michael Fallone, and Brett Wilkinson</p>
+
+

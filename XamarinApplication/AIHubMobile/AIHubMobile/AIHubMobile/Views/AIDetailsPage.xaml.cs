@@ -26,7 +26,7 @@ namespace AIHubMobile
             DetailWeatherSets.ItemsSource = passedInViewModel.RgSets;
             BindingContext = this.viewModel = passedInViewModel;
 
-            Title = "AI Page Station: " + viewModel.Item.StationName;
+            Title = "AI Info Station: " + viewModel.Item.StationName;
             //Change the selected index
             this.dateDropDown.SelectedIndex = 0;
         }

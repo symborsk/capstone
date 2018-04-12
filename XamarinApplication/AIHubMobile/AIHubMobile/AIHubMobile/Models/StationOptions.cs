@@ -12,9 +12,9 @@ namespace AIHubMobile
     public class StationOptions : TableEntity
     {
         public double polling_frequency { set; get; }
-        public string email_address { set; get; }
+        public string notification_email { set; get; }
         public string cellular_backup_ro { set; get; }
-        public double battery_temp_ro { set; get; }
+        public double battery_temperature_ro { set; get; }
 
         //We need this for TableEntity.... it how azure storage interacts with it
         public StationOptions() { }
@@ -25,8 +25,8 @@ namespace AIHubMobile
             this.PartitionKey = stationName;
             this.RowKey = stationName;
             polling_frequency = pollFreq;
-            email_address = email;
-            battery_temp_ro = temp;
+            notification_email = email;
+            battery_temperature_ro = temp;
             cellular_backup_ro = cellBack;
         }
 
@@ -36,9 +36,9 @@ namespace AIHubMobile
             this.PartitionKey = stationName;
             this.RowKey = stationName;
             polling_frequency = 60;
-            email_address = "No Entered Email";
+            notification_email = "No Entered Email";
             cellular_backup_ro = "false";
-            battery_temp_ro = 20.2;
+            battery_temperature_ro = 20.2;
         }
     }
 }
