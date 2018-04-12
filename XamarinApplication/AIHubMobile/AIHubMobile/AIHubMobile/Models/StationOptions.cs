@@ -13,20 +13,21 @@ namespace AIHubMobile
     {
         public double polling_frequency { set; get; }
         public string email_address { set; get; }
-        public bool cellular_backup { set; get; }
+        public string cellular_backup_ro { set; get; }
         public double battery_temp_ro { set; get; }
 
         //We need this for TableEntity.... it how azure storage interacts with it
         public StationOptions() { }
 
         //This creation of the object if all is known about it
-        public StationOptions(string stationName, bool use3G, int pollFreq, string email, double temp)
+        public StationOptions(string stationName, string cellBack, int pollFreq, string email, double temp)
         {
             this.PartitionKey = stationName;
             this.RowKey = stationName;
             polling_frequency = pollFreq;
             email_address = email;
             battery_temp_ro = temp;
+            cellular_backup_ro = cellBack;
         }
 
         //This is creation of object with the defaults 1 hour and no 3G
@@ -36,6 +37,8 @@ namespace AIHubMobile
             this.RowKey = stationName;
             polling_frequency = 60;
             email_address = "No Entered Email";
+            cellular_backup_ro = "false";
+            battery_temp_ro = 20.2;
         }
     }
 }

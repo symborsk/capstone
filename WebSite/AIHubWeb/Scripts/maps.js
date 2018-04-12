@@ -223,7 +223,7 @@ function InsertAITableHtml(data) {
         //Table will be built in parts so that we can keep the table building complety dynamic
         var tableHeaderContent = "";
         var tableDetailContent = "";
-        content += "<h2>" + currentStation + "</h2><div><table id=\"resultsTable\" class=\"table table-striped table-bordered table-hover\">";
+        content += "<h2>" + currentStation + "</h2><div><table id=\"resultsTable\" class=\"table table-condensed table-striped table-bordered table-hover\">";
         tableHeaderContent = "<thead><tr><th> Recorded Time </th>";
         for (var i = 0; i < data.length; i++) {
             var set = data[i];
@@ -253,7 +253,9 @@ function InsertAITableHtml(data) {
                     tableDetailContent += "<td>---</td>";
                 }
                 else {
-                    tableDetailContent += "<td>" + set[propName] + "</td>";
+                    var tempRound = parseFloat(set[propName]).toFixed(2);
+
+                    tableDetailContent += "<td>" + tempRound + "</td>";
                 }
 
             }
