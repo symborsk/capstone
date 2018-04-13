@@ -1,4 +1,12 @@
-﻿var currentStation;
+﻿/**
+ * maps.cs
+ * By: John Symborski
+ * Capstone Group 2
+ * Javascript dynamic calls to manage the maps and table generation
+ * */
+
+
+var currentStation;
 var currentConfigOptions; //We want to push this object back through a post so change field
 
 function initialize(weatherList) {

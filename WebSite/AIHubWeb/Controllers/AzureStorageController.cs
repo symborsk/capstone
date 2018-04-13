@@ -1,4 +1,11 @@
-﻿using System;
+﻿/**
+ * AzureStorageController.cs
+ * By: John Symborski
+ * Capstone Group 2
+ * Interacts with the Azure Restful api for the  
+ * */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Configuration;

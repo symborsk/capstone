@@ -1,7 +1,13 @@
-﻿using System;
+﻿/**
+* WeatherStation.cs
+* By: John Symborski
+* Capstone Group 2
+* Model to represent a physical station
+* */
+
+
+using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
 
 namespace AIHubWeb
 {
@@ -59,7 +65,6 @@ namespace AIHubWeb
 
             return rgWeatherSets[0].RecordedTime;
         }
-
 
         public class LatLng
         {
