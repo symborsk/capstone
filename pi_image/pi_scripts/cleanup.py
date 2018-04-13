@@ -3,11 +3,10 @@
 #
 # By: Joey-Michael Fallone
 #
-# This script kills running processes and cleans up files to re-prepare
-# the system to run "setup"
+# The following python script runs the makeclean scripts, cancels the 
+# station monitoring, and removes all temporary data files
 #
 #############################################################################
-
 
 import os
 

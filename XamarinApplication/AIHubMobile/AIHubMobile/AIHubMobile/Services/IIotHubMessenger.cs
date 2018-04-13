@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/* IIoTHubMessenger.cs
+ * Created by: John Symborski
+ * 
+ * Interface definition for the IoTHubMessenger
+ */
 using System.Threading.Tasks;
-using System.Text;
 
 namespace AIHubMobile
 {

@@ -1,3 +1,13 @@
+#############################################################################
+# Custom.py
+#
+# By: Joey-Michael Fallone
+#
+# Custom dropdown class for the GUI
+# 
+#
+#############################################################################
+
 from kivy.lang import Builder
 from kivy.uix.dropdown import DropDown
 from kivy.uix.button import Button
