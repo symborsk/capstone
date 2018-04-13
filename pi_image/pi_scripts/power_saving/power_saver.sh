@@ -1,4 +1,12 @@
-# power saving tricks
+#############################################################################
+# power_saver.sh
+#
+# By: Joey-Michael Fallone
+#
+# The following script uses some power saving tricks to put the pi into
+# a low power operating mode
+#
+############################################################################## 
 
 # requires reboot
 # sudo cp /home/thor/capstone/pi_image/pi_scripts/power_saving/rc.local /etc/rc.local

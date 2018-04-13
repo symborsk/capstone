@@ -1,3 +1,13 @@
+
+#############################################################################
+# cleanup.py
+#
+# By: Joey-Michael Fallone
+#
+# The following python script runs the makeclean scripts, cancels the 
+# station monitoring, and removes all temporary data files
+#
+#############################################################################
 import os
 
 os.system("sudo sh /home/thor/capstone/pi_image/pi_scripts/makeclean.sh")

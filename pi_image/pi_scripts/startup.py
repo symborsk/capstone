@@ -1,3 +1,14 @@
+#############################################################################
+# startup.py
+#
+# By: Joey-Michael Fallone
+#
+# The following script was created to setup the sensor hub and launch it
+# into a continuous data collection mode
+#
+#
+#
+#############################################################################
 import os
 import os.path
 import time
