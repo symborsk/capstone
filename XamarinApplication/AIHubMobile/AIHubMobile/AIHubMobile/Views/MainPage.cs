@@ -6,8 +6,6 @@
  * it initializes the main displays differently for different Runtime Platforms.
  * */
 
-using System;
-
 using Xamarin.Forms;
 
 namespace AIHubMobile

@@ -1,5 +1,5 @@
 ﻿/**
- * ChangeOptions.xaml.cs
+ * DeviceConfig.xaml.cs
  * By: John Symborski
  * Capstone Group 2
  * This file is the back end functionality bound to the Weather Item Page Markup. It will perform any logic and
@@ -7,7 +7,6 @@
  * */
 
 using System;
-using System.Collections.Generic;
 using Xamarin.Forms.Xaml;
 using Xamarin.Forms;
 

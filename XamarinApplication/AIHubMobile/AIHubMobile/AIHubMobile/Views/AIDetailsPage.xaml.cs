@@ -1,4 +1,11 @@
-﻿using System;
+﻿/**
+ * AIDetailsPage.xaml.cs
+ * By: John Symborski
+ * Capstone Group 2
+ * Back end functionality for the AI Details page
+ * */
+
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
