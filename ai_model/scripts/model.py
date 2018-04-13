@@ -1,3 +1,9 @@
+"""
+	model.py
+	Created by: Brett Wilkinson
+
+	Main program that handles menus to perform tasks like weather model building, benchmarking & prediction.
+"""
 import pandas_formatting as pf
 import decision_forest as df
 import pandas as pd

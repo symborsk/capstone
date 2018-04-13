@@ -1,3 +1,10 @@
+"""
+	weather_model.py
+	Created by: Brett Wilkinson
+	
+	Builds, trains and evaluates a decision forest weather model
+"""
+
 import os
 import pandas_formatting as pf
 import numpy as np
