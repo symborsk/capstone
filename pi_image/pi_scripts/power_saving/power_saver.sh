@@ -1,3 +1,13 @@
+#############################################################################
+# power_saver.sh
+#
+# By: Joey-Michael Fallone
+#
+# Sends email with the visibility image if below the threshold
+# based on this tutorial: http://naelshiab.com/tutorial-send-email-python/
+#
+#############################################################################
+
 # power saving tricks
 
 # requires reboot

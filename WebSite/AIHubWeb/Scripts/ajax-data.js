@@ -1,4 +1,9 @@
-﻿
+﻿/**
+ * ajax-data.cs
+ * By: John Symborski
+ * Capstone Group 2
+ * Asynchronous calls to the server 
+ * */
 
 function GetWeatherSetsForNewRange(statName, start, end) {
     var serviceURL = '/Home/GetWeatherSetsForNameAndRange';

@@ -1,3 +1,14 @@
+#############################################################################
+# cleanup.py
+#
+# By: Joey-Michael Fallone
+#
+# This script runs the entire sensor sweep process. It starts by launching
+# the setup gui and then launches the necessary scripts and programs/drivers
+# to properly operate. 
+#
+#############################################################################
+
 import os
 import os.path
 import time

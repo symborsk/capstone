@@ -1,7 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿/**
+ * AzureIotHubController.cs
+ * By: John Symborski
+ * Capstone Group 2
+ * Interacts with the Iot Hub to send messages
+ * */
+
+using System;
 using System.Web.Mvc;
 using Microsoft.Azure.Devices;
 using System.Text;

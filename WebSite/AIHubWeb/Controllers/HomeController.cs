@@ -1,4 +1,11 @@
-﻿using System;
+﻿/**
+ * HomeController.cs
+ * By: John Symborski
+ * Capstone Group 2
+ * Manages the controller from the home on the webpage
+ * */
+
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
