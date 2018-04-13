@@ -1,3 +1,14 @@
+#############################################################################
+# cleanup.py
+#
+# By: Joey-Michael Fallone
+#
+# This script kills running processes and cleans up files to re-prepare
+# the system to run "setup"
+#
+#############################################################################
+
+
 import os
 
 os.system("sudo sh /home/thor/capstone/pi_image/pi_scripts/makeclean.sh")

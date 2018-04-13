@@ -1,4 +1,10 @@
-﻿using System;
+﻿/* Program.cs
+ * Created by: John Symborski & Brett Wilkinson
+ * 
+ * Program to read data from Azure blob storage, store it on the server, then push processed data back to Azure
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;

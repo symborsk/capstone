@@ -1,3 +1,9 @@
+"""
+	decision_forest.py
+	Created by: Brett Wilkinson
+
+	Program to handle the decision forest algorithm.
+"""
 import numpy as np
 import json
 
