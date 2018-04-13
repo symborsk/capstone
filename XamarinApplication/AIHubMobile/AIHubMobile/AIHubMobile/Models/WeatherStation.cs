@@ -1,7 +1,11 @@
-﻿using System;
+﻿/* WeatherStation.cs
+ * Created by: John Symborski
+ * 
+ * File to define the weather station class
+ */
+
+using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
 
 namespace AIHubMobile
 {

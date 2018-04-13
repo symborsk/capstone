@@ -25,7 +25,7 @@ python /home/thor/capstone/pi_image/sensors/interfacing/Barometer/run_barometer.
 python /home/thor/capstone/pi_image/sensors/interfacing/Interpreters/Barometer/Barometer.py
 
 # Visibility
-echo "visibility"
+echo "Visibility"
 python /home/thor/capstone/pi_image/image_recognition/image_rec.py
 
 # IoT Hub Message

@@ -42,7 +42,6 @@
         <image name="tab_feed.png" width="32" height="30"/>
         <image name="xamarin_logo.png" width="220" height="51"/>
         <image name="pcl.png" width="1000" height="700"/>
-        <image name="Image" width="1280" height="1920"/>
         <image name="portrait_splashScreen.jpg" width="1280" height="1920"/>
     </resources>
 </document>

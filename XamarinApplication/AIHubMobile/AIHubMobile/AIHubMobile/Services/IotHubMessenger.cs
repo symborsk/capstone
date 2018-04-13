@@ -1,5 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/* IoTHubMessenger.cs
+ * Created by: John Symborski
+ * 
+ * Implementation of the IoTHubMessenger to interact w/ IoT Hub
+ */
+
+using System;
 using System.Text;
 using Microsoft.Azure.Devices;
 using System.Threading.Tasks;

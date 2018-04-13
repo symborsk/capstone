@@ -1,8 +1,12 @@
-﻿using System;
+﻿/* WeatherSet.cs
+ * Created by: Brett Wilkinson
+ *  
+ * Custom collection that improves Xamarin rendering performance
+ */
+
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Collections.Specialized;
 
 namespace AIHubMobile
