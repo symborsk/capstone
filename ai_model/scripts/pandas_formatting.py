@@ -1,3 +1,9 @@
+"""
+	pandas_formatting.py
+	Created by: Brett Wilkinson
+
+	Program to load and format weather data csvs
+"""
 import pandas as pd
 import numpy as np
 

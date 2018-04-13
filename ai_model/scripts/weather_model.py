@@ -1,3 +1,10 @@
+"""
+	weather_model.py
+	Created by: Brett Wilkinson
+	
+	Builds, trains and evaluates a decision forest weather model
+"""
+
 import os
 import pandas_formatting as pf
 import numpy as np
@@ -176,7 +183,7 @@ class weather_model():
 			print(output_str)
 
 		# Return the mean absolute error for each label
-		return MAE
+		return [MAE]
 
 	""" Function to dump the model to the output folder as a JSON object """
 	def save(self): 
